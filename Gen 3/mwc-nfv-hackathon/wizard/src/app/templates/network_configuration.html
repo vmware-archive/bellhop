@@ -110,13 +110,13 @@
 			    	  </span>
 			     </div>
 			   </div>
-			   <div class="form-group long col-xs-4" ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isOS_Cloudify()" >
+			   <div class="form-group long col-xs-4" ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isOS_Subnet()" >
 				<div class="col-xs-4" style="margin: 5px;">
 			 	      <input type="text" name="{{Subnet}}" 
-					ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isOS_Cloudify()"
+					ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isOS_Subnet()"
 	           		        ng-model="$ctrl.Subnet[ $ctrl.indices[ $index ]]" 
 				        data-index="{{ $ctrl.indices[ $index ] }}" 
-                                        placeholder="{{ $ctrl.SUBNET_PLACEHOLDER[$index] }}" size="14"  required />
+                                        placeholder="Subnet cidr" size="14"  required />
 				</div>
 			     </div>
 			   <div class="form-group long col-xs-12" ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isVCD_Cloudify()" >

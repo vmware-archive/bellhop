@@ -270,6 +270,24 @@ module.exports = function routesConfig($stateProvider, $urlRouterProvider, $loca
        }
       },
     })
+
+	.state('wizard.epa_configurations_os_heat', {
+     		 url: 'epa_configurations_os_heat',
+     		 component: 'epaosheat',
+		 resolve: {
+			pathChanger: function (navigationService,authService) {
+				"ngInject";
+                		if(authService.loginObj.isAuthenticated){
+		        	    navigationService.currPath = 4;
+				}else{
+					authService.logOut();
+	                		$state.go('/login');
+
+				}
+			}
+		},
+	})
+
 	
     .state('wizard.scripts', {
       url: 'scripts',

@@ -59,14 +59,14 @@ module.exports = {
 	
 	
 	
-	this.OrchType = ['OSM 3.0','Cloudify 3.4','Cloudify 4.0','TOSCA 1.1', 'RIFT.ware 5.3'];
+    this.OrchType = ['OSM 3.0','Cloudify 3.4','Cloudify 4.0','TOSCA 1.1','None', 'RIFT.ware 5.3'];
     this.OrchTypeSelected = config.OrchType;
-	this.OrchTypeSelected = config.OrchType;
+    this.OrchTypeSelected = config.OrchType;
 
 	
-	this.VNFDname = config.VNFDname; 
+    this.VNFDname = config.VNFDname; 
     
-	 this.vnfDescription = config.VNFDescription || this.VNFTypeSelected;
+    this.vnfDescription = config.VNFDescription || this.VNFTypeSelected;
     this.VNFType = dataService.getVNFTypes();
     this.VNFTypeSelected = config.VNFType;
 	
@@ -103,6 +103,11 @@ module.exports = {
        if(isNaN(this.numberOfVMs) || this.numberOfVMs > this.maxvalue || this.numberOfVMs < this.minvalue){
                 $scope.maxNicsError = true;
         }
+        if(this.VIMTypeSelected == 'vCloud Director'){
+		this.OrchType[4] = "Ovf";
+	}else{
+		this.OrchType[4] = "None";
+	}
 
      });
     

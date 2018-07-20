@@ -59,6 +59,7 @@ const epaostComponent = require('./app/components/epa_configurations_ost_compone
 const epaostosmComponent = require('./app/components/epa_configurations_ostosm_component');
 const epaostriftComponent = require('./app/components/epa_configurations_ostrift_component');
 const epaoscloudifyComponent = require('./app/components/epa_configurations_oscloudify_component');
+const epaosheatComponent = require('./app/components/epa_configurations_osheat_component');
 
 const signupComponent = require('./app/components/signup_component');
 
@@ -103,6 +104,7 @@ module.exports = angular
   .component('login',loginComponent)
   .component('epavccloudify', epavccloudifyComponent)
   .component('epaoscloudify', epaoscloudifyComponent)
+  .component('epaosheat', epaosheatComponent)
   .component('signup',signupComponent)
   .component('forgotpassword',forgotpasswordComponent)
   .name

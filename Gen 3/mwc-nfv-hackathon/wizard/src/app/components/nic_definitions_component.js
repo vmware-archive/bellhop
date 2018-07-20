@@ -51,6 +51,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 this.OPENSTACKINTERFACES = ['Select Type','VIRTIO','PCI-PASSTHROUGH','SR-IOV','E1000'];
 	 this.VCD_CLOUDIFY_INTERFACES = ['Select Type','Default'];
 	 this.OPENSTACK_CLOUDIFY_INTERFACES = ['Select Type','normal','direct','macvtap'];
+	 this.OPENSTACK_HEAT_INTERFACES = ['Select Type','normal'];
 	 
 	 
 	 const config_vnf = dataService.getVnfDefinition();
@@ -74,14 +75,15 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 const config = dataService.getNicDefintion();
 	 this.numberOfNICs = config.numberOfNICs;
 	 this.NICs = config.NICs;
+	 this.Ip_adds = config.Ip_adds;
 	 this.indices = config.NICsIndices;
 	 this.Interfaces = config.Interfaces;
 	 this.NICshow = [[]];
 	 //this.NICshow[0][0] = true;
 	 this.Networks ={'Select Type':'Select Type'};
-	 if(this.mgmtNetwork){
-                this.Networks[this.mgmtNetwork] = this.mgmtNetwork;
-         }
+         if( this.mgmtNetwork){
+	 	this.Networks[this.mgmtNetwork] = this.mgmtNetwork;
+	 }
 	 for (let n = 0; n <this.netNetworks.length; n++){
 		 if(this.netNetworks[n].trim()){
 			 
@@ -184,7 +186,9 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		if (this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0') {
 			
 			this.possibleInterfaces = this.OPENSTACK_CLOUDIFY_INTERFACES; 
-		} else {
+		} else if(this.OrchType == 'None') {
+			this.possibleInterfaces = this.OPENSTACK_HEAT_INTERFACES;
+		}else {
 			
 			this.possibleInterfaces = this.OPENSTACKINTERFACES; 
 		}
@@ -195,7 +199,15 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 // console.log("possibleInterfaces");
 	 //console.log(this.possibleInterfaces);
 	 
-	 
+	this.isOS_Heat = function() {
+            if((this.OrchType == 'None' ) && (this.VIMType == 'OpenStack')){
+               return true;
+            }
+           else{
+              return false;
+           }
+         };
+ 
 	for (v = 0; v < this.numberOfVMs; v++) {
 		 for (i = 0; i < this.possibleNumbersOfNICs.length; i++) {
 			 if( this.Interfaces[v][i] == "" || this.Interfaces[v][i] == undefined ){
@@ -346,6 +358,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	      const config = {
 			numberOfNICs: this.numberOfNICs,
 		        NICs: this.NICs,
+		        Ip_adds: this.Ip_adds,
 			Interfaces: this.Interfaces,
 			NICsIndices: this.indices
 	      };
