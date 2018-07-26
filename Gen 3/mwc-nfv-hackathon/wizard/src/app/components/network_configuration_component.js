@@ -62,6 +62,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 this.indices = config.NetworkIndices;
 	 this.Interfaces = config.NewNetwork;
 	 this.Subnet = config.Subnet;
+	 this.SubnetCidr = config.SubnetCidr;
 
          this.Edge_Gateway = config.Edge_Gateway;
          this.Network_Name = config.Network_Name;
@@ -102,9 +103,9 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 }
 	 
 	 this.NewNetwk = true;
-          if (this.OrchType == 'TOSCA 1.1') {
-                 this.NewNetwk = false;
-         }
+         // if (this.OrchType == 'TOSCA 1.1') {
+         //        this.NewNetwk = false;
+        // }
 	 
 	 console.log("possibleInterfaces");
 	 console.log(this.possibleInterfaces);
@@ -135,6 +136,15 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
               return false;
            } 
          };
+	
+	 this.isTOSCA = function() {
+            if(this.OrchType == 'TOSCA 1.1'){
+               return true;
+            }
+           else{
+              return false;
+           }
+         };
 
          this.isMgmtNwt = function(){
 		if(this.OrchType == 'None' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0'){
@@ -144,11 +154,14 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 			return true;
 		}
 	}
+
 	 this.isOS_Subnet = function(){
               if((this.VIMType == 'OpenStack') &&
-                        (this.OrchType == 'None' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' )){
+                        (this.OrchType == 'None' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0'  || this.OrchType == 'TOSCA 1.1' )){
                  return true;
-              }
+              } else if (this.VIMType == 'vCloud Director' && this.OrchType == 'TOSCA 1.1'){
+		 return true;
+	      }
               else{
                  return false;
               }
@@ -315,7 +328,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 				
 			}
 
-			if(!this.isMgmtNwt()){
+			if(!this.isMgmtNwt()||  this.isTOSCA()){
 				$scope.EthernetTypeSelected[i] = "";
 			}
 			
@@ -331,14 +344,14 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 				$scope.NetworksTypeSelected[i] = "";
 				
 			}
-			if(!this.isMgmtNwt()){
+			if(!this.isMgmtNwt() ||  this.isTOSCA()){
                                 $scope.NetworksTypeSelected[i] = ""; 
                         }
 
 			
 		}
 		
-                 if(!this.isMgmtNwt()){
+                 if(!this.isMgmtNwt() ||  this.isTOSCA()){
                          $scope.mgmtNetworkEthernetTypeSelected  = "";
                         }
 		

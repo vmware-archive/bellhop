@@ -195,11 +195,9 @@ def GetHashofDirs(directory, verbose=0):
 def create_vmdk_package(inputs, name, workdir):
     vmdk_dir = os.path.join(workdir, name + '_vmdk')
     os.mkdir(vmdk_dir)
-    generate_standard_vmdk_blueprint(inputs, inputs['params'], vmdk_dir, name)
-    if get_flavor_type(inputs['params']) == 'auto':
-        generate_flavor_blueprint(inputs, inputs['params'], workdir, name)
-    create_vmdk_manifest_file(name+'_vmdk', vmdk_dir)
-    add_scripts(inputs['params'], vmdk_dir)   
+    generate_standard_vmdk_blueprint(inputs,vmdk_dir, name)
+    #create_vmdk_manifest_file(name+'_vmdk', vmdk_dir)
+    #add_scripts(inputs['params'], vmdk_dir)   
     i = datetime.now()
     readme="VMDK descriptor package is generated. \nCreated on " + i.strftime('%Y/%m/%d %H:%M:%S')
     readme_file = os.path.join(vmdk_dir, 'README.txt') 
@@ -419,6 +417,32 @@ def populate_distinct_cloudify_networks(inputs):
              else:
 	        inputs['vim_params']['NeworOldNetwork'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])  
     print "Cloudify distinct networks inputs:{}".format(inputs)
+
+def populate_distinct_tosca_networks(inputs):
+    # Data structures to populate  information for New networks in Cloudify
+    inputs['vim_params']['NeworOldNetwork'] = {}
+    for paramskey in inputs['vim_params'].keys():
+        print "paramskey = {}".format(paramskey)
+        if re.match('Network(\d+)_name',paramskey):
+          commonkey = paramskey.split('_')[0]
+          print "commonkey={}".format(commonkey)
+          newnetkey = 'Create ' + commonkey
+          print "newnetykey = {}".format(newnetkey)
+          netname = inputs['vim_params'][paramskey]
+          print "populate distinct networks = {}".format(str(netname))
+          if newnetkey in inputs['vim_params']:
+#             if get_env_types(inputs) == 'OpenStack':
+             inputs['vim_params']['NeworOldNetwork'][str(netname)] = str(inputs['vim_params']['Subnet_' + commonkey ])
+#             else:
+#                inputs['vim_params']['NeworOldNetwork'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])
+
+        mgmt_network = inputs['vim_params']['mgmt_network']
+        print "Management network Value: ", inputs['vim_params']['create_mgmt_network']
+        if inputs['vim_params']['create_mgmt_network'] == True: 
+           #inputs['vim_params']['NeworOldNetwork'][mgmt_network] = inputs['vim_params']['create_mgmt_network']
+           inputs['vim_params']['NeworOldNetwork'][mgmt_network] = inputs['vim_params']['subnet_cidr']
+
+    print "TOSCA distinct networks inputs:{}".format(inputs)
 
 def add_scripts_osm(params,workdir):
     scripts_dir = os.path.join(workdir, 'scripts')
@@ -770,17 +794,15 @@ def generate_riftio_package(params, workdir, name, create_nsd=True):
         The files have already been copied to the correct folder inside the tar.gz package
     '''
     shutil.rmtree(cinit_scripts_dir)
-    
-def generate_standard_vmdk_blueprint(inputs, params, workdir, name):
-    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['NONE_' + params['env_type']]))
+
+
+def generate_standard_vmdk_blueprint(params, workdir, name):
+    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['NONE_' + params['vim_params']['env_type']]))
     out = template.render(params)
-    if get_env_types(inputs['params']) == 'OpenStack':
-        out_file = os.path.join(workdir, name + '.yaml')
-    else: 
-        out_file = os.path.join(workdir, name + '.ovf')
+    out_file = os.path.join(workdir, name + '.ovf')
     with open(out_file, 'w') as f:
         f.write(out)
-
+    
 def generate_standard_heat_blueprint(params, workdir, name):
     template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['NONE_' + params['env_type']]))
     out = template.render(params)
@@ -944,7 +966,7 @@ def create_multivdu_blueprint_package(inputs):
     try:
        create_work_dir(workdir)
        #if get_orch_types(inputs['params']) not in ['OSM 3.0', 'RIFT.ware 5.3', 'NONE']:
-       if get_orch_types(inputs) not in ['OSM 3.0', 'RIFT.ware 5.3', 'HEAT']:
+       if get_orch_types(inputs) not in ['OSM 3.0', 'RIFT.ware 5.3', 'HEAT', 'Ovf']:
           add_scripts(inputs, workdir)
           copy_README(inputs, workdir)
        print "The input parameter is ", get_orch_types(inputs)
@@ -980,18 +1002,28 @@ def create_multivdu_blueprint_package(inputs):
                Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name, vnf_name])
            return output_file, workdir
        elif get_orch_types(inputs) == 'TOSCA 1.1':
-            generate_standard_tosca_blueprint(inputs, workdir, name)
-            if get_env_types(inputs) == 'OpenStack':
-               for vm in inputs['params']:
-                   print "data ****************", vm['flavor']
-                   if vm['flavor'] == 'auto':
-                       generate_flavor_blueprint(inputs,workdir, name)
-            copy_inputs_template(inputs, workdir)
-            output_file = create_package(name, workdir)
-            if get_git_flag(inputs) == True:
-                 print "The git flag inside ", get_git_flag(inputs)
-                 Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
-            return output_file, workdir
+           populate_distinct_tosca_networks(inputs)
+           generate_standard_tosca_blueprint(inputs, workdir, name)
+#           if get_env_types(inputs['params']) == 'OpenStack':
+#               if get_flavor_type(inputs['params']) == 'Custom Flavor':
+ #                  generate_flavor_blueprint(inputs, inputs['params'], workdir, name)
+           copy_inputs_template(inputs, workdir)
+           output_file = create_package(name, workdir)
+           print "Got the output file", output_file
+           print "Got the working directory",workdir
+           print "The git flag outside ", get_git_flag(inputs)
+           if get_git_flag(inputs) == True:
+                print "The git flag inside ", get_git_flag(inputs)
+                Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
+           return output_file, workdir
+       elif get_orch_types(inputs) == 'Ovf':
+           vmdk_package=create_vmdk_package(inputs, name, workdir)
+           output_file = create_package(name, workdir)
+           print "The git flag outside ", get_git_flag(inputs['params'])
+           if get_git_flag(inputs['params']) == True:
+              print "The git flag inside ", get_git_flag(inputs['params'])
+              Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name, vnf_name])
+           return output_file, workdir
        elif get_orch_types(inputs) == 'HEAT':
            if get_env_types(inputs) == 'OpenStack':
                #generate_standard_heat_blueprint(inputs['params'], workdir, name)

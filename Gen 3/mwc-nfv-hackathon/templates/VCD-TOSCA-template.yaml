@@ -61,7 +61,7 @@ topology_template:
                 type: {{ vm.Interfaces1_name }}{% endif %}
             requirements:
                 - virtualLink:
-                    node: VL{{loop.index}}
+                    node: VL1{{loop.index}}
                 - virtualBinding:
                     node: VDU{{loop.index}}{% if vm.nic2_name %}
         CP2{{loop.index}}:
@@ -72,7 +72,7 @@ topology_template:
                 type: {{ vm.Interfaces2_name }}{% endif %}
             requirements:
                 - virtualLink:
-                    node: VL{{loop.index}}
+                    node: VL2{{loop.index}}
                 - virtualBinding:
                     node: VDU{{loop.index}}{% endif %}{% if vm.nic3_name %}
         CP3{{loop.index}}:
@@ -83,7 +83,7 @@ topology_template:
                 type: {{ vm.Interfaces3_name }}{% endif %}
             requirements:
                 - virtualLink:
-                    node: VL{{loop.index}}
+                    node: VL3{{loop.index}}
                 - virtualBinding:
                     node: VDU{{loop.index}}{% endif %}{% if vm.nic4_name %}
         CP4{{loop.index}}:
@@ -94,7 +94,7 @@ topology_template:
                 type: {{ vm.Interfaces4_name }}{% endif %}
             requirements:
                 - virtualLink:
-                    node: VL{{loop.index}}
+                    node: VL4{{loop.index}}
                 - virtualBinding:
                     node: VDU{{loop.index}}{% endif %}{% if vm.nic5_name %}
         CP5{{loop.index}}:
@@ -105,7 +105,7 @@ topology_template:
                 type: {{ vm.Interfaces5_name }}{% endif %}
             requirements:
                 - virtualLink:
-                    node: VL{{loop.index}}
+                    node: VL5{{loop.index}}
                 - virtualBinding:
                     node: VDU{{loop.index}}{% endif %}{% if vm.nic6_name %}
         CP6{{loop.index}}:
@@ -116,7 +116,7 @@ topology_template:
                 type: {{ vm.Interfaces6_name }}{% endif %}
             requirements:
                 - virtualLink:
-                    node: VL{{loop.index}}
+                    node: VL6{{loop.index}}
                 - virtualBinding:
                     node: VDU{{loop.index}}{% endif %}{% if vm.nic7_name %}
         CP7{{loop.index}}:
@@ -127,7 +127,7 @@ topology_template:
                 type: {{ vm.Interfaces7_name }}{% endif %}
             requirements:
                 - virtualLink:
-                    node: VL{{loop.index}}
+                    node: VL7{{loop.index}}
                 - virtualBinding:
                     node: VDU{{loop.index}}{% endif %}{% if vm.nic8_name %}
         CP8{{loop.index}}:
@@ -138,7 +138,7 @@ topology_template:
                 type: {{ vm.Interfaces8_name }}{% endif %}
             requirements:
                 - virtualLink:
-                    node: VL{{loop.index}}
+                    node: VL8{{loop.index}}
                 - virtualBinding:
                     node: VDU{{loop.index}}{% endif %}{% if vm.nic9_name %}
         CP9{{loop.index}}:
@@ -149,7 +149,7 @@ topology_template:
                 type: {{ vm.Interfaces9_name }}{% endif %}
             requirements:
                 - virtualLink:
-                    node: VL{{loop.index}}
+                    node: VL9{{loop.index}}
                 - virtualBinding:
                     node: VDU{{loop.index}}{% endif %}{% if vm.nic10_name %}
         CP10{{loop.index}}:
@@ -160,10 +160,57 @@ topology_template:
                 type: {{ vm.Interfaces10_name }}{% endif %}
             requirements:
                 - virtualLink:
-                    node: VL{{loop.index}}
+                    node: VL10{{loop.index}}
                 - virtualBinding:
-                    node: VDU{{loop.index}}{% endif %}
-        VL{{loop.index}}:
+                    node: VDU{{loop.index}}{% endif %}{% if vm.nic1_name %}
+        VL1{{loop.index}}:
             properties:
-                network_name: {get_input: ext_con_pnt}
-                vendor: VMware {% endfor %}
+                network_name: {{ vm.nic1_name }}
+                vendor: VMware {% if vm.nic1_name in vim_params['NeworOldNetwork'] %}
+                cidr: {{ vim_params.NeworOldNetwork.get(vm.nic1_name) }}{% endif %}{% endif %}{% if vm.nic2_name %}
+        VL2{{loop.index}}:
+            properties:
+                network_name: {{ vm.nic2_name }}
+                vendor: VMware {% if vm.nic2_name in vim_params['NeworOldNetwork'] %}
+                cidr: {{ vim_params.NeworOldNetwork.get(vm.nic2_name) }}{% endif %}{% endif %}{% if vm.nic3_name %}
+        VL3{{loop.index}}:
+            properties:
+                network_name: {{ vm.nic3_name }}
+                vendor: VMware {% if vm.nic3_name in vim_params['NeworOldNetwork'] %}
+                cidr: {{ vim_params.NeworOldNetwork.get(vm.nic3_name) }}{% endif %}{% endif %}{% if vm.nic4_name %}
+        VL4{{loop.index}}:
+            properties:
+                network_name: {{ vm.nic4_name }}
+                vendor: VMware {% if vm.nic4_name in vim_params['NeworOldNetwork'] %}
+                cidr: {{ vim_params.NeworOldNetwork.get(vm.nic4_name) }}{% endif %}{% endif %}{% if vm.nic5_name %}
+        VL5{{loop.index}}:
+            properties:
+                network_name: {{ vm.nic5_name }}
+                vendor: VMware {% if vm.nic5_name in vim_params['NeworOldNetwork'] %}
+                cidr: {{ vim_params.NeworOldNetwork.get(vm.nic5_name) }}{% endif %}{% endif %}{% if vm.nic6_name %}
+        VL6{{loop.index}}:
+            properties:
+                network_name: {{ vm.nic6_name }}
+                vendor: VMware {% if vm.nic6_name in vim_params['NeworOldNetwork'] %}
+                cidr: {{ vim_params.NeworOldNetwork.get(vm.nic6_name) }}{% endif %}{% endif %}{% if vm.nic7_name %}
+        VL7{{loop.index}}:
+            properties:
+                network_name: {{ vm.nic7_name }}
+                vendor: VMware {% if vm.nic7_name in vim_params['NeworOldNetwork'] %}
+                cidr: {{ vim_params.NeworOldNetwork.get(vm.nic7_name) }}{% endif %}{% endif %}{% if vm.nic8_name %}
+        VL8{{loop.index}}:
+            properties:
+                network_name: {{ vm.nic8_name }}
+                vendor: VMware {% if vm.nic8_name in vim_params['NeworOldNetwork'] %}
+                cidr: {{ vim_params.NeworOldNetwork.get(vm.nic8_name) }}{% endif %}{% endif %}{% if vm.nic9_name %}
+        VL9{{loop.index}}:
+            properties:
+                network_name: {{ vm.nic9_name }}
+                vendor: VMware {% if vm.nic9_name in vim_params['NeworOldNetwork'] %}
+                cidr: {{ vim_params.NeworOldNetwork.get(vm.nic9_name) }}{% endif %}{% endif %}{% if vm.nic10_name %}
+        VL10{{loop.index}}:
+            properties:
+                network_name: {{ vm.nic10_name }}
+                vendor: VMware {% if vm.nic10_name in vim_params['NeworOldNetwork'] %}
+                cidr: {{ vim_params.NeworOldNetwork.get(vm.nic10_name) }}{% endif %}{% endif %}{% endfor %}
+
