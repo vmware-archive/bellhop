@@ -67,8 +67,7 @@ module.exports = function (dataService, $state) {
       this.VIMType = config_data.VIMType;
       this.OrchType = config_data.OrchType;
       this.customFlavor = 0;
-      this.toscaEpa = (this.VIMType === 'OpenStack' && this.OrchType == 'TOSCA 1.1') ? true : false;
-      if (this.VIMType === 'OpenStack' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 11' ||  this.OrchType === 'None' || this.toscaEpa)) {
+      if (this.VIMType === 'OpenStack' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'None')) {
 	      for(f=0; f< this.flavor.length; f++){	
 		      if(this.flavor[f] == 'auto'){
 			      this.customFlavor ++ ;      
@@ -76,11 +75,19 @@ module.exports = function (dataService, $state) {
 	      }
       }
 
-      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 11' ||  this.OrchType === 'None' || this.toscaEpa)) {
+      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'None' || this.OrchType === 'Ovf')) {
   
 	      if (this.currPath - 1 == 4){
-     //          alert("I am here");
-		      this.currPath = this.currPath - 1 ;
+				
+				this.currPath = this.currPath - 1 ;
+				
+	      }
+		  
+		  if (this.currPath - 2 == 4){
+				if (this.OrchType === 'Ovf'){
+					this.currPath = this.currPath - 2 ;
+				}
+				
 	      }
       }
       
@@ -100,8 +107,7 @@ module.exports = function (dataService, $state) {
       this.VIMType = config_data.VIMType;
       this.OrchType = config_data.OrchType;
       this.customFlavor = 0;
-      this.toscaEpa = (this.VIMType === 'OpenStack' && this.OrchType == 'TOSCA 1.1') ? true : false;
-      if (this.VIMType === 'OpenStack' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 11' ||  this.OrchType === 'None' || this.toscaEpa )) {
+      if (this.VIMType === 'OpenStack' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'None')) {
 	      for(f=0; f< this.flavor.length; f++){	
 		      if(this.flavor[f] == 'auto'){
 			      this.customFlavor ++ ;      
@@ -109,11 +115,15 @@ module.exports = function (dataService, $state) {
 	      }
       }
 
-      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 11' || this.OrchType === 'None' || this.toscaEpa )) {
+      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 1.1' || this.OrchType === 'None' || this.OrchType === 'Ovf')) {
   
 	      if (this.currPath + 1 == 4){
 //               alert("I am here");
-		      this.currPath = this.currPath + 1 ;
+				if (this.OrchType === 'Ovf'){
+					this.currPath = this.currPath + 2 ;
+				}else{
+					this.currPath = this.currPath + 1 ;
+				}
 	      }
       }
       if( dataService.update() ) {
@@ -210,15 +220,25 @@ module.exports = function (dataService, $state) {
       this.VIMType = config_data.VIMType;
       this.OrchType = config_data.OrchType;
       this.customFlavour = 0;
-      this.toscaEpa = (this.VIMType === 'OpenStack' && this.OrchType == 'TOSCA 1.1') ? true : false;
-      if (this.VIMType === 'OpenStack' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 11' ||  this.OrchType === 'None' || this.toscaEpa )) {
+      if (this.VIMType === 'OpenStack' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'None')) {
 	      for(f=0; f< this.flavor.length; f++){	
 		      if(this.flavor[f] == 'auto'){
 			      this.customFlavor ++ ;      
 		      }
 	      }
       }
-      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 11' ||  this.OrchType === 'None' || this.toscaEpa )) {
+      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'None' || this.OrchType === 'Ovf')) {
+	      return true;
+      }
+      return false;
+   }
+   
+   this.IsScriptDisable = function(){
+      var config_data = dataService.getVnfDefinition();
+      this.VIMType = config_data.VIMType;
+      this.OrchType = config_data.OrchType;
+      
+      if (this.VIMType === 'vCloud Director'&& this.OrchType === 'Ovf') {
 	      return true;
       }
       return false;

@@ -48,6 +48,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 this.possibleNumbersOfNICs = [1,2,3,4,5,6,7,8,9,10];
          this.nicCnt = this.possibleNumbersOfNICs.length;
 	 this.VCDINTERFACES = ['Select Type','E1000'];
+	 this.VCD_OVF_INTERFACES = ['Select Type','Vmxnet3'];
 	 this.OPENSTACKINTERFACES = ['Select Type','VIRTIO','PCI-PASSTHROUGH','SR-IOV','E1000'];
 	 this.VCD_CLOUDIFY_INTERFACES = ['Select Type','Default'];
 	 this.OPENSTACK_CLOUDIFY_INTERFACES = ['Select Type','normal','direct','macvtap'];
@@ -168,6 +169,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 			
 			}
 		}
+		VCD_OVF_INTERFACES
 	*/ 
 	 this.possibleInterfaces = [];
 	 
@@ -176,7 +178,10 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	    if (this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0') {
 			
 			this.possibleInterfaces = this.VCD_CLOUDIFY_INTERFACES; 
-		} else {
+		} else if (this.OrchType == 'Ovf') {
+			
+			this.possibleInterfaces = this.VCD_OVF_INTERFACES; 
+		}else {
 			
 			this.possibleInterfaces = this.VCDINTERFACES; 
 		}

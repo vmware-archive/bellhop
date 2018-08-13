@@ -1,190 +1,1173 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<Envelope xmlns="http://schemas.dmtf.org/ovf/envelope/1" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1" xmlns:vmw="http://www.vmware.com/schema/ovf" xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:vssd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData">
-  <References>
-    <File ovf:id="file1" ovf:href="{{ vnfd_name }}-1.vmdk"/>
-  </References>
-<!---
-  <DiskSection>
-    <Info>List of the virtual disks</Info>
-    <Disk ovf:capacityAllocationUnits="byte" ovf:format="http://www.vmware.com/interfaces/specifications/vmdk.html#streamOptimized" ovf:diskId="vmdisk1" ovf:capacity="42949672960" ovf:fileRef="file1"/>
-  </DiskSection>
---->
-  <NetworkSection>
-    <Info>The list of logical networks</Info>
-    <Network ovf:name="VM Network">
-      <Description>The VM Network network</Description>
-    </Network>
-  </NetworkSection>
-  <vmw:StorageGroupSection ovf:required="false" vmw:id="group1" vmw:name="vSAN Default Storage Policy">
-    <Info>Storage policy for group of disks</Info>
-    <vmw:Description>The vSAN Default Storage Policy storage policy group</vmw:Description>
-  </vmw:StorageGroupSection>
-  <VirtualSystem ovf:id="{{ vnfd_name }}">
-    <Info>A Virtual system</Info>
-    <Name>{{ vnfd_name }}</Name>
-    <OperatingSystemSection ovf:id="103" vmw:osType="{{ image_id }}">
-      <Info>The operating system installed</Info>
-      <Description>{{ image_id }}</Description>
-    </OperatingSystemSection>
-    <VirtualHardwareSection>
-      <Info>Virtual hardware requirements</Info>
-      <System>
-        <vssd:ElementName>Virtual Hardware Family</vssd:ElementName>
-        <vssd:InstanceID>{% set instId=0 %}</vssd:InstanceID>
-        <vssd:VirtualSystemType>vmx-13</vssd:VirtualSystemType>
-      </System>
-      <Item>
-        <rasd:AllocationUnits>hertz * 10^6</rasd:AllocationUnits>
-        <rasd:Description>Number of Virtual CPUs</rasd:Description>
-        <rasd:ElementName>{{ cpu }} virtual CPU(s)</rasd:ElementName>
-        <rasd:InstanceID>{% set instId=instId+1 %}</rasd:InstanceID>
-        <rasd:ResourceType>3</rasd:ResourceType>
-        <rasd:VirtualQuantity>{{ cpu }}</rasd:VirtualQuantity>
-        <vmw:CoresPerSocket ovf:required="false">1</vmw:CoresPerSocket>
-      </Item>
-      <Item>
-        <rasd:AllocationUnits>byte * 2^20</rasd:AllocationUnits>
-        <rasd:Description>Memory Size</rasd:Description>
-        <rasd:ElementName>{{ ram }}MB of memory</rasd:ElementName>
-        <rasd:InstanceID>{% set instId=instId+1 %}</rasd:InstanceID>
-        <rasd:ResourceType>4</rasd:ResourceType>
-        <rasd:VirtualQuantity>{{ ram }}</rasd:VirtualQuantity>
-      </Item>
-      <Item>
-        <rasd:Address>0</rasd:Address>
-        <rasd:Description>SCSI Controller</rasd:Description>
-        <rasd:ElementName>SCSI Controller 1</rasd:ElementName>
-        <rasd:InstanceID>{% set instId=instId+1 %}</rasd:InstanceID>
-        <rasd:ResourceSubType>lsilogicsas</rasd:ResourceSubType>
-        <rasd:ResourceType>6</rasd:ResourceType>
-      </Item>
-      <Item>
-        <rasd:Address>0</rasd:Address>
-        <rasd:Description>SATA Controller</rasd:Description>
-        <rasd:ElementName>SATA Controller 1</rasd:ElementName>
-        <rasd:InstanceID>{% set instId=instId+1 %}</rasd:InstanceID>
-        <rasd:ResourceSubType>vmware.sata.ahci</rasd:ResourceSubType>
-        <rasd:ResourceType>20</rasd:ResourceType>
-      </Item>
-<!---
-      <Item>
-        <rasd:AddressOnParent>0</rasd:AddressOnParent>
-        <rasd:ElementName>Hard Disk 1</rasd:ElementName>
-        <rasd:HostResource>ovf:/disk/vmdisk1</rasd:HostResource>
-        <rasd:InstanceID>{% set instId=instId+1 %}</rasd:InstanceID>
-        <rasd:Parent>3</rasd:Parent>
-        <rasd:ResourceType>17</rasd:ResourceType>
-      </Item>
---->
-      <Item>
-        <rasd:AddressOnParent>0</rasd:AddressOnParent>
-        <rasd:AutomaticAllocation>false</rasd:AutomaticAllocation>
-        <rasd:ElementName>CD/DVD Drive 1</rasd:ElementName>
-        <rasd:InstanceID>{% set instId=instId+1 %}</rasd:InstanceID>
-        <rasd:Parent>4</rasd:Parent>
-        <rasd:ResourceSubType>vmware.cdrom.remotepassthrough</rasd:ResourceSubType>
-        <rasd:ResourceType>15</rasd:ResourceType>
-      </Item>
-      <Item>
-        <rasd:AddressOnParent>0</rasd:AddressOnParent>
-        <rasd:AutomaticAllocation>false</rasd:AutomaticAllocation>
-        <rasd:Description>Floppy Drive</rasd:Description>
-        <rasd:ElementName>Floppy Drive 1</rasd:ElementName>
-        <rasd:InstanceID>{% set instId=instId+1 %}</rasd:InstanceID>
-        <rasd:ResourceSubType>vmware.floppy.remotedevice</rasd:ResourceSubType>
-        <rasd:ResourceType>14</rasd:ResourceType>
-      </Item>
-      <Item>
-        <rasd:AddressOnParent>{% set i=0 %}</rasd:AddressOnParent>
-        <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
-        <rasd:Connection>VM Network</rasd:Connection>
-        <rasd:ElementName>{{ nic1_name }}</rasd:ElementName>
-        <rasd:InstanceID>{% set instId=instId+1 %}</rasd:InstanceID>
-        <rasd:ResourceSubType>{{ Interfaces1_name }}</rasd:ResourceSubType>
-        <rasd:ResourceType>10</rasd:ResourceType>
-        <vmw:Config ovf:required="false" vmw:key="connectable.allowGuestControl" vmw:value="true"/>
-        <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
-      </Item>{% if nic2_name %}
-      <Item>
-        <rasd:AddressOnParent>{% set i=i+1 %}</rasd:AddressOnParent>
-        <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
-        <rasd:Connection>VM Network</rasd:Connection>
-        <rasd:ElementName>{{ nic2_name }}</rasd:ElementName>
-        <rasd:InstanceID>{% set instId=instId+1 %}</rasd:InstanceID>
-        <rasd:ResourceSubType>{{ Interfaces2_name }}</rasd:ResourceSubType>
-        <rasd:ResourceType>10</rasd:ResourceType>
-        <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
-        <vmw:Config ovf:required="false" vmw:key="connectable.allowGuestControl" vmw:value="true"/>
-      </Item>{% endif %}{% if nic3_name %}
-      <Item>
-        <rasd:AddressOnParent>{% set i=i+1 %}</rasd:AddressOnParent>
-        <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
-        <rasd:Connection>VM Network</rasd:Connection>
-        <rasd:ElementName>{{ nic3_name }}</rasd:ElementName>
-        <rasd:InstanceID>{% set instId=instId+1 %}</rasd:InstanceID>
-        <rasd:ResourceSubType>{{ Interfaces3_name }}</rasd:ResourceSubType>
-        <rasd:ResourceType>10</rasd:ResourceType>
-        <vmw:Config ovf:required="false" vmw:key="connectable.allowGuestControl" vmw:value="true"/>
-        <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
-      </Item>{% endif %}{% if nic4_name %}
-       <Item>
-        <rasd:AddressOnParent>{% set i=i+1 %}</rasd:AddressOnParent>
-        <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
-        <rasd:Connection>VM Network</rasd:Connection>
-        <rasd:ElementName>{{ nic3_name }}</rasd:ElementName>
-        <rasd:InstanceID>10</rasd:InstanceID>
-        <rasd:ResourceSubType>{{ Interfaces3_name }}</rasd:ResourceSubType>
-        <rasd:ResourceType>10</rasd:ResourceType>
-        <vmw:Config ovf:required="false" vmw:key="connectable.allowGuestControl" vmw:value="true"/>
-        <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
-      </Item>{% endif %}{% if nic5_name %}
-       <Item>
-        <rasd:AddressOnParent>2</rasd:AddressOnParent>
-        <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
-        <rasd:Connection>VM Network</rasd:Connection>
-        <rasd:ElementName>{{ nic3_name }}</rasd:ElementName>
-        <rasd:InstanceID>10</rasd:InstanceID>
-        <rasd:ResourceSubType>{{ Interfaces3_name }}</rasd:ResourceSubType>
-        <rasd:ResourceType>10</rasd:ResourceType>
-        <vmw:Config ovf:required="false" vmw:key="connectable.allowGuestControl" vmw:value="true"/>
-        <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
-      </Item>{% endif %}{% if nic6_name %}
-      <Item>
-        <rasd:AddressOnParent>2</rasd:AddressOnParent>
-        <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
-        <rasd:Connection>VM Network</rasd:Connection>
-        <rasd:ElementName>{{ nic3_name }}</rasd:ElementName>
-        <rasd:InstanceID>10</rasd:InstanceID>
-        <rasd:ResourceSubType>{{ Interfaces3_name }}</rasd:ResourceSubType>
-        <rasd:ResourceType>10</rasd:ResourceType>
-        <vmw:Config ovf:required="false" vmw:key="connectable.allowGuestControl" vmw:value="true"/>
-        <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
-      </Item>{% endif %}
-      <Item ovf:required="false">
-        <rasd:ElementName>Video card</rasd:ElementName>
-        <rasd:InstanceID>11</rasd:InstanceID>
-        <rasd:ResourceType>24</rasd:ResourceType>
-        <vmw:Config ovf:required="false" vmw:key="enable3DSupport" vmw:value="false"/>
-        <vmw:Config ovf:required="false" vmw:key="videoRamSizeInKB" vmw:value="8192"/>
-        <vmw:Config ovf:required="false" vmw:key="use3dRenderer" vmw:value="automatic"/>
-        <vmw:Config ovf:required="false" vmw:key="useAutoDetect" vmw:value="false"/>
-        <vmw:Config ovf:required="false" vmw:key="numDisplays" vmw:value="1"/>
-        <vmw:Config ovf:required="false" vmw:key="graphicsMemorySizeInKB" vmw:value="262144"/>
-        <vmw:Config ovf:required="false" vmw:key="enableMPTSupport" vmw:value="false"/>
-      </Item>
-      <vmw:Config ovf:required="false" vmw:key="cpuHotAddEnabled" vmw:value="false"/>
-      <vmw:Config ovf:required="false" vmw:key="nestedHVEnabled" vmw:value="false"/>
-      <vmw:Config ovf:required="false" vmw:key="virtualSMCPresent" vmw:value="false"/>
-      <vmw:Config ovf:required="false" vmw:key="cpuHotRemoveEnabled" vmw:value="false"/>
-      <vmw:Config ovf:required="false" vmw:key="memoryHotAddEnabled" vmw:value="false"/>
-      <vmw:Config ovf:required="false" vmw:key="virtualICH7MPresent" vmw:value="false"/>{% if latency_sensitivity %}
-      <vmw:ExtraConfig ovf:required="false" vmw:key="sched.cpu.latencySensitivity" vmw:value="high" />{% else %}
-      <vmw:ExtraConfig ovf:required="false" vmw:key="sched.cpu.latencySensitivity" vmw:value="normal" />{% endif %}{% if numa_affinity %}
-      <vmw:ExtraConfig ovf:required="false" vmw:key="numa.nodeAffinity" vmw:value=" {{ number_numa_node }}" />{% endif %}
-<!---      <vmw:ExtraConfig ovf:required="false" vmw:key="sched.cpu.latencySensitivity" vmw:value="high" />   --->
-    </VirtualHardwareSection>
-    <vmw:StorageSection ovf:required="false" vmw:group="group1">
-      <Info>Storage policy group reference</Info>
-    </vmw:StorageSection>
-  </VirtualSystem>
-</Envelope>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Generated by VMware ovftool 4.1.0 (build-6823256), UTC time: 2018-08-07T21:10:36.545843Z-->
+<ovf:Envelope vmw:buildId="build-6823256" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1" xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:vcloud="http://www.vmware.com/vcloud/v1.5" xmlns:vmw="http://www.vmware.com/schema/ovf" xmlns:vssd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.dmtf.org/ovf/envelope/1 http://schemas.dmtf.org/ovf/envelope/1/dsp8023_1.1.0.xsd http://www.vmware.com/vcloud/v1.5 http://192.169.241.58/api/v1.5/schema/master.xsd http://www.vmware.com/schema/ovf http://www.vmware.com/schema/ovf http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2.22.0/CIM_ResourceAllocationSettingData.xsd http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2.22.0/CIM_VirtualSystemSettingData.xsd">
+    <ovf:References> {% for vm in params %}
+        <ovf:File ovf:href="{{ vim_params.vnfd_name }}-disk{{loop.index}}.vmdk" ovf:id="file-{{loop.index}}"/> {% endfor %}
+    </ovf:References>
+    <ovf:DiskSection>
+        <ovf:Info>Virtual disk information</ovf:Info> {% for vm in params %}
+        <ovf:Disk ovf:capacity="{{ vm.disk }}" ovf:capacityAllocationUnits="byte * 2^30" ovf:diskId="vmdisk-{{loop.index}}" ovf:fileRef="file-{{loop.index}}" ovf:format="http://www.vmware.com/interfaces/specifications/vmdk.html#streamOptimized"/> {% endfor %}
+    </ovf:DiskSection>
+    <ovf:NetworkSection>
+        <ovf:Info>The list of logical networks</ovf:Info> {% if vim_params.Network1_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network1_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network2_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network2_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network3_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network3_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network4_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network4_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network5_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network5_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network6_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network6_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network7_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network7_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network8_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network8_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network9_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network9_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network10_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network10_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network11_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network11_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network12_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network12_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network13_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network13_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network14_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network14_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network15_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network15_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network16_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network16_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network17_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network17_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network18_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network18_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network19_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network19_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}{% if vim_params.Network20_name %}
+        <ovf:Network ovf:name="{{ vim_params.Network20_name }}">
+            <ovf:Description/>
+        </ovf:Network> {% endif %}
+    </ovf:NetworkSection>
+    <vcloud:NetworkConfigSection ovf:required="false">
+        <ovf:Info>The configuration parameters for logical networks</ovf:Info> {% if vim_params.Network1_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network1_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network1 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network1 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip1 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip1 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork1 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network1 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network1_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network2_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network2_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network2 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network2 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip2 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip2 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork2 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network2 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network2_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network3_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network3_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network3 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network3 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip3 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip3 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork3 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network3 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network3_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network4_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network4_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network4 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network4 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip4 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip4 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork4 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network4 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network4_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network5_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network5_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network5 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network5 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip5 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip5 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork5 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network5 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network5_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network6_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network6_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network6 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network6 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip6 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip6 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork6 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network6 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network6_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network7_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network7_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network7 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network7 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip7 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip7 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork7 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network7 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network7_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network8_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network8_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network8 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network8 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip8 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip8 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork8 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network8 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network8_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network9_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network9_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network9 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network9 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip9 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip9 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork9 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network9 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network9_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network10_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network10_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network10 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network10 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip10 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip10 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork10 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network10 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network10_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network11_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network8_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network11 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network11 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip11 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip11 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork11 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network11 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network11_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network12_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network8_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network12 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network12 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip12 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip12 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork12 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network12 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network12_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network13_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network8_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network13 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network13 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip13 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip13 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork13 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network13 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network13_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network14_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network14_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network14 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network14 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip14 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip14 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork14 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network14 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network14_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network15_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network15_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network15 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network15 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip15 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip15 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork15 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network15 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network15_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network16_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network16_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network16 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network16 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip16 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip16 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork16 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network16 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network16_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network17_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network17_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network17 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network17 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip17 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip17 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork17 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network17 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network17_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network18_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network18_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network18 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network18 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip18 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip18 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork18 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network18 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network18_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network19_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network19_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network19 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network19 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip19 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip19 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork19 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network19 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network19_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network20_name %}
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network20_name }}">
+            <vcloud:Description/>
+            <vcloud:Configuration>
+                <vcloud:IpScopes>
+                    <vcloud:IpScope>
+                        <vcloud:IsInherited>false</vcloud:IsInherited>
+                        <vcloud:Gateway>{{ vim_params.Edge_Gateway_Network20 }}</vcloud:Gateway>
+                        <vcloud:Netmask>{{ vim_params.Netmask_Network20 }}</vcloud:Netmask>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:IpRanges>
+                            <vcloud:IpRange>
+                                <vcloud:StartAddress>{{ vim_params.Static_Range_Start_Ip20 }}</vcloud:StartAddress>
+                                <vcloud:EndAddress>{{ vim_params.Static_Range_End_Ip20 }}</vcloud:EndAddress>
+                            </vcloud:IpRange>
+                        </vcloud:IpRanges>
+                    </vcloud:IpScope>
+                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork20 %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network20 }}"/>
+                <vcloud:FenceMode>natRouted</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
+                <vcloud:Features>
+                    <vcloud:DhcpService>
+                        <vcloud:IsEnabled>false</vcloud:IsEnabled>
+                        <vcloud:DefaultLeaseTime>3600</vcloud:DefaultLeaseTime>
+                        <vcloud:MaxLeaseTime>7200</vcloud:MaxLeaseTime>
+                    </vcloud:DhcpService>
+                    <vcloud:FirewallService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:DefaultAction>drop</vcloud:DefaultAction>
+                        <vcloud:LogDefaultAction>false</vcloud:LogDefaultAction>
+                    </vcloud:FirewallService>
+                    <vcloud:NatService>
+                        <vcloud:IsEnabled>true</vcloud:IsEnabled>
+                        <vcloud:NatType>ipTranslation</vcloud:NatType>
+                        <vcloud:Policy>allowTrafficIn</vcloud:Policy>
+                    </vcloud:NatService>
+                </vcloud:Features> {% else %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network20_name }}"/>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
+            </vcloud:Configuration>
+            <vcloud:IsDeployed>false</vcloud:IsDeployed>
+        </vcloud:NetworkConfig> {% endif %}
+    </vcloud:NetworkConfigSection>
+    <ovf:VirtualSystemCollection ovf:id="{{ vim_params.vnfd_name }}">
+        <ovf:Info>A collection of virtual machines</ovf:Info>
+        <ovf:Name>{{ vim_params.vnfd_name }}</ovf:Name>
+        <ovf:StartupSection>
+            <ovf:Info>VApp startup section</ovf:Info> {% for vm in params %}
+            <ovf:Item ovf:id="{{ vim_params.vnfd_name }}{{loop.index}}" ovf:order="0" ovf:startAction="powerOn" ovf:startDelay="0" ovf:stopAction="powerOff" ovf:stopDelay="0"/> {% endfor %}
+        </ovf:StartupSection> {% for vm in params %}
+        <ovf:VirtualSystem ovf:id="{{ vim_params.vnfd_name }}{{loop.index}}">
+            <ovf:Info>A virtual machine</ovf:Info>
+            <ovf:Name>{{ vim_params.vnfd_name }}{{loop.index}}</ovf:Name>
+            <ovf:OperatingSystemSection ovf:id="80" vmw:osType="{{ vm.image_id }}">
+                <ovf:Info>Specifies the operating system installed</ovf:Info>
+                <ovf:Description>operating system installed on VM</ovf:Description>
+            </ovf:OperatingSystemSection>
+            <ovf:VirtualHardwareSection ovf:transport="">
+                <ovf:Info>Virtual hardware requirements</ovf:Info>
+                <ovf:System>
+                    <vssd:ElementName>Virtual Hardware Family</vssd:ElementName>
+                    <vssd:InstanceID>0</vssd:InstanceID>
+                    <vssd:VirtualSystemIdentifier>{{ vim_params.vnfd_name }}{{loop.index}}</vssd:VirtualSystemIdentifier>
+                    <vssd:VirtualSystemType>vmx-13</vssd:VirtualSystemType>
+                </ovf:System> {% if vm.nic1_name %}
+                <ovf:Item> 
+                    <rasd:AddressOnParent>0</rasd:AddressOnParent>
+                    <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
+                    <rasd:Connection vcloud:ipAddress="{{ vim_params.Static_Range_Start_Ip1 }}" vcloud:ipAddressingMode="POOL" vcloud:primaryNetworkConnection="true">{{ vm.nic1_name }}</rasd:Connection>
+                    <rasd:Description>{{ vm.Interfaces1_name }} ethernet adapter on &quot;{{ vm.nic1_name }}&quot;</rasd:Description>
+                    <rasd:ElementName>Network adapter 0</rasd:ElementName>
+                    <rasd:InstanceID>1</rasd:InstanceID>
+                    <rasd:ResourceSubType>{{ vm.Interfaces1_name }}</rasd:ResourceSubType>
+                    <rasd:ResourceType>10</rasd:ResourceType>
+                    <vmw:Config ovf:required="false" vmw:key="slotInfo.pciSlotNumber" vmw:value="160"/>
+                    <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
+                </ovf:Item> {% endif %} {% if vm.nic2_name %}
+                <ovf:Item>
+                    <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
+                    <rasd:Connection vcloud:ipAddress="{{ vim_params.Static_Range_Start_Ip2 }}" vcloud:ipAddressingMode="POOL" vcloud:primaryNetworkConnection="true">{{ vm.nic2_name }}</rasd:Connection>
+                    <rasd:Description>{{ vm.Interfaces2_name }} ethernet adapter on &quot;{{ vm.nic2_name }}&quot;</rasd:Description>
+                    <rasd:ElementName>Network adapter 1</rasd:ElementName>
+                    <rasd:InstanceID>2</rasd:InstanceID>
+                    <rasd:ResourceSubType>{{ vm.Interfaces2_name }}</rasd:ResourceSubType>
+                    <rasd:ResourceType>10</rasd:ResourceType>
+                    <vmw:Config ovf:required="false" vmw:key="slotInfo.pciSlotNumber" vmw:value="160"/>
+                    <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
+                </ovf:Item> {% endif %}{% if vm.nic3_name %}
+                <ovf:Item>
+                    <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
+                    <rasd:Connection vcloud:ipAddress="{{ vim_params.Static_Range_Start_Ip3 }}" vcloud:ipAddressingMode="POOL" vcloud:primaryNetworkConnection="true">{{ vm.nic3_name }}</rasd:Connection>
+                    <rasd:Description>{{ vm.Interfaces3_name }} ethernet adapter on &quot;{{ vm.nic3_name }}&quot;</rasd:Description>
+                    <rasd:ElementName>Network adapter 2</rasd:ElementName>
+                    <rasd:InstanceID>3</rasd:InstanceID>
+                    <rasd:ResourceSubType>{{ vm.Interfaces3_name }}</rasd:ResourceSubType>
+                    <rasd:ResourceType>10</rasd:ResourceType>
+                    <vmw:Config ovf:required="false" vmw:key="slotInfo.pciSlotNumber" vmw:value="160"/>
+                    <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
+                </ovf:Item> {% endif %}{% if vm.nic4_name %}
+                <ovf:Item>
+                    <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
+                    <rasd:Connection vcloud:ipAddress="{{ vim_params.Static_Range_Start_Ip4 }}" vcloud:ipAddressingMode="POOL" vcloud:primaryNetworkConnection="true">{{ vm.nic4_name }}</rasd:Connection>
+                    <rasd:Description>{{ vm.Interfaces4_name }} ethernet adapter on &quot;{{ vm.nic4_name }}&quot;</rasd:Description>
+                    <rasd:ElementName>Network adapter 3</rasd:ElementName>
+                    <rasd:InstanceID>4</rasd:InstanceID>
+                    <rasd:ResourceSubType>{{ vm.Interfaces4_name }}</rasd:ResourceSubType>
+                    <rasd:ResourceType>10</rasd:ResourceType>
+                    <vmw:Config ovf:required="false" vmw:key="slotInfo.pciSlotNumber" vmw:value="160"/>
+                    <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
+                </ovf:Item> {% endif %}{% if vm.nic5_name %}
+                <ovf:Item>
+                    <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
+                    <rasd:Connection vcloud:ipAddress="{{ vim_params.Static_Range_Start_Ip5 }}" vcloud:ipAddressingMode="POOL" vcloud:primaryNetworkConnection="true">{{ vm.nic5_name }}</rasd:Connection>
+                    <rasd:Description>{{ vm.Interfaces5_name }} ethernet adapter on &quot;{{ vm.nic5_name }}&quot;</rasd:Description>
+                    <rasd:ElementName>Network adapter 4</rasd:ElementName>
+                    <rasd:InstanceID>5</rasd:InstanceID>
+                    <rasd:ResourceSubType>{{ vm.Interfaces5_name }}</rasd:ResourceSubType>
+                    <rasd:ResourceType>10</rasd:ResourceType>
+                    <vmw:Config ovf:required="false" vmw:key="slotInfo.pciSlotNumber" vmw:value="160"/>
+                    <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
+                </ovf:Item> {% endif %}{% if vm.nic6_name %}
+                <ovf:Item>
+                    <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
+                    <rasd:Connection vcloud:ipAddress="{{ vim_params.Static_Range_Start_Ip6 }}" vcloud:ipAddressingMode="POOL" vcloud:primaryNetworkConnection="true">{{ vm.nic6_name }}</rasd:Connection>
+                    <rasd:Description>{{ vm.Interfaces6_name }} ethernet adapter on &quot;{{ vm.nic6_name }}&quot;</rasd:Description>
+                    <rasd:ElementName>Network adapter 5</rasd:ElementName>
+                    <rasd:InstanceID>6</rasd:InstanceID>
+                    <rasd:ResourceSubType>{{ vm.Interfaces6_name }}</rasd:ResourceSubType>
+                    <rasd:ResourceType>10</rasd:ResourceType>
+                    <vmw:Config ovf:required="false" vmw:key="slotInfo.pciSlotNumber" vmw:value="160"/>
+                    <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
+                </ovf:Item> {% endif %}{% if vm.nic7_name %}
+                <ovf:Item>
+                    <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
+                    <rasd:Connection vcloud:ipAddress="{{ vim_params.Static_Range_Start_Ip3 }}" vcloud:ipAddressingMode="POOL" vcloud:primaryNetworkConnection="true">{{ vm.nic7_name }}</rasd:Connection>
+                    <rasd:Description>{{ vm.Interfaces7_name }} ethernet adapter on &quot;{{ vm.nic7_name }}&quot;</rasd:Description>
+                    <rasd:ElementName>Network adapter 6</rasd:ElementName>
+                    <rasd:InstanceID>7</rasd:InstanceID>
+                    <rasd:ResourceSubType>{{ vm.Interfaces7_name }}</rasd:ResourceSubType>
+                    <rasd:ResourceType>10</rasd:ResourceType>
+                    <vmw:Config ovf:required="false" vmw:key="slotInfo.pciSlotNumber" vmw:value="160"/>
+                    <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
+                </ovf:Item> {% endif %}{% if vm.nic8_name %}
+                <ovf:Item>
+                    <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
+                    <rasd:Connection vcloud:ipAddress="{{ vim_params.Static_Range_Start_Ip3 }}" vcloud:ipAddressingMode="POOL" vcloud:primaryNetworkConnection="true">{{ vm.nic8_name }}</rasd:Connection>
+                    <rasd:Description>{{ vm.Interfaces8_name }} ethernet adapter on &quot;{{ vm.nic8_name }}&quot;</rasd:Description>
+                    <rasd:ElementName>Network adapter 7</rasd:ElementName>
+                    <rasd:InstanceID>8</rasd:InstanceID>
+                    <rasd:ResourceSubType>{{ vm.Interfaces8_name }}</rasd:ResourceSubType>
+                    <rasd:ResourceType>10</rasd:ResourceType>
+                    <vmw:Config ovf:required="false" vmw:key="slotInfo.pciSlotNumber" vmw:value="160"/>
+                    <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
+                </ovf:Item> {% endif %}{% if vm.nic9_name %}
+                <ovf:Item>
+                    <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
+                    <rasd:Connection vcloud:ipAddress="{{ vim_params.Static_Range_Start_Ip3 }}" vcloud:ipAddressingMode="POOL" vcloud:primaryNetworkConnection="true">{{ vm.nic9_name }}</rasd:Connection>
+                    <rasd:Description>{{ vm.Interfaces9_name }} ethernet adapter on &quot;{{ vm.nic9_name }}&quot;</rasd:Description>
+                    <rasd:ElementName>Network adapter 8</rasd:ElementName>
+                    <rasd:InstanceID>9</rasd:InstanceID>
+                    <rasd:ResourceSubType>{{ vm.Interfaces9_name }}</rasd:ResourceSubType>
+                    <rasd:ResourceType>10</rasd:ResourceType>
+                    <vmw:Config ovf:required="false" vmw:key="slotInfo.pciSlotNumber" vmw:value="160"/>
+                    <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
+                </ovf:Item> {% endif %}{% if vm.nic10_name %}
+                <ovf:Item>
+                    <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
+                    <rasd:Connection vcloud:ipAddress="{{ vim_params.Static_Range_Start_Ip3 }}" vcloud:ipAddressingMode="POOL" vcloud:primaryNetworkConnection="true">{{ vm.nic10_name }}</rasd:Connection>
+                    <rasd:Description>{{ vm.Interfaces10_name }} ethernet adapter on &quot;{{ vm.nic10_name }}&quot;</rasd:Description>
+                    <rasd:ElementName>Network adapter 9</rasd:ElementName>
+                    <rasd:InstanceID>2</rasd:InstanceID>
+                    <rasd:ResourceSubType>{{ vm.Interfaces10_name }}</rasd:ResourceSubType>
+                    <rasd:ResourceType>10</rasd:ResourceType>
+                    <vmw:Config ovf:required="false" vmw:key="slotInfo.pciSlotNumber" vmw:value="160"/>
+                    <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
+                </ovf:Item> {% endif %}
+                <ovf:Item>
+                    <rasd:Address>0</rasd:Address>
+                    <rasd:Description>SCSI Controller</rasd:Description>
+                    <rasd:ElementName>SCSI Controller 0</rasd:ElementName>
+                    <rasd:InstanceID>10</rasd:InstanceID>
+                    <rasd:ResourceSubType>lsilogic</rasd:ResourceSubType>
+                    <rasd:ResourceType>6</rasd:ResourceType>
+                    <vmw:Config ovf:required="false" vmw:key="slotInfo.pciSlotNumber" vmw:value="16"/>
+                </ovf:Item>
+                <ovf:Item>
+                    <rasd:AddressOnParent>0</rasd:AddressOnParent>
+                    <rasd:Description>Hard disk</rasd:Description>
+                    <rasd:ElementName>Hard disk 1</rasd:ElementName>
+                    <rasd:HostResource>ovf:/disk/vmdisk-{{loop.index}}</rasd:HostResource>
+                    <rasd:InstanceID>2000</rasd:InstanceID>
+                    <rasd:Parent>2</rasd:Parent>
+                    <rasd:ResourceType>17</rasd:ResourceType>
+                    <rasd:VirtualQuantity>{{ vm.disk }}</rasd:VirtualQuantity>
+                    <rasd:VirtualQuantityUnits>byte * 2^30</rasd:VirtualQuantityUnits>
+                    <vmw:Config ovf:required="false" vmw:key="backing.writeThrough" vmw:value="false"/>
+                </ovf:Item>
+                <ovf:Item>
+                    <rasd:Address>0</rasd:Address>
+                    <rasd:Description>IDE Controller</rasd:Description>
+                    <rasd:ElementName>IDE Controller 0</rasd:ElementName>
+                    <rasd:InstanceID>3</rasd:InstanceID>
+                    <rasd:ResourceType>5</rasd:ResourceType>
+                </ovf:Item>
+                <ovf:Item>
+                    <rasd:AddressOnParent>0</rasd:AddressOnParent>
+                    <rasd:AutomaticAllocation>false</rasd:AutomaticAllocation>
+                    <rasd:Description>Floppy Drive</rasd:Description>
+                    <rasd:ElementName>Floppy Drive 1</rasd:ElementName>
+                    <rasd:HostResource/>
+                    <rasd:InstanceID>8000</rasd:InstanceID>
+                    <rasd:ResourceType>14</rasd:ResourceType>
+                </ovf:Item>
+                <ovf:Item>
+                    <rasd:AllocationUnits>hertz * 10^6</rasd:AllocationUnits>
+                    <rasd:Description>Number of Virtual CPUs</rasd:Description>
+                    <rasd:ElementName>{{ vm.cpu }} virtual CPU(s)</rasd:ElementName>
+                    <rasd:InstanceID>4</rasd:InstanceID>
+                    <rasd:Limit>1000</rasd:Limit>
+                    <rasd:Reservation>200</rasd:Reservation>
+                    <rasd:ResourceType>3</rasd:ResourceType>
+                    <rasd:VirtualQuantity>{{ vm.cpu }}</rasd:VirtualQuantity>
+                    <rasd:Weight>1000</rasd:Weight>
+                    <vmw:CoresPerSocket ovf:required="false">{{ vm.cpu }}</vmw:CoresPerSocket>
+                </ovf:Item>
+                <ovf:Item>
+                    <rasd:AllocationUnits>byte * 2^20</rasd:AllocationUnits>
+                    <rasd:Description>Memory Size</rasd:Description>
+                    <rasd:ElementName>{{ vm.ram }} MB of memory</rasd:ElementName>
+                    <rasd:InstanceID>5</rasd:InstanceID>
+                    <rasd:Limit>{{ vm.ram }}</rasd:Limit>
+                    <rasd:Reservation>204</rasd:Reservation>
+                    <rasd:ResourceType>4</rasd:ResourceType>
+                    <rasd:VirtualQuantity>{{ vm.ram }}</rasd:VirtualQuantity>
+                    <rasd:Weight>10240</rasd:Weight>
+                </ovf:Item>
+                <ovf:Item>
+                    <rasd:AddressOnParent>0</rasd:AddressOnParent>
+                    <rasd:AutomaticAllocation>false</rasd:AutomaticAllocation>
+                    <rasd:Description>CD/DVD Drive</rasd:Description>
+                    <rasd:ElementName>CD/DVD Drive 1</rasd:ElementName>
+                    <rasd:HostResource/>
+                    <rasd:InstanceID>3000</rasd:InstanceID>
+                    <rasd:Parent>3</rasd:Parent>
+                    <rasd:ResourceType>15</rasd:ResourceType>
+                    <vmw:Config ovf:required="false" vmw:key="backing.exclusive" vmw:value="false"/>
+                </ovf:Item>
+                <vmw:Config ovf:required="false" vmw:key="cpuHotAddEnabled" vmw:value="false"/>
+                <vmw:Config ovf:required="false" vmw:key="cpuHotRemoveEnabled" vmw:value="false"/>
+                <vmw:Config ovf:required="false" vmw:key="firmware" vmw:value="bios"/>
+                <vmw:Config ovf:required="false" vmw:key="virtualICH7MPresent" vmw:value="false"/>
+                <vmw:Config ovf:required="false" vmw:key="virtualSMCPresent" vmw:value="false"/>
+                <vmw:Config ovf:required="false" vmw:key="memoryHotAddEnabled" vmw:value="false"/>
+                <vmw:Config ovf:required="false" vmw:key="nestedHVEnabled" vmw:value="false"/>
+                <vmw:Config ovf:required="false" vmw:key="powerOpInfo.powerOffType" vmw:value="soft"/>
+                <vmw:Config ovf:required="false" vmw:key="powerOpInfo.resetType" vmw:value="soft"/>
+                <vmw:Config ovf:required="false" vmw:key="powerOpInfo.standbyAction" vmw:value="checkpoint"/>
+                <vmw:Config ovf:required="false" vmw:key="powerOpInfo.suspendType" vmw:value="hard"/>
+                <vmw:Config ovf:required="false" vmw:key="tools.afterPowerOn" vmw:value="true"/>
+                <vmw:Config ovf:required="false" vmw:key="tools.afterResume" vmw:value="true"/>
+                <vmw:Config ovf:required="false" vmw:key="tools.beforeGuestShutdown" vmw:value="true"/>
+                <vmw:Config ovf:required="false" vmw:key="tools.beforeGuestStandby" vmw:value="true"/>
+                <vmw:Config ovf:required="false" vmw:key="tools.syncTimeWithHost" vmw:value="false"/>
+                <vmw:Config ovf:required="false" vmw:key="tools.toolsUpgradePolicy" vmw:value="manual"/>
+            </ovf:VirtualHardwareSection>
+            <vcloud:GuestCustomizationSection ovf:required="false">
+                <ovf:Info>Specifies Guest OS Customization Settings</ovf:Info>
+                <vcloud:Enabled>false</vcloud:Enabled>
+                <vcloud:ChangeSid>false</vcloud:ChangeSid>
+                <vcloud:VirtualMachineId>1</vcloud:VirtualMachineId>
+                <vcloud:JoinDomainEnabled>false</vcloud:JoinDomainEnabled>
+                <vcloud:UseOrgSettings>false</vcloud:UseOrgSettings>
+                <vcloud:AdminPasswordEnabled>true</vcloud:AdminPasswordEnabled>
+                <vcloud:AdminPasswordAuto>true</vcloud:AdminPasswordAuto>
+                <vcloud:ResetPasswordRequired>false</vcloud:ResetPasswordRequired>
+                <vcloud:ComputerName>{{ vim_params.vnfd_name }}{{loop.index}}</vcloud:ComputerName>
+            </vcloud:GuestCustomizationSection>
+        </ovf:VirtualSystem> {% endfor %}
+    </ovf:VirtualSystemCollection>
+</ovf:Envelope>

@@ -196,7 +196,7 @@ def create_vmdk_package(inputs, name, workdir):
     vmdk_dir = os.path.join(workdir, name + '_vmdk')
     os.mkdir(vmdk_dir)
     generate_standard_vmdk_blueprint(inputs,vmdk_dir, name)
-    #create_vmdk_manifest_file(name+'_vmdk', vmdk_dir)
+    create_vmdk_manifest_file(name+'_vmdk', vmdk_dir)
     #add_scripts(inputs['params'], vmdk_dir)   
     i = datetime.now()
     readme="VMDK descriptor package is generated. \nCreated on " + i.strftime('%Y/%m/%d %H:%M:%S')
@@ -397,6 +397,34 @@ def populate_distinct_networks(inputs):
            j += 1
         vmnum += 1
     print "inputs:{}".format(inputs)   
+
+def populate_distinct_ovf_networks(inputs):
+    # Data structures to populate  information for Ovf networks
+    inputs['vim_params']['NeworOldNetwork'] = {}
+    inputs['vim_params']['EdgeGatway'] = {}
+    inputs['vim_params']['netmask'] = {}
+    inputs['vim_params']['start_ip'] = {}
+    inputs['vim_params']['end_ip'] = {}
+    for paramskey in inputs['vim_params'].keys():
+        print "paramskey = {}".format(paramskey)
+        if re.match('Network(\d+)_name',paramskey):
+          commonkey = paramskey.split('_')[0]
+          print "commonkey={}".format(commonkey)
+          newnetkey = 'Create ' + commonkey
+          print "newnetykey = {}".format(newnetkey)
+          netname = inputs['vim_params'][paramskey]
+          netnum =  paramskey.split('Network')[1]
+          netindex = netnum.split('_')[0]
+          print "netindex = {}".format(netindex)
+          print "populate distinct networks = {}".format(str(netname))
+          if newnetkey in inputs['vim_params']:
+             inputs['vim_params']['NeworOldNetwork'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])
+             #inputs['vim_params']['NeworOldNetwork'][commonkey] = str(inputs['vim_params'][commonkey + '_name' ])
+             inputs['vim_params']['EdgeGatway'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])
+             inputs['vim_params']['netmask'][str(netname)] = str(inputs['vim_params']['Netmask_' + commonkey ])
+             inputs['vim_params']['start_ip'][str(netname)] = str(inputs['vim_params']['Static_Range_Start_Ip' + netindex ])
+             inputs['vim_params']['end_ip'][str(netname)] = str(inputs['vim_params']['Static_Range_End_Ip' + netindex ])
+    print "VCD OVF distinct networks inputs:{}".format(inputs)
  
     
 def populate_distinct_cloudify_networks(inputs):
@@ -796,7 +824,7 @@ def generate_riftio_package(params, workdir, name, create_nsd=True):
     shutil.rmtree(cinit_scripts_dir)
 
 
-def generate_standard_vmdk_blueprint(params, workdir, name):
+def generate_standard_ovf_blueprint(params, workdir, name):
     template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['NONE_' + params['vim_params']['env_type']]))
     out = template.render(params)
     out_file = os.path.join(workdir, name + '.ovf')
@@ -1017,12 +1045,13 @@ def create_multivdu_blueprint_package(inputs):
                 Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
            return output_file, workdir
        elif get_orch_types(inputs) == 'Ovf':
-           vmdk_package=create_vmdk_package(inputs, name, workdir)
+           populate_distinct_ovf_networks(inputs)
+           generate_standard_ovf_blueprint(inputs, workdir, name)
+           #create_vmdk_manifest_file((name+'_vmdk', workdir)
+           #copy_inputs_template(inputs, workdir)
            output_file = create_package(name, workdir)
-           print "The git flag outside ", get_git_flag(inputs['params'])
-           if get_git_flag(inputs['params']) == True:
-              print "The git flag inside ", get_git_flag(inputs['params'])
-              Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name, vnf_name])
+           if get_git_flag(inputs) == True:
+                Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
            return output_file, workdir
        elif get_orch_types(inputs) == 'HEAT':
            if get_env_types(inputs) == 'OpenStack':
