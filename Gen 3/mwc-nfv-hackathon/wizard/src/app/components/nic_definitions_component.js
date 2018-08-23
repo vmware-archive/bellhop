@@ -53,7 +53,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
          this.OPENSTACK_OSM_INTERFACES = ['Select Type','VIRTIO','VMXNET3','PCI-PASSTHROUGH','SR-IOV','E1000'];
 	 this.VCD_CLOUDIFY_INTERFACES = ['Select Type','Default'];
 	 this.OPENSTACK_CLOUDIFY_INTERFACES = ['Select Type','normal','direct','macvtap'];
-	 this.OPENSTACK_HEAT_INTERFACES = ['Select Type','normal'];
+	 this.OPENSTACK_HEAT_INTERFACES = ['Select Type','normal','direct','direct-physical', 'macvtap'];
 	 
 	 
 	 const config_vnf = dataService.getVnfDefinition();

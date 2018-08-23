@@ -20,103 +20,93 @@ resources:{% for vm in params %} {% set vmindex = loop.index %}
              - port: { get_resource: {{ vm.nic8_name }}_vdu_{{ vmindex }}_port8 }{% endif %}{% if vm.nic9_name %}
              - port: { get_resource: {{ vm.nic9_name }}_vdu_{{ vmindex }}_port9 }{% endif %}{% if vm.nic10_name %}
              - port: { get_resource: {{ vm.nic10_name }}_vdu_{{ vmindex }}_port10 }{% endif %}
-           #TBD : On each instance consider about 10 nics
     {{ vm.nic1_name }}_vdu_{{ vmindex }}_port1:
          type: OS::Neutron::Port
          properties: {% if vim_params.NewNetworks.get(vm.nic1_name) %}
             network_id: {get_resource: {{ vm.nic1_name }}} {% else %}
             network_id: {{ vm.nic1_name }} {% endif %}
-            binding:vnic_type: normal {% if vim_params.NewNetworks.get(vm.nic1_name) %}
+            binding:vnic_type: {{ vm.Interfaces1_name}}{% if vim_params.NewNetworks.get(vm.nic1_name) %}
             fixed_ips: {% if vm.static_ip_address1 %}
               - ip_address: {{ vm.static_ip_address1 }} {% else %}
-              - subnet_id:  { get_resource: {{ vm.nic1_name }}_subnet }{% endif %}{% endif %}
-    {% if vm.nic2_name %}
+              - subnet_id:  { get_resource: {{ vm.nic1_name }}_subnet }{% endif %}{% endif %} {% if vm.nic2_name %}
     {{ vm.nic2_name }}_vdu_{{ vmindex }}_port2:
       type: OS::Neutron::Port
       properties: {% if vim_params.NewNetworks.get(vm.nic2_name) %}
          network_id: {get_resource: {{ vm.nic2_name }}} {% else %}
          network_id: {{ vm.nic2_name }} {% endif %}
-         binding:vnic_type: normal {% if vim_params.NewNetworks.get(vm.nic2_name) %}
+         binding:vnic_type: {{ vm.Interfaces2_name}}{% if vim_params.NewNetworks.get(vm.nic2_name) %}
          fixed_ips: {% if vm.static_ip_address2 %}
            - ip_address: {{ vm.static_ip_address2 }} {% else %}
-           - subnet_id:  {get_resource: {{ vm.nic2_name }}_subnet }{% endif %}{% endif %}{% endif %}
-    {% if vm.nic3_name %}
+           - subnet_id:  {get_resource: {{ vm.nic2_name }}_subnet }{% endif %}{% endif %}{% endif %} {% if vm.nic3_name %}
     {{ vm.nic3_name }}_vdu_{{ vmindex }}_port3:
        type: OS::Neutron::Port
        properties: {% if vim_params.NewNetworks.get(vm.nic3_name) %}
          network_id: {get_resource: {{ vm.nic3_name }} } {% else %}
          network_id: {{ vm.nic3_name }} {% endif %}
-         binding:vnic_type: normal {% if vim_params.NewNetworks.get(vm.nic3_name) %}
+         binding:vnic_type: {{ vm.Interfaces3_name }}{% if vim_params.NewNetworks.get(vm.nic3_name) %}
          fixed_ips: {% if vm.static_ip_address3 %}
             - ip_address: {{ vm.static_ip_address3 }} {% else %}
-            - subnet_id: {{ vim_params.NewNetworks.get(vm.nic3_name) }}{% endif %}{% endif %}{% endif %}
-    {% if vm.nic4_name %}
+            - subnet_id: {{ vim_params.NewNetworks.get(vm.nic3_name) }}{% endif %}{% endif %}{% endif %}{% if vm.nic4_name %}
     {{ vm.nic4_name }}_vdu_{{ vmindex }}_port4:
        type: OS::Neutron::Port
        properties: {% if vim_params.NewNetworks.get(vm.nic4_name) %}
          network_id: {get_resource: {{ vm.nic4_name }}} {% else %}
          network_id: {{ vm.nic4_name }} {% endif %}
-         binding:vnic_type: normal {% if vim_params.NewNetworks.get(vm.nic4_name) %}
+         binding:vnic_type: {{ vm.Interfaces4_name }}{% if vim_params.NewNetworks.get(vm.nic4_name) %}
          fixed_ips: {% if vm.static_ip_address4 %}
            - ip_address: {{ vm.static_ip_address4 }} {% else %}
-           - subnet_id: {{ vim_params.NewNetworks.get(vm.nic4_name) }}{% endif %}{% endif %}{% endif %}
-    {% if vm.nic5_name %}
+           - subnet_id: {{ vim_params.NewNetworks.get(vm.nic4_name) }}{% endif %}{% endif %}{% endif %} {% if vm.nic5_name %}
     {{ vm.nic5_name }}_vdu_{{ vmindex }}_port5:
        type: OS::Neutron::Port
        properties: {% if vim_params.NewNetworks.get(vm.nic5_name) %}
          network_id: {get_resource: {{ vm.nic5_name }}} {% else %}
          network_id: {{ vm.nic5_name }} {% endif %}
-         binding:vnic_type: normal {% if vim_params.NewNetworks.get(vm.nic5_name) %}
+         binding:vnic_type: {{ vm.Interfaces5_name }}{% if vim_params.NewNetworks.get(vm.nic5_name) %}
          fixed_ips: {% if vm.static_ip_address5 %}
             - ip_address: {{ vm.static_ip_address5 }} {% else %}
-            - subnet_id: {{ vim_params.NewNetworks.get(vm.nic5_name) }}{% endif %}{% endif %}{% endif %}
-    {% if vm.nic6_name %}
+            - subnet_id: {{ vim_params.NewNetworks.get(vm.nic5_name) }}{% endif %}{% endif %}{% endif %} {% if vm.nic6_name %}
     {{ vm.nic6_name }}_vdu_{{ vmindex }}_port6:
        type: OS::Neutron::Port
        properties: {% if vim_params.NewNetworks.get(vm.nic6_name) %}
          network_id: { get_resource: {{ vm.nic6_name }} } {% else %}
 	 network_id: {{ vm.nic6_name }} {% endif %}
-         binding:vnic_type: normal {% if vim_params.NewNetworks.get(vm.nic6_name) %}
+         binding:vnic_type: {{ vm.Interfaces6_name }}{% if vim_params.NewNetworks.get(vm.nic6_name) %}
          fixed_ips: {% if vm.static_ip_address6 %}
            - ip_address: {{ vm.static_ip_address6 }} {% else %}
-           - subnet_id: {{ vim_params.NewNetworks.get(vm.nic6_name) }}{% endif %}{% endif %}{% endif %}
-    {% if vm.nic7_name %}
+           - subnet_id: {{ vim_params.NewNetworks.get(vm.nic6_name) }}{% endif %}{% endif %}{% endif %} {% if vm.nic7_name %}
     {{ vm.nic7_name }}_vdu_{{ vmindex }}_port7:
         type: OS::Neutron::Port
         properties: {% if vim_params.NewNetworks.get(vm.nic7_name) %}
            network_id: {get_resource: {{ vm.nic7_name }}} {% else %}
 	   network_id: {{ vm.nic7_name }} {% endif %}
-           binding:vnic_type: normal {% if vim_params.NewNetworks.get(vm.nic7_name) %}
+           binding:vnic_type: {{ vm.Interfaces7_name }} {% if vim_params.NewNetworks.get(vm.nic7_name) %}
            fixed_ips: {% if vm.static_ip_address7 %}
              - ip_address: {{ vm.static_ip_address7 }} {% else %}
-             - subnet_id: {{ vim_params.NewNetworks.get(vm.nic7_name) }}{% endif %}{% endif %}{% endif %}
-    {% if vm.nic8_name %}
+             - subnet_id: {{ vim_params.NewNetworks.get(vm.nic7_name) }}{% endif %}{% endif %}{% endif %} {% if vm.nic8_name %}
     {{ vm.nic8_name }}_vdu_{{ vmindex }}_port8:
         type: OS::Neutron::Port
         properties: {% if vim_params.NewNetworks.get(vm.nic8_name) %}
           network_id: {get_resource: {{ vm.nic8_name }}} {% else %}
           network_id: {{  vm.nic8_name }} {% endif %}
-          binding:vnic_type: normal {% if vim_params.NewNetworks.get(vm.nic8_name) %}
+          binding:vnic_type: {{ vm.Interfaces8_name }}{% if vim_params.NewNetworks.get(vm.nic8_name) %}
           fixed_ips: {% if vm.static_ip_address8 %}
              - ip_address: {{ vm.static_ip_address8 }} {% else %}
-             - subnet_id: {{ vim_params.NewNetworks.get(vm.nic8_name) }}{% endif %}{% endif %}{% endif %}
-    {% if vm.nic9_name %}
+             - subnet_id: {{ vim_params.NewNetworks.get(vm.nic8_name) }}{% endif %}{% endif %}{% endif %} {% if vm.nic9_name %}
     {{ vm.nic9_name }}_vdu_{{ vmindex }}_port9:
         type: OS::Neutron::Port
         properties: {% if vim_params.NewNetworks.get(vm.nic9_name) %}
            network_id: {get_resource: {{ vm.nic9_name }} } {% else %}
            network_id: {{ vm.nic9_name }} {% endif %}
-           binding:vnic_type: normal {% if vim_params.NewNetworks.get(vm.nic9_name) %}
+           binding:vnic_type: {{ vm.Interfaces9_name }} {% if vim_params.NewNetworks.get(vm.nic9_name) %}
            fixed_ips: {% if vm.static_ip_address9 %}
              - ip_address: {{ vm.static_ip_address9 }} {% else %}
-             - subnet_id: {{ vim_params.NewNetworks.get(vm.nic9_name) }}{% endif %}{% endif %}{% endif %} 
-    {% if vm.nic10_name %}
+             - subnet_id: {{ vim_params.NewNetworks.get(vm.nic9_name) }}{% endif %}{% endif %}{% endif %} {% if vm.nic10_name %}
     {{ vm.nic10_name }}_vdu_{{ vmindex }}_port10:
         type: OS::Neutron::Port
         properties: {% if vim_params.NewNetworks.get(vm.nic10_name) %}
            network_id: {get_resource: {{ vm.nic10_name }} } {% else %}
            network_id: {{ vm.nic10_name }} {% endif %}
-           binding:vnic_type: normal {% if vim_params.NewNetworks.get(vm.nic10_name) %}
+           binding:vnic_type: {{ vm.Interfaces10_namei }} {% if vim_params.NewNetworks.get(vm.nic10_name) %}
            fixed_ips: {% if vm.static_ip_address10 %}
               - ip_address: {{ vm.static_ip_address10 }} {% else %}
               - subnet_id: {{ vim_params.NewNetworks.get(vm.nic10_name) }}{% endif %}{% endif %}{% endif %}
