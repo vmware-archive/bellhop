@@ -1002,7 +1002,7 @@ def create_blueprint_package(inputs):
         cleanup(workdir)
 
 def create_multivdu_blueprint_package(inputs):
-    if get_orch_types(inputs) == 'None':
+    if get_orch_types(inputs) == 'Heat':
        inputs['vim_params']['orch_type'] = 'HEAT'
     name, workdir = gen_name_and_workdir(inputs)
     try:

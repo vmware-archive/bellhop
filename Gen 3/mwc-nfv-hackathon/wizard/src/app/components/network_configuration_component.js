@@ -146,7 +146,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
          };
 
          this.isMgmtNwt = function(){
-		if(this.OrchType == 'None' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' || this.OrchType == 'Ovf'){
+		if(this.OrchType == 'Heat' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' || this.OrchType == 'Ovf'){
 			return false;
 		}
 		else{
@@ -155,7 +155,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	}
 	 this.isOS_Subnet = function(){
               if((this.VIMType == 'OpenStack') &&
-                        (this.OrchType == 'None' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' )){
+                        (this.OrchType == 'Heat' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' )){
                  return true;
               }
               else{

@@ -87,7 +87,7 @@ module.exports = {
 	
 	for (i = 0; i <= this.scriptsInputsconfig.create.length -1; i++) {
 		//alert(1);
-		if (this.OrchType == 'OSM 3.0' || this.OrchType == 'None'){	
+		if (this.OrchType == 'OSM 3.0' || this.OrchType == 'Heat'){	
 		 
 		 console.log(this.scriptsInputsconfig['create']);
 		this.scriptsInputs[i] = {
@@ -159,7 +159,7 @@ module.exports = {
 		for (i = 0; i <= this.scriptsInputsconfig.create.length -1; i++) {
 		//alert(1);
 			
-			if (this.OrchType == 'OSM 3.0' || this.OrchType == 'None'){
+			if (this.OrchType == 'OSM 3.0' || this.OrchType == 'Heat'){
 				
 					create_arr.push(emptyToString(this.scriptsInputs[i]['create'].value))
 			}else{
@@ -170,7 +170,7 @@ module.exports = {
 				
 		}
 
-		if (this.OrchType == 'OSM 3.0' || this.OrchType == 'None'){
+		if (this.OrchType == 'OSM 3.0' || this.OrchType == 'Heat'){
 
 			config_final = {
 					create: create_arr			

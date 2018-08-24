@@ -59,7 +59,7 @@ module.exports = {
 	
 	
 	
-    this.OrchType = ['OSM 3.0','Cloudify 3.4','Cloudify 4.0','TOSCA 1.1','None', 'RIFT.ware 5.3'];
+    this.OrchType = ['OSM 3.0','Cloudify 3.4','Cloudify 4.0','TOSCA 1.1','Heat', 'RIFT.ware 5.3'];
     this.OrchTypeSelected = config.OrchType;
     this.OrchTypeSelected = config.OrchType;
 
@@ -106,7 +106,7 @@ module.exports = {
         if(this.VIMTypeSelected == 'vCloud Director'){
 		this.OrchType[4] = "Ovf";
 	}else{
-		this.OrchType[4] = "None";
+		this.OrchType[4] = "Heat";
 	}
 
      });

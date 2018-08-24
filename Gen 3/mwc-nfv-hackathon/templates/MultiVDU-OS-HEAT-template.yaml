@@ -118,7 +118,7 @@ resources:{% for vm in params %} {% set vmindex = loop.index %}
            ram:  {{ vm.ram }}
            disk: {{ vm.disk }}
            vcpus: {{ vm.cpu }}
-           extra_specs: { {% if vm.latency_sensitivity %} cpu_policy: dedicated {% endif %}, {% if vm.memory_reservation %} mem_page_size: Large {% endif %}, {% if vm.numa_affinity %} numa_nodes: {{ vm.number_numa_node }} {% endif %} } {% endif %} {% endfor %}       
+           extra_specs: { {% if vm.latency_sensitivity %} cpu_policy: dedicated {% endif %} {% if vm.memory_reservation %}, mem_page_size: Large {% endif %} {% if vm.numa_affinity %} ,numa_nodes: {{ vm.number_numa_node }} {% endif %} } {% endif %} {% endfor %}       
     # New Networks to be created
     {% for network in vim_params.NewNetworks %} 
     {{ network }}:

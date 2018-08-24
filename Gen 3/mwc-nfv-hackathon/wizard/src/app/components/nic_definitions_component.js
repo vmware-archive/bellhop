@@ -192,7 +192,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		if (this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0') {
 			
 			this.possibleInterfaces = this.OPENSTACK_CLOUDIFY_INTERFACES; 
-		} else if(this.OrchType == 'None') {
+		} else if(this.OrchType == 'Heat') {
 			this.possibleInterfaces = this.OPENSTACK_HEAT_INTERFACES;
                 }else if(this.OrchType == 'OSM 3.0') {
                         this.possibleInterfaces = this.OPENSTACK_OSM_INTERFACES;
@@ -208,7 +208,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 //console.log(this.possibleInterfaces);
 	 
 	this.isOS_Heat = function() {
-            if((this.OrchType == 'None' ) && (this.VIMType == 'OpenStack')){
+            if((this.OrchType == 'Heat' ) && (this.VIMType == 'OpenStack')){
                return true;
             }
            else{
