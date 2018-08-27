@@ -70,11 +70,12 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
          this.Static_end = config.Static_end;
          this.Netmask = config.Netmask;
          this.Gateway_IP = config.Gateway_IP;
-         this.DNS = config.DNS;
-         //this.DNS1 = config.DNS1;
-         //this.DNS2 = config.DNS2;
+         //this.DNS = config.DNS;
+         this.DNS1 = config.DNS1;
+         this.DNS2 = config.DNS2;
          this.DNS_Suffix = config.DNS_Suffix;
-         this.DHCP_Range = config.DHCP_Range;
+         this.DHCP_Start = config.DHCP_Start;
+         this.DHCP_End = config.DHCP_End;
 		
          this.mgmtNetwork = config.mgmtNetwork;
          this.SubnetCidr = config.SubnetCidr;
@@ -146,7 +147,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
          };
 
          this.isMgmtNwt = function(){
-		if(this.OrchType == 'Heat' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' || this.OrchType == 'Ovf'){
+		if(this.OrchType == 'None' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' || this.OrchType == 'Ovf'){
 			return false;
 		}
 		else{
@@ -155,7 +156,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	}
 	 this.isOS_Subnet = function(){
               if((this.VIMType == 'OpenStack') &&
-                        (this.OrchType == 'Heat' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' )){
+                        (this.OrchType == 'None' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' )){
                  return true;
               }
               else{
@@ -379,11 +380,12 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
                  Static_Range : this.Static_Range,
                  Netmask : this.Netmask,
                  Gateway_IP : this.Gateway_IP,
-                 //DNS1 : this.DNS1,
-                 //DNS2 : this.DNS2,
-                 DNS : this.DNS,
+                 DNS1 : this.DNS1,
+                 DNS2 : this.DNS2,
+                 //DNS : this.DNS,
                  DNS_Suffix : this.DNS_Suffix,
-                 DHCP_Range : this.DHCP_Range,
+                 DHCP_Start : this.DHCP_Start,
+                 DHCP_End : this.DHCP_End,
 		 OrgVdc_Network : this.OrgVdc_Network,
 		 OrgVdcNetwork : this.OrgVdcNetwork
        };

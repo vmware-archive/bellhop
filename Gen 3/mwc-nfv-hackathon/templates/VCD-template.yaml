@@ -71,13 +71,13 @@ inputs:{% for vm in params %}
   netmask1{{loop.index}}:
     default: {{ vim_params.netmask.get(vm.nic1_name) }}
   static_ip_range1{{loop.index}}:
-    default: {{ vim_params.static_ip_range.get(vm.nic1_name) }}
+    default: {{ vim_params.static_ip_start.get(vm.nic1_name) }}-{{ vim_params.static_ip_end.get(vm.nic1_name) }}
   dns1{{loop.index}}:
-    default: [ {{ vim_params.dns.get(vm.nic1_name) }} ]
+    default: [ '{{ vim_params.primary_dns.get(vm.nic1_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic1_name) }}' ]
   dns_suffix1{{loop.index}}:
     default: {{ vim_params.dns_suffix.get(vm.nic1_name) }}
   dhcp_range1{{loop.index}}:
-    default: {{ vim_params.dhcp_range.get(vm.nic1_name) }}{% endif %}{% if vm.nic2_name in vim_params['NeworOldNetwork'] %}
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic1_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic1_name) }}{% endif %}{% if vm.nic2_name in vim_params['NeworOldNetwork'] %}
   edge_gate_way2{{loop.index}}:
     default: {{ vim_params.EdgeGatway.get(vm.nic2_name) }}
   gateway_ip2{{loop.index}}:
@@ -85,13 +85,13 @@ inputs:{% for vm in params %}
   netmask2{{loop.index}}:
     default: {{ vim_params.netmask.get(vm.nic2_name) }}
   static_ip_range2{{loop.index}}:
-    default: {{ vim_params.static_ip_range.get(vm.nic2_name) }}
+    default: {{ vim_params.static_ip_start.get(vm.nic2_name) }}-{{ vim_params.static_ip_end.get(vm.nic2_name) }}
   dns2{{loop.index}}:
-    default: [ {{ vim_params.dns.get(vm.nic2_name) }} ]
+    default: [ '{{ vim_params.primary_dns.get(vm.nic2_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic2_name) }}' ]
   dns_suffix2{{loop.index}}:
     default: {{ vim_params.dns_suffix.get(vm.nic2_name) }}
   dhcp_range2{{loop.index}}:
-    default: {{ vim_params.dhcp_range.get(vm.nic2_name) }}{% endif %}{% if vm.nic3_name in vim_params['NeworOldNetwork'] %}
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic2_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic2_name) }}{% endif %}{% if vm.nic3_name in vim_params['NeworOldNetwork'] %}
   edge_gate_way3{{loop.index}}:
     default: {{ vim_params.EdgeGatway.get(vm.nic3_name) }}
   gateway_ip3{{loop.index}}:
@@ -99,13 +99,13 @@ inputs:{% for vm in params %}
   netmask3{{loop.index}}:
     default: {{ vim_params.netmask.get(vm.nic3_name) }}
   static_ip_range3{{loop.index}}:
-    default: {{ vim_params.static_ip_range.get(vm.nic3_name) }}
+    default: {{ vim_params.static_ip_start.get(vm.nic3_name) }}-{{ vim_params.static_ip_end.get(vm.nic3_name) }}
   dns3{{loop.index}}:
-    default: [ {{ vim_params.dns.get(vm.nic3_name) }} ]
+    default: [ '{{ vim_params.primary_dns.get(vm.nic3_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic3_name) }}' ]
   dns_suffix3{{loop.index}}:
     default: {{ vim_params.dns_suffix.get(vm.nic3_name) }}
   dhcp_range3{{loop.index}}:
-    default: {{ vim_params.dhcp_range.get(vm.nic3_name) }}{% endif %}{% if vm.nic4_name in vim_params['NeworOldNetwork'] %}
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic3_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic3_name) }}{% endif %}{% if vm.nic4_name in vim_params['NeworOldNetwork'] %}
   edge_gate_way4{{loop.index}}:
     default: {{ vim_params.EdgeGatway.get(vm.nic4_name) }}
   gateway_ip4{{loop.index}}:
@@ -113,13 +113,15 @@ inputs:{% for vm in params %}
   netmask4{{loop.index}}:
     default: {{ vim_params.netmask.get(vm.nic4_name) }}
   static_ip_range4{{loop.index}}:
-    default: {{ vim_params.static_ip_range.get(vm.nic4_name) }}
+    default: {{ vim_params.static_ip_start.get(vm.nic4_name) }}-{{ vim_params.static_ip_end.get(vm.nic4_name) }}
+  static_ip_end4{{loop.index}}:
+    default: {{ vim_params.static_ip_end.get(vm.nic4_name) }}
   dns4{{loop.index}}:
-    default: [ {{ vim_params.dns.get(vm.nic4_name) }} ]
+    default: [ '{{ vim_params.primary_dns.get(vm.nic4_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic4_name) }}' ]
   dns_suffix4{{loop.index}}:
     default: {{ vim_params.dns_suffix.get(vm.nic4_name) }}
   dhcp_range4{{loop.index}}:
-    default: {{ vim_params.dhcp_range.get(vm.nic4_name) }}{% endif %}{% if vm.nic5_name in vim_params['NeworOldNetwork'] %}
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic4_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic4_name) }}{% endif %}{% if vm.nic5_name in vim_params['NeworOldNetwork'] %}
   edge_gate_way5{{loop.index}}:
     default: {{ vim_params.EdgeGatway.get(vm.nic5_name) }}
   gateway_ip5{{loop.index}}:
@@ -127,13 +129,13 @@ inputs:{% for vm in params %}
   netmask5{{loop.index}}:
     default: {{ vim_params.netmask.get(vm.nic5_name) }}
   static_ip_range5{{loop.index}}:
-    default: {{ vim_params.static_ip_range.get(vm.nic5_name) }}
+    default: {{ vim_params.static_ip_start.get(vm.nic5_name) }}-{{ vim_params.static_ip_end.get(vm.nic5_name) }}
   dns5{{loop.index}}:
-    default: [ {{ vim_params.dns.get(vm.nic5_name) }} ]
+    default: [ '{{ vim_params.primary_dns.get(vm.nic5_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic5_name) }}' ]
   dns_suffix5{{loop.index}}:
     default: {{ vim_params.dns_suffix.get(vm.nic5_name) }}
-  dhcp_range5{{loop.index}}:
-    default: {{ vim_params.dhcp_range.get(vm.nic5_name) }}{% endif %}{% if vm.nic6_name in vim_params['NeworOldNetwork'] %}
+  dhcp_start5{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic5_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic5_name) }}{% endif %}{% if vm.nic6_name in vim_params['NeworOldNetwork'] %}
   edge_gate_way6{{loop.index}}:
     default: {{ vim_params.EdgeGatway.get(vm.nic6_name) }}
   gateway_ip6{{loop.index}}:
@@ -141,13 +143,13 @@ inputs:{% for vm in params %}
   netmask6{{loop.index}}:
     default: {{ vim_params.netmask.get(vm.nic6_name) }}
   static_ip_range6{{loop.index}}:
-    default: {{ vim_params.static_ip_range.get(vm.nic6_name) }}
+    default: {{ vim_params.static_ip_start.get(vm.nic6_name) }}- {{ vim_params.static_ip_end.get(vm.nic6_name) }}
   dns6{{loop.index}}:
-    default: [ {{ vim_params.dns.get(vm.nic6_name) }} ]
+    default: [ '{{ vim_params.primary_dns.get(vm.nic6_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic6_name) }}' ]
   dns_suffix6{{loop.index}}:
     default: {{ vim_params.dns_suffix.get(vm.nic6_name) }}
-  dhcp_range6{{loop.index}}:
-    default: {{ vim_params.dhcp_range.get(vm.nic6_name) }}{% endif %}{% if vm.nic7_name in vim_params['NeworOldNetwork'] %}
+  dhcp_start6{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic6_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic6_name) }}{% endif %}{% if vm.nic7_name in vim_params['NeworOldNetwork'] %}
   edge_gate_way7{{loop.index}}:
     default: {{ vim_params.EdgeGatway.get(vm.nic7_name) }}
   gateway_ip7{{loop.index}}:
@@ -155,13 +157,13 @@ inputs:{% for vm in params %}
   netmask7{{loop.index}}:
     default: {{ vim_params.netmask.get(vm.nic7_name) }}
   static_ip_range7{{loop.index}}:
-    default: {{ vim_params.static_ip_range.get(vm.nic7_name) }}
+    default: {{ vim_params.static_ip_start.get(vm.nic7_name) }}-{{ vim_params.static_ip_end.get(vm.nic7_name) }}
   dns7{{loop.index}}:
-    default: [ {{ vim_params.dns.get(vm.nic7_name) }} ]
+    default: [ '{{ vim_params.primary_dns.get(vm.nic7_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic7_name) }}' ]
   dns_suffix7{{loop.index}}:
     default: {{ vim_params.dns_suffix.get(vm.nic7_name) }}
-  dhcp_range7{{loop.index}}:
-    default: {{ vim_params.dhcp_range.get(vm.nic7_name) }}{% endif %}{% if vm.nic8_name in vim_params['NeworOldNetwork'] %}
+  dhcp_start7{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic7_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic7_name) }}{% endif %}{% if vm.nic8_name in vim_params['NeworOldNetwork'] %}
   edge_gate_way8{{loop.index}}:
     default: {{ vim_params.EdgeGatway.get(vm.nic8_name) }}
   gateway_ip8{{loop.index}}:
@@ -169,13 +171,13 @@ inputs:{% for vm in params %}
   netmask8{{loop.index}}:
     default: {{ vim_params.netmask.get(vm.nic8_name) }}
   static_ip_range8{{loop.index}}:
-    default: {{ vim_params.static_ip_range.get(vm.nic8_name) }}
+    default: {{ vim_params.static_ip_start.get(vm.nic8_name) }}-{{ vim_params.static_ip_end.get(vm.nic8_name) }}
   dns8{{loop.index}}:
-    default: [ {{ vim_params.dns.get(vm.nic8_name) }} ]
+    default: [ '{{ vim_params.primary_dns.get(vm.nic8_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic8_name) }}' ]
   dns_suffix8{{loop.index}}:
     default: {{ vim_params.dns_suffix.get(vm.nic8_name) }}
-  dhcp_range8{{loop.index}}:
-    default: {{ vim_params.dhcp_range.get(vm.nic8_name) }}{% endif %}{% if vm.nic9_name in vim_params['NeworOldNetwork'] %}
+  dhcp_start8{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic8_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic8_name) }}{% endif %}{% if vm.nic9_name in vim_params['NeworOldNetwork'] %}
   edge_gate_way9{{loop.index}}:
     default: {{ vim_params.EdgeGatway.get(vm.nic9_name) }}
   gateway_ip9{{loop.index}}:
@@ -183,13 +185,13 @@ inputs:{% for vm in params %}
   netmask9{{loop.index}}:
     default: {{ vim_params.netmask.get(vm.nic9_name) }}
   static_ip_range9{{loop.index}}:
-    default: {{ vim_params.static_ip_range.get(vm.nic9_name) }}
+    default: {{ vim_params.static_ip_start.get(vm.nic9_name) }}-{{ vim_params.static_ip_end.get(vm.nic9_name) }}
   dns9{{loop.index}}:
-    default: [ {{ vim_params.dns.get(vm.nic9_name) }} ]
+    default: [ '{{ vim_params.primary_dns.get(vm.nic9_name) }}' , ' {{ vim_params.secondary_dns.get(vm.nic9_name) }}' ]
   dns_suffix9{{loop.index}}:
     default: {{ vim_params.dns_suffix.get(vm.nic9_name) }}
-  dhcp_range9{{loop.index}}:
-    default: {{ vim_params.dhcp_range.get(vm.nic9_name) }}{% endif %}{% if vm.nic10_name in vim_params['NeworOldNetwork'] %}
+  dhcp_start9{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic9_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic9_name) }}{% endif %}{% if vm.nic10_name in vim_params['NeworOldNetwork'] %}
   edge_gate_way10{{loop.index}}:
     default: {{ vim_params.EdgeGatway.get(vm.nic10_name) }}
   gateway_ip10{{loop.index}}:
@@ -197,13 +199,13 @@ inputs:{% for vm in params %}
   netmask10{{loop.index}}:
     default: {{ vim_params.netmask.get(vm.nic10_name) }}
   static_ip_range10{{loop.index}}:
-    default: {{ vim_params.static_ip_range.get(vm.nic10_name) }}
+    default: {{ vim_params.static_ip_start.get(vm.nic10_name) }}-{{ vim_params.static_ip_end.get(vm.nic10_name) }}
   dns10{{loop.index}}:
-    default: [ {{ vim_params.dns.get(vm.nic10_name) }} ]
+    default: [ '{{ vim_params.primary_dns.get(vm.nic10_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic10_name) }}' ]
   dns_suffix10{{loop.index}}:
     default: {{ vim_params.dns_suffix.get(vm.nic10_name) }}
-  dhcp_rang10{{loop.index}}:
-    default: {{ vim_params.dhcp_range.get(vm.nic10_name) }}{% endif %}{% endfor %}
+  dhcp_start10{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic10_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic10_name) }}{% endif %}{% endfor %}
   vcloud_config:
     default: {}
 

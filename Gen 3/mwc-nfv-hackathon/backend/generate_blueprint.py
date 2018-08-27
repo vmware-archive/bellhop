@@ -432,10 +432,13 @@ def populate_distinct_cloudify_networks(inputs):
     inputs['vim_params']['EdgeGatway'] = {}
     inputs['vim_params']['GatwayIP'] = {}
     inputs['vim_params']['netmask'] = {}
-    inputs['vim_params']['dns'] = {}
-    inputs['vim_params']['dhcp_range'] = {}
+    inputs['vim_params']['primary_dns'] = {}
+    inputs['vim_params']['secondary_dns'] = {}
+    inputs['vim_params']['dhcp_start_ip'] = {}
+    inputs['vim_params']['dhcp_end_ip'] = {}
     inputs['vim_params']['dns_suffix'] = {}
-    inputs['vim_params']['static_ip_range'] = {}
+    inputs['vim_params']['static_ip_start'] = {}
+    inputs['vim_params']['static_ip_end'] = {}
     for paramskey in inputs['vim_params'].keys():
         print "paramskey = {}".format(paramskey)
         if re.match('Network(\d+)_name',paramskey):
@@ -454,11 +457,14 @@ def populate_distinct_cloudify_networks(inputs):
              inputs['vim_params']['EdgeGatway'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])
              inputs['vim_params']['GatwayIP'][str(netname)] = str(inputs['vim_params']['Gateway_IP_' + commonkey ])
              inputs['vim_params']['netmask'][str(netname)] = str(inputs['vim_params']['Netmask_' + commonkey ])
-             inputs['vim_params']['dns'][str(netname)] = str(inputs['vim_params']['DNS_' + commonkey ])
-             inputs['vim_params']['dhcp_range'][str(netname)] = str(inputs['vim_params']['DHCP_Range_' + commonkey ])
-             inputs['vim_params']['dns_suffix'][str(netname)] = str(inputs['vim_params']['DNS_Suffix_' + commonkey ])
-             inputs['vim_params']['static_ip_range'][str(netname)] = str(inputs['vim_params']['Static_Range' + netindex ])
-    print "Cloudify distinct networks inputs:{}".format(inputs)    
+             inputs['vim_params']['primary_dns'][str(netname)] = str(inputs['vim_params']['DNS1_' + commonkey ])
+             inputs['vim_params']['secondary_dns'][str(netname)] = str(inputs['vim_params']['DNS2_' + commonkey ])
+             inputs['vim_params']['dhcp_start_ip'][str(netname)] = str(inputs['vim_params']['DHCP_Start_' + commonkey ])
+             inputs['vim_params']['dhcp_end_ip'][str(netname)] = str(inputs['vim_params']['DHCP_End_' + commonkey ])
+#             inputs['vim_params']['dns_suffix'][str(netname)] = str(inputs['vim_params']['DNS_Suffix_' + commonkey ])
+             inputs['vim_params']['static_ip_start'][str(netname)] = str(inputs['vim_params']['Static_Range_Start_Ip' + netindex ])
+             inputs['vim_params']['static_ip_end'][str(netname)] = str(inputs['vim_params']['Static_Range_End_Ip' + netindex ])
+    print "Cloudify distinct networks inputs:{}".format(inputs)
 
 def populate_distinct_tosca_networks(inputs):
     # Data structures to populate  information for New networks in Cloudify
@@ -974,14 +980,6 @@ def create_blueprint_package(inputs):
                if get_git_flag(inputs['params']) == True:
                    print "The git flag inside ", get_git_flag(inputs['params'])
                    Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
-               return output_file, workdir
-            else:
-               vmdk_package=create_vmdk_package(inputs, name, workdir)
-               output_file = create_package(name, workdir)
-               print "The git flag outside ", get_git_flag(inputs['params'])
-               if get_git_flag(inputs['params']) == True:
-                  print "The git flag inside ", get_git_flag(inputs['params'])
-                  Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name, vnf_name])
                return output_file, workdir
         elif get_orch_types(inputs['params']) == 'TOSCA 1.1':
            generate_standard_tosca_blueprint(inputs['params'], workdir, name)

@@ -97,11 +97,11 @@ module.exports = function ($http) {
           Static_end:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
           Netmask:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
           Gateway_IP:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
-          DNS:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
-          //DNS1:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
-          //DNS2:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
+          DNS1:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
+          DNS2:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
           DNS_Suffix:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
-          DHCP_Range:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
+          DHCP_Start:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
+          DHCP_End:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
 	  OrgVdc_Network:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
 	  OrgVdcNetwork:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
 
@@ -635,12 +635,13 @@ module.exports = function ($http) {
 		}
 
 
-	for (let i = 0; i <_networkConfiguration.DNS.length; i++){
+/*	for (let i = 0; i <_networkConfiguration.DNS.length; i++){
 		  if (_networkConfiguration.DNS[i]){
 			  inputs.vim_params['DNS_Network' + ( i + 1 ) ] = _networkConfiguration.DNS[i];
 		  }
 		}
-/*	for (let i = 0; i <_networkConfiguration.DNS1.length; i++){
+*/
+	for (let i = 0; i <_networkConfiguration.DNS1.length; i++){
 		  if (_networkConfiguration.DNS1[i]){
 			  inputs.vim_params['DNS1_Network' + ( i + 1 ) ] = _networkConfiguration.DNS1[i];
 		  }
@@ -651,7 +652,7 @@ module.exports = function ($http) {
 			  inputs.vim_params['DNS2_Network' + ( i + 1 ) ] = _networkConfiguration.DNS2[i];
 		  }
 		}
-*/
+
 	for (let i = 0; i <_networkConfiguration.Gateway_IP.length; i++){
 		  if (_networkConfiguration.Gateway_IP[i]){
 			  inputs.vim_params['Gateway_IP_Network' + ( i + 1 ) ] = _networkConfiguration.Gateway_IP[i];
@@ -689,9 +690,15 @@ module.exports = function ($http) {
 		  }
 		}
 
-	for (let i = 0; i <_networkConfiguration.DHCP_Range.length; i++){
-		  if (_networkConfiguration.DHCP_Range[i]){
-			  inputs.vim_params['DHCP_Range_Network' + ( i + 1 ) ] = _networkConfiguration.DHCP_Range[i];
+	for (let i = 0; i <_networkConfiguration.DHCP_Start.length; i++){
+		  if (_networkConfiguration.DHCP_Start[i]){
+			  inputs.vim_params['DHCP_Start_Network' + ( i + 1 ) ] = _networkConfiguration.DHCP_Start[i];
+		  }
+	}
+
+	for (let i = 0; i <_networkConfiguration.DHCP_End.length; i++){
+		  if (_networkConfiguration.DHCP_End[i]){
+			  inputs.vim_params['DHCP_End_Network' + ( i + 1 ) ] = _networkConfiguration.DHCP_End[i];
 		  }
 	}
 

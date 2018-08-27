@@ -89,8 +89,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork1 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network1 }}"/>
+                </vcloud:IpScopes> {% if  vim_params.ParentNetwork1_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network1 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -109,9 +109,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork1_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network1_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork1_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network1_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -132,8 +134,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork2 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network2 }}"/>
+                </vcloud:IpScopes> {% if  vim_params.ParentNetwork2_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network2 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -152,9 +154,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork2_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network2_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork2_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network2_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -175,8 +179,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork3 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network3 }}"/>
+                </vcloud:IpScopes> {% if  vim_params.ParentNetwork3_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network3 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -195,9 +199,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features>  {% elif vim_params.ParentNetwork3_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network3_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork3_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network3_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -218,8 +224,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork4 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network4 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork4_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network4 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -238,9 +244,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork4_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network4_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork4_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network4_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -261,8 +269,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork5 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network5 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork5_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network5 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -281,9 +289,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork5_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network5_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork5_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network5_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -304,8 +314,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork6 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network6 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork6_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network6 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -324,9 +334,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features>  {% elif vim_params.ParentNetwork6_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network6_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork6_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network6_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -347,8 +359,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork7 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network7 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork7_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network7 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -367,9 +379,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork7_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network7_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork7_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network7_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -390,8 +404,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork8 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network8 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork8_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network8 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -410,9 +424,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork8_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network8_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork8_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network8_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -433,8 +449,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork9 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network9 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork9_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network9 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -453,9 +469,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork9_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network9_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork9_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network9_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -476,8 +494,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork10 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network10 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork10_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network10 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -496,14 +514,16 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork10_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network10_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork10_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network10_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode> 
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
         </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network11_name %}
-        <vcloud:NetworkConfig networkName="{{ vim_params.Network8_name }}">
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network11_name }}">
             <vcloud:Description/>
             <vcloud:Configuration>
                 <vcloud:IpScopes>
@@ -519,8 +539,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork11 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network11 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork11_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network11 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -539,14 +559,16 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork11_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network11_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork11_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network11_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
         </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network12_name %}
-        <vcloud:NetworkConfig networkName="{{ vim_params.Network8_name }}">
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network12_name }}">
             <vcloud:Description/>
             <vcloud:Configuration>
                 <vcloud:IpScopes>
@@ -562,8 +584,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork12 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network12 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork12_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network12 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -582,14 +604,16 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork12_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network12_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork12_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network12_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
         </vcloud:NetworkConfig> {% endif %}{% if vim_params.Network13_name %}
-        <vcloud:NetworkConfig networkName="{{ vim_params.Network8_name }}">
+        <vcloud:NetworkConfig networkName="{{ vim_params.Network13_name }}">
             <vcloud:Description/>
             <vcloud:Configuration>
                 <vcloud:IpScopes>
@@ -605,8 +629,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork13 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network13 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork13_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network13 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -625,9 +649,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork13_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network13_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork13_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network13_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -648,8 +674,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork14 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network14 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork14_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network14 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -668,9 +694,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork14_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network14_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork14_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network14_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -691,8 +719,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork15 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network15 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork15_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network15 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -711,9 +739,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork15_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network15_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork15_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network15_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -734,8 +764,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork16 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network16 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork16_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network16 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -754,9 +784,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork16_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network16_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork16_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network16_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -777,8 +809,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork17 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network17 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork17_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network17 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -797,9 +829,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork17_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network17_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork17_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network17_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -820,8 +854,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork18 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network18 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork18_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network18 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -840,9 +874,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork18_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network18_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork18_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network18_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -863,8 +899,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork19 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network19 }}"/>
+                </vcloud:IpScopes> {% if vim_params.ParentNetwork19_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network19 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -883,9 +919,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork19_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network19_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork19_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network19_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -906,8 +944,8 @@
                             </vcloud:IpRange>
                         </vcloud:IpRanges>
                     </vcloud:IpScope>
-                </vcloud:IpScopes> {% if  vim_params.Connect_OrgVdcNetwork20 %}
-                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_OrgVdc_Network20 }}"/>
+                </vcloud:IpScopes>  {% if vim_params.ParentNetwork20_type == "natRouted" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Parent_Network20 }}"/>
                 <vcloud:FenceMode>natRouted</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments>
                 <vcloud:Features>
@@ -926,9 +964,11 @@
                         <vcloud:NatType>ipTranslation</vcloud:NatType>
                         <vcloud:Policy>allowTrafficIn</vcloud:Policy>
                     </vcloud:NatService>
-                </vcloud:Features> {% else %}
+                </vcloud:Features> {% elif vim_params.ParentNetwork20_type == "isolated" %}
                 <vcloud:ParentNetwork href="" name="{{ vim_params.Network20_name }}"/>
-                <vcloud:FenceMode>isolated</vcloud:FenceMode>
+                <vcloud:FenceMode>isolated</vcloud:FenceMode> {% elif vim_params.ParentNetwork20_type == "bridged" %}
+                <vcloud:ParentNetwork href="" name="{{ vim_params.Network20_name }}"/>
+                <vcloud:FenceMode>bridged</vcloud:FenceMode>
                 <vcloud:RetainNetInfoAcrossDeployments>false</vcloud:RetainNetInfoAcrossDeployments> {% endif %}
             </vcloud:Configuration>
             <vcloud:IsDeployed>false</vcloud:IsDeployed>
@@ -1122,7 +1162,7 @@
                     <rasd:ElementName>{{ vm.ram }} MB of memory</rasd:ElementName>
                     <rasd:InstanceID>5</rasd:InstanceID>
                     <rasd:Limit>{{ vm.ram }}</rasd:Limit>
-                    <rasd:Reservation>204</rasd:Reservation>
+                    <rasd:Reservation>{{ vm.memory_reservation }}</rasd:Reservation>
                     <rasd:ResourceType>4</rasd:ResourceType>
                     <rasd:VirtualQuantity>{{ vm.ram }}</rasd:VirtualQuantity>
                     <rasd:Weight>10240</rasd:Weight>
@@ -1155,6 +1195,8 @@
                 <vmw:Config ovf:required="false" vmw:key="tools.beforeGuestStandby" vmw:value="true"/>
                 <vmw:Config ovf:required="false" vmw:key="tools.syncTimeWithHost" vmw:value="false"/>
                 <vmw:Config ovf:required="false" vmw:key="tools.toolsUpgradePolicy" vmw:value="manual"/>
+                <vmw:ExtraConfig ovf:required="false" vmw:key="sched.cpu.latencySensitivity" vmw:value="{{ vm.latency_sensitivity }}" /> {% if vm.numa_affinity %}
+                <vmw:ExtraConfig ovf:required="false" vmw:key="numa.nodeAffinity" vmw:value="{{ vm.number_numa_node }}" /> {% endif %}
             </ovf:VirtualHardwareSection>
             <vcloud:GuestCustomizationSection ovf:required="false">
                 <ovf:Info>Specifies Guest OS Customization Settings</ovf:Info>
