@@ -50,6 +50,7 @@ module.exports = function (dataService, $state) {
 	  {name: 'EPA VCloud CLOUDIFY', href: 'wizard.epa_configurations_vc_cloudify', button:'Continue'},
 	  {name: 'EPA VCloud OSM', href: 'wizard.epa_configurations_vc_osm', button:'Continue'},
 	  {name: 'EPA VCloud RIFT', href: 'wizard.epa_configurations_vc_rift', button:'Continue'},
+	  {name: 'EPA VCloud OVF', href: 'wizard.epa_configurations_vc_ovf', button:'Continue'},
 	  {name: 'EPA OpenStack TOSCA', href: 'wizard.epa_configurations_os_tosca', button:'Continue'},
 	  {name: 'EPA OpenStack CLOUDIFY', href: 'wizard.epa_configurations_os_cloudify', button:'Continue'},
 	  {name: 'EPA OpenStack HEAT', href: 'wizard.epa_configurations_os_heat', button:'Continue'},
@@ -77,7 +78,7 @@ module.exports = function (dataService, $state) {
 
       if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'Heat' || this.OrchType === 'Ovf')) {
   
-	      if (this.currPath - 1 == 4){
+	   /*	      if (this.currPath - 1 == 4){
 				
 				this.currPath = this.currPath - 1 ;
 				
@@ -88,8 +89,22 @@ module.exports = function (dataService, $state) {
 					this.currPath = this.currPath - 2 ;
 				}
 				
-	      }
+	      }*/
+
+	      if (this.OrchType === 'Ovf'){
+                        if (this.currPath - 1 == 5){
+                                this.currPath = this.currPath - 1 ;
+                        }
+
+              }else {
+
+                        if (this.currPath - 1 == 4){
+                                this.currPath = this.currPath - 1 ;
+                        }
+               }
+
       }
+
       
       this.currPath = this.currPath - 1;
       this.updatePath()
@@ -117,14 +132,26 @@ module.exports = function (dataService, $state) {
 
       if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 1.1' || this.OrchType === 'Heat' || this.OrchType === 'Ovf')) {
   
-	      if (this.currPath + 1 == 4){
+	   /*   if (this.currPath + 1 == 4){
 //               alert("I am here");
 				if (this.OrchType === 'Ovf'){
 					this.currPath = this.currPath + 2 ;
 				}else{
 					this.currPath = this.currPath + 1 ;
 				}
-	      }
+	      } */
+
+	      if (this.OrchType === 'Ovf'){  
+			if (this.currPath + 1 == 5){
+                                this.currPath = this.currPath + 1 ;
+                        }
+
+	      }else {
+
+			if (this.currPath + 1 == 4){
+				this.currPath = this.currPath + 1 ;
+			}
+	       }
       }
       if( dataService.update() ) {
         if (this.currPath + 1 === this.links.length) {
@@ -186,25 +213,30 @@ module.exports = function (dataService, $state) {
 		   //alert();
 		   path = this.epas[3].href;
 		   
-	   }else if (this.VIMType === 'OpenStack' && this.OrchType === 'TOSCA 1.1') {
-		   
-		   path = this.epas[4].href;
-		   
-	   }else if (this.VIMType === 'OpenStack' && (this.OrchType === 'Cloudify 3.4' ||this.OrchType === 'Cloudify 4.0')) {
+	   }else if (this.VIMType === 'vCloud Director' && this.OrchType === 'Ovf') {
+
+                   //alert();
+                   path = this.epas[4].href;
+
+           }else if (this.VIMType === 'OpenStack' && this.OrchType === 'TOSCA 1.1') {
 		   
 		   path = this.epas[5].href;
 		   
-	   }else if (this.VIMType === 'OpenStack' && (this.OrchType === 'Heat')) {
+	   }else if (this.VIMType === 'OpenStack' && (this.OrchType === 'Cloudify 3.4' ||this.OrchType === 'Cloudify 4.0')) {
 		   
 		   path = this.epas[6].href;
 		   
-	   }else if (this.VIMType === 'OpenStack' && this.OrchType === 'OSM 3.0') {
+	   }else if (this.VIMType === 'OpenStack' && (this.OrchType === 'Heat')) {
 		   
 		   path = this.epas[7].href;
 		   
+	   }else if (this.VIMType === 'OpenStack' && this.OrchType === 'OSM 3.0') {
+		   
+		   path = this.epas[8].href;
+		   
 	   }else if (this.VIMType === 'OpenStack' && this.OrchType === 'RIFT.ware 5.3') {
 		   //alert();
-		   path = this.epas[8].href;
+		   path = this.epas[9].href;
 		   
 	   }
 	   

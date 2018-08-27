@@ -187,6 +187,23 @@ module.exports = function routesConfig($stateProvider, $urlRouterProvider, $loca
         }
       },
     })
+
+       .state('wizard.epa_configurations_vc_ovf', {
+      url: 'epa_configurations_vc_ovf',
+      component: 'epavcovf',
+      resolve: {
+        pathChanger: function (navigationService,authService) {
+          "ngInject";
+          if(authService.loginObj.isAuthenticated){
+            navigationService.currPath = 4;
+          }else{
+            authService.logOut();
+            $state.go('/login');
+          }
+
+        }
+      },
+    })
 	
 	.state('wizard.epa_configurations_ost_osm', {
       url: 'epa_configurations_ost_osm',

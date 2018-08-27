@@ -104,7 +104,9 @@ module.exports = function ($http) {
           DHCP_End:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
 	  OrgVdc_Network:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
 	  OrgVdcNetwork:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
-
+	  Parent_Network:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
+	  Network_Type:['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type','Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type','Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type','Select Type','Select Type'],
+	  ParentNetwork_Type:['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
           NetworkIndices: [0, 1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
 	  NetworksType: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
 	  EthernetType: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
@@ -713,6 +715,18 @@ module.exports = function ($http) {
 			  inputs.vim_params['Ethernet' + ( i + 1 ) + '_type' ] = _networkConfiguration.EthernetType[i];
 		  }
 		}
+
+	 for (let i = 0; i <_networkConfiguration.Parent_Network.length; i++){
+                  if (_networkConfiguration.Parent_Network[i]){
+                          inputs.vim_params['Parent_Network' + ( i + 1 ) ] = _networkConfiguration.Parent_Network[i];
+                  }
+                }
+	
+	 for (let i = 0; i <_networkConfiguration.ParentNetwork_Type.length; i++){
+                  if (_networkConfiguration.ParentNetwork_Type[i]){
+                          inputs.vim_params['ParentNetwork' + ( i + 1 ) + '_type' ] = _networkConfiguration.ParentNetwork_Type[i];
+                  }
+                }
 	
 	for (let v = 0; v < _vnfDefinition.numberOfVMs; v++){
 		vm_params = {

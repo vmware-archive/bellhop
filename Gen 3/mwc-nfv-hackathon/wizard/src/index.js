@@ -54,6 +54,7 @@ const epavctComponent = require('./app/components/epa_configurations_vct_compone
 const epavcsComponent = require('./app/components/epa_configurations_vcosm_component');
 const epavcriftComponent = require('./app/components/epa_configurations_vcrift_component');
 const epavccloudifyComponent = require('./app/components/epa_configurations_vccloudify_component');
+const epavcovfComponent = require('./app/components/epa_configurations_vcovf_component');
 
 const epaostComponent = require('./app/components/epa_configurations_ost_component');
 const epaostosmComponent = require('./app/components/epa_configurations_ostosm_component');
@@ -107,5 +108,6 @@ module.exports = angular
   .component('epaosheat', epaosheatComponent)
   .component('signup',signupComponent)
   .component('forgotpassword',forgotpasswordComponent)
+  .component('epavcovf', epavcovfComponent)
   .name
 ;

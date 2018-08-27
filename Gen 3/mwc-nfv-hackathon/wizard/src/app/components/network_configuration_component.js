@@ -48,6 +48,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 this.OPENSTACKINTERFACES = ['Select Type','VIRTIO','PCI-PASSTHROUGH','SR-IOV','E1000','VMXNET3'];
 	 this.VCD_CLOUDIFY_INTERFACES = ['Select Type','Default'];
 	 this.OPENSTACK_CLOUDIFY_INTERFACES = ['Select Type','Default','SR-IOV'];
+         this.possibleNetworkType = ['Select Type','isolated','natRouted','bridged'];
 	 
 	 
 	 const config_vnf = dataService.getVnfDefinition();
@@ -86,6 +87,9 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 this.OrgVdc_Network = config.OrgVdc_Network;
 	 this.OrgVdcNetwork = config.OrgVdcNetwork;
 	 
+         this.Parent_Network = config.Parent_Network;
+         this.Network_Type = config.Network_Type;
+         this.ParentNetworkType = config.ParentNetwork_Type; 
 	 
 	 $scope.mgmtNetworkEthernetTypeSelected = this.mgmtNetworkEthernetType || 'ELAN';
          this.createMgmtNetwork = config.create_mgmt_network;
@@ -110,7 +114,16 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 				$scope.EthernetTypeSelected[i] = $scope.ETHERNETTYPE[0];
 			}
 	 }
-	 
+	
+         $scope.PARENTNETWORKTYPE = ['isolated','natRouted','bridged'];
+         $scope.ParentNetworkTypeSelected = this.ParentNetworkType;
+
+
+         for (i = 0; i < this.ParentNetworkType.length; i++) {
+                 if(this.ParentNetworkType[i] == "" || typeof this.ParentNetworkType[i] == undefined ){
+                                $scope.ParentNetworkTypeSelected[i] = $scope.PARENTNETWORKTYPE[0];
+                        }
+         } 
 	 this.NewNetwk = true;
           if (this.OrchType == 'TOSCA 1.1') {
                  this.NewNetwk = false;
@@ -147,7 +160,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
          };
 
          this.isMgmtNwt = function(){
-		if(this.OrchType == 'None' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' || this.OrchType == 'Ovf'){
+		if(this.OrchType == 'Heat' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' || this.OrchType == 'Ovf'){
 			return false;
 		}
 		else{
@@ -156,7 +169,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	}
 	 this.isOS_Subnet = function(){
               if((this.VIMType == 'OpenStack') &&
-                        (this.OrchType == 'None' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' )){
+                        (this.OrchType == 'Heat' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' )){
                  return true;
               }
               else{
@@ -339,7 +352,20 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 			}
 			
 		}
-		
+	
+                for (i = 0; i < this.indices.length; i++) {
+
+                        if(this.NICs[i] && this.numberOfNICs > 0){
+
+                                $scope.ParentNetworkTypeSelected[i] = $scope.ParentNetworkTypeSelected[i] ;
+                        }
+                        else
+                        {
+                                $scope.ParentNetworkTypeSelected[i] = "";
+
+                        }
+                }
+	
 		for (i = 0; i < this.indices.length; i++) {
 	       		 if(this.NICs[i] && this.numberOfNICs > 0){
 				
@@ -387,7 +413,10 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
                  DHCP_Start : this.DHCP_Start,
                  DHCP_End : this.DHCP_End,
 		 OrgVdc_Network : this.OrgVdc_Network,
-		 OrgVdcNetwork : this.OrgVdcNetwork
+		 OrgVdcNetwork : this.OrgVdcNetwork,
+                 Parent_Network : this.Parent_Network,
+                 ParentNetwork_Type : $scope.ParentNetworkTypeSelected
+
        };
 
         dataService.setNETC( config);
