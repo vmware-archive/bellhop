@@ -36,6 +36,7 @@ module.exports = {
     this.CUSTOM_FLAVOR = "auto"; 
     this.TOSCA_NAME = "TOSCA 1.1"; 
     this.OSM_NAME = 'OSM 3.0';
+    this.OVF_NAME = 'Ovf';
     this.RIFT_NAME = 'RIFT.ware 5.3';
     this.DISABLED_FORM_GROUP = 'form-group disabled';
     this.FORM_GROUP = 'form-group';
@@ -49,6 +50,7 @@ module.exports = {
     this.DISK_TOOLTIP = TOOLTIPS.DISK;
     this.FLAVOR_TOOLTIP = TOOLTIPS.FLAVOR_TOOLTIP;
     this.FLAVOR_NAME_TOOLTIP = TOOLTIPS.FLAVOR_NAME_TOOLTIP;
+    this.VMDK_TOOLTIP = TOOLTIPS.VMDK_TOOLTIP;
 	 
 
 	//vnf VMs
@@ -92,6 +94,13 @@ module.exports = {
 		}
 	};
 	
+	this.isVCD = function() {
+      return this.VIMTypeSelected === this.VCD_NAME;
+    };
+	
+	 this.isOVF = function() {
+      return this.OrchTypeSelected === this.OVF_NAME;
+    };
 	
 	// VNF configuration
     var config = dataService.getVnfConfiguration();
@@ -113,19 +122,41 @@ module.exports = {
 		this.Disk[d] = this.Disk[d] || '10';
 	}
 	
-       
+    // VMDK 
+	this.VMDK = config.VMDK
+    for (let d = 0; d <this.VMDK.length; d++){
+        this.VMDK[d] = this.VMDK[d];
+    }
+	
+	//Huge pages
+	this.Huge_pages = config.Huge_pages
+    for (let d = 0; d <this.Huge_pages.length; d++){
+        this.Huge_pages[d] = this.Huge_pages[d];
+    }
 	// CPU 
-	this.vCPUs = dataService.getVCPUs();
+	if(this.isVCD() && this.isOVF() ) {  
+		this.vCPUs = dataService.getVCPUs_ovf();
+	} else {
+		
+		this.vCPUs = dataService.getVCPUs();
+	}
+	
 	this.vCPU = config.vCPU;
 	this.vCPUSelected = this.vCPU;
 	for (let c = 0; c <this.vCPU.length; c++){
 			     
-		this.vCPUSelected[c] = this.vCPU[c] || '0';	  
+		this.vCPUSelected[c] = this.vCPU[c] || '1';	  
 	}
     
     
 	//RAM
-	this.RAMs = dataService.getRAMs();
+	//this.RAMs = dataService.getRAMs();
+	if(this.isVCD() && this.isOVF() ) {  
+		this.RAMs = dataService.getRAMs_ovf();
+	} else {
+		
+		this.RAMs = dataService.getRAMs();
+	}
 	this.RAM = config.RAM;
 	this.RAMSelected = this.RAM;
 	for (let r = 0; r <this.RAM.length; r++){
@@ -163,9 +194,7 @@ module.exports = {
            }
          };
 
-    this.isVCD = function() {
-      return this.VIMTypeSelected === this.VCD_NAME;
-    };
+    
 
     this.isVCDClass = function() {
       return this.isVCD() ? this.FORM_GROUP : this.DISABLED_FORM_GROUP;
@@ -187,10 +216,12 @@ module.exports = {
       return this.OrchTypeSelected === this.OSM_NAME;
     };
 
+   
+
     this.isRIFT = function() {
       return this.OrchTypeSelected === this.RIFT_NAME;
     };
-   
+  
     this.isOSM_VCDClass = function(index) {
         if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1')){
             return this.FORM_GROUP;
@@ -220,6 +251,9 @@ module.exports = {
     this.isOSM_or_VCD_and_NONE_Class = function(index) {
         if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0'|| this.OrchTypeSelected == 'Heat' )){
 	     return this.FORM_GROUP
+        }
+        else if (this.isVCD() && this.OrchTypeSelected != 'Ovf'){
+           return this.FORM_GROUP;
         }
         else{
            return ((this.isOSM())|| (this.isRIFT()) || (this.isVCD() && this.OrchTypeSelected != 'Heat')) ? this.FORM_GROUP : this.DISABLED_FORM_GROUP;
@@ -277,9 +311,6 @@ module.exports = {
                   {
                       this.validCnt++;
                   }
-
-		  		  		  
-		  
 	  }
 	  if(this.validCnt){
 		  isValid = false;
@@ -312,6 +343,8 @@ module.exports = {
 			vCPU: this.vCPUSelected,
 			RAM: this.RAMSelected,
 			Disk: this.Disk,
+			VMDK: this.VMDK,
+			Huge_pages: this.Huge_pages,
 			Flavor: this.FlavorSelected,
 			flavorname: this.flavorname
 		};

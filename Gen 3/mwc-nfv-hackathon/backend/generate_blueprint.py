@@ -451,18 +451,21 @@ def populate_distinct_cloudify_networks(inputs):
           print "netindex = {}".format(netindex)
           print "populate distinct networks = {}".format(str(netname))
           if newnetkey in inputs['vim_params']:
-             inputs['vim_params']['NeworOldNetwork'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])
-             #inputs['vim_params']['NeworOldNetwork'][commonkey] = str(inputs['vim_params'][commonkey + '_name' ])
-             inputs['vim_params']['EdgeGatway'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])
-             inputs['vim_params']['GatwayIP'][str(netname)] = str(inputs['vim_params']['Gateway_IP_' + commonkey ])
-             inputs['vim_params']['netmask'][str(netname)] = str(inputs['vim_params']['Netmask_' + commonkey ])
-             inputs['vim_params']['primary_dns'][str(netname)] = str(inputs['vim_params']['DNS1_' + commonkey ])
-             inputs['vim_params']['secondary_dns'][str(netname)] = str(inputs['vim_params']['DNS2_' + commonkey ])
-             inputs['vim_params']['dhcp_start_ip'][str(netname)] = str(inputs['vim_params']['DHCP_Start_' + commonkey ])
-             inputs['vim_params']['dhcp_end_ip'][str(netname)] = str(inputs['vim_params']['DHCP_End_' + commonkey ])
-#             inputs['vim_params']['dns_suffix'][str(netname)] = str(inputs['vim_params']['DNS_Suffix_' + commonkey ])
-             inputs['vim_params']['static_ip_start'][str(netname)] = str(inputs['vim_params']['Static_Range_Start_Ip' + netindex ])
-             inputs['vim_params']['static_ip_end'][str(netname)] = str(inputs['vim_params']['Static_Range_End_Ip' + netindex ])
+             if get_env_types(inputs) == 'OpenStack':             
+                inputs['vim_params']['NeworOldNetwork'][str(netname)] = str(inputs['vim_params']['Subnet_' + commonkey ])
+             else:
+	        inputs['vim_params']['NeworOldNetwork'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])
+                #inputs['vim_params']['NeworOldNetwork'][commonkey] = str(inputs['vim_params'][commonkey + '_name' ])
+	        inputs['vim_params']['EdgeGatway'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])
+	        inputs['vim_params']['GatwayIP'][str(netname)] = str(inputs['vim_params']['Gateway_IP_' + commonkey ])
+                inputs['vim_params']['netmask'][str(netname)] = str(inputs['vim_params']['Netmask_' + commonkey ])
+                inputs['vim_params']['primary_dns'][str(netname)] = str(inputs['vim_params']['DNS1_' + commonkey ])
+                inputs['vim_params']['secondary_dns'][str(netname)] = str(inputs['vim_params']['DNS2_' + commonkey ])
+                inputs['vim_params']['dhcp_start_ip'][str(netname)] = str(inputs['vim_params']['DHCP_Start_' + commonkey ])
+                inputs['vim_params']['dhcp_end_ip'][str(netname)] = str(inputs['vim_params']['DHCP_End_' + commonkey ])
+#               inputs['vim_params']['dns_suffix'][str(netname)] = str(inputs['vim_params']['DNS_Suffix_' + commonkey ])
+                inputs['vim_params']['static_ip_start'][str(netname)] = str(inputs['vim_params']['Static_Range_Start_Ip' + netindex ])
+                inputs['vim_params']['static_ip_end'][str(netname)] = str(inputs['vim_params']['Static_Range_End_Ip' + netindex ])
     print "Cloudify distinct networks inputs:{}".format(inputs)
 
 def populate_distinct_tosca_networks(inputs):

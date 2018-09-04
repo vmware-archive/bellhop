@@ -32,6 +32,7 @@
   "NETWORK_INTERFACE":"Enter Additional Network Name",
   "ETHERNET_TYPE":"Select Network Type",
   "MGMT_TYPE_NETWORK_TOOLTIP":"Select Management Network Type",
-  "MGMT_NETWORK_TOOLTIP":"Enter name of the netwrok for Management traffic"
+  "MGMT_NETWORK_TOOLTIP":"Enter name of the netwrok for Management traffic",
+  "VMDK_TOOLTIP":"Enter valid vmdk file name with vmdk extension."
 
 }

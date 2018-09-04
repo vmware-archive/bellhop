@@ -47,7 +47,8 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 this.OPENSTACKINTERFACES = ['Select Type','VIRTIO','PCI-PASSTHROUGH','SR-IOV','E1000','VMXNET3'];
 	 this.VCD_CLOUDIFY_INTERFACES = ['Select Type','Default'];
 	 this.OPENSTACK_CLOUDIFY_INTERFACES = ['Select Type','Default','SR-IOV'];
-         this.possibleNetworkType = ['Select Type','isolated','natRouted','bridged'];
+         //this.possibleNetworkType = ['Select Type','isolated','natRouted','bridged'];
+         this.possibleNetworkType = ['Select Type','Direct','Routed','Isolated'];
 	 
 	 
 	 const config_vnf = dataService.getVnfDefinition();
@@ -114,7 +115,8 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 			}
 	 }
 	
-         $scope.PARENTNETWORKTYPE = ['isolated','natRouted','bridged'];
+         //$scope.PARENTNETWORKTYPE = ['isolated','natRouted','bridged'];
+         $scope.PARENTNETWORKTYPE = ['Direct','Routed','Isolated'];
          $scope.ParentNetworkTypeSelected = this.ParentNetworkType;
 
 
@@ -123,10 +125,10 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
                                 $scope.ParentNetworkTypeSelected[i] = $scope.PARENTNETWORKTYPE[0];
                         }
          } 
-	 this.NewNetwk = true;
-          if (this.OrchType == 'TOSCA 1.1') {
+		  this.NewNetwk = true;
+          /*if (this.OrchType == 'TOSCA 1.1') {
                  this.NewNetwk = false;
-         }
+         }*/
 	 
 	 console.log("possibleInterfaces");
 	 console.log(this.possibleInterfaces);
@@ -193,7 +195,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
            }
          } 
 		 
-		 this.isVCD_Ovf = function() {
+ this.isVCD_Ovf = function() {
             if((this.OrchType == 'Ovf') && (this.VIMType == 'vCloud Director')){
                return true;
             }
@@ -279,25 +281,112 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
            } else{ isValid = false; }
 
 	 
-           this.subnetCnt = 0;
-	   if(this.isOS_Subnet()){
-		
-		for (i = 0; i < this.numberOfNICs; i++) { 
+       this.errorCnt = 0;
+       if(this.isOS_Subnet()){
+       		for (i = 0; i < this.numberOfNICs; i++) { 
+			if(this.Interfaces[i] && ((typeof this.Subnet[i] == 'undefined') || (this.Subnet[i] == ""))){
+				this.errorCnt++;		   	
 
-		   if(this.Interfaces[i] && ((typeof this.Subnet[i] == 'undefined') || (this.Subnet[i] == ""))){
-			this.subnetCnt++;		   	
-
-		    //}else if (){
-
-			
-		    }
-			
-		   console.log(this.subnetCnt); 
+				//}else if (){
+		}
 		}
 
+	   } 
 
-	   }  
-	   if( (isValid || (this.numberOfNICs == validCnt++)) && this.mgmtValid && (this.subnetCnt == 0)){
+	   
+	   if(this.isVCD_Cloudify()){
+		   /*
+			Edge_Gateway : this.Edge_Gateway,
+                 Network_Name : this.Network_Name,
+                 Static_end : this.Static_end,
+                 Static_Start : this.Static_Start,
+                 Static_Range : this.Static_Range,
+                 Netmask : this.Netmask,
+                 Gateway_IP : this.Gateway_IP,
+                 DNS1 : this.DNS1,
+                 DNS2 : this.DNS2,
+                 //DNS : this.DNS,
+                 DNS_Suffix : this.DNS_Suffix,
+                 DHCP_Start : this.DHCP_Start,
+                 DHCP_End : this.DHCP_End,
+		   
+		   */
+		   //alert(" In isVCD_Cloudify");
+		    
+		   for (i = 0; i < this.numberOfNICs; i++) { 
+		   
+			if (this.Interfaces[i]){
+					if((typeof this.Edge_Gateway[i] == 'undefined') || (this.Edge_Gateway[i] == "")) {
+						this.errorCnt++;	  		
+					}
+					
+					if(((typeof this.DNS_Suffix[i] == 'undefined') || (this.DNS_Suffix[i] == ""))) {
+						this.errorCnt++;		   		
+					}
+					
+					if((typeof this.Static_Start[i] == 'undefined') || (this.Static_Start[i] == "")) {
+						this.errorCnt++;	  		
+					}
+					
+					if(((typeof this.Static_end[i] == 'undefined') || (this.Static_end[i] == ""))) {
+						this.errorCnt++;		   		
+					}
+					
+					if((typeof this.DNS1[i] == 'undefined') || (this.DNS1[i] == "")) {
+						this.errorCnt++;	  		
+					}
+					
+					if(((typeof this.DNS2[i] == 'undefined') || (this.DNS2[i] == ""))) {
+						this.errorCnt++;		   		
+					}
+					
+					if((typeof this.DHCP_Start[i] == 'undefined') || (this.DHCP_Start[i] == "")) {
+						this.errorCnt++;	  		
+					}
+					
+					if(((typeof this.DHCP_End[i] == 'undefined') || (this.DHCP_End[i] == ""))) {
+						this.errorCnt++;		   		
+					}
+					if((typeof this.Netmask[i] == 'undefined') || (this.Netmask[i] == "")) {
+						this.errorCnt++;	  		
+					}
+					
+					if(((typeof this.Gateway_IP[i] == 'undefined') || (this.Gateway_IP[i] == ""))) {
+						this.errorCnt++;		   		
+					}
+					
+			
+			}
+			
+			
+		   }
+	   }
+	   
+	   if(this.isVCD_Ovf()){
+		   
+		   
+		   for (i = 0; i < this.numberOfNICs; i++) { 
+		   
+			    if((typeof this.Edge_Gateway[i] == 'undefined') || (this.Edge_Gateway[i] == "")) {
+						this.errorCnt++;	  		
+				}
+				if((typeof this.Netmask[i] == 'undefined') || (this.Netmask[i] == "")) {
+						this.errorCnt++;	  		
+				}
+					
+				if((typeof this.Static_Start[i] == 'undefined') || (this.Static_Start[i] == "")) {
+						this.errorCnt++;	  		
+				}
+					
+				if(((typeof this.Static_end[i] == 'undefined') || (this.Static_end[i] == ""))) {
+						this.errorCnt++;		   		
+				}
+				
+		   }
+		   
+	   }
+	   
+	   if( (isValid || (this.numberOfNICs == validCnt++)) && this.mgmtValid && (this.errorCnt == 0)){
 	   	isValid = true ;
 	   }
 	  //alert(isValid)
@@ -389,13 +478,13 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		const config = {
                  numberOfNetworks: this.numberOfNICs,
                  Networks: this.NICs,
-		 NewNetwork: this.Interfaces,
+				 NewNetwork: this.Interfaces,
                  Subnet: this.Subnet,
                  NetworkIndices: $scope._localIndices,
                  mgmtNetwork : this.mgmtNetwork,
                  SubnetCidr : this.SubnetCidr,
                  EthernetType : $scope.EthernetTypeSelected,
-		 NetworksType : $scope.NetworksTypeSelected,
+				 NetworksType : $scope.NetworksTypeSelected,
                  mgmtNetworkEthernetType : $scope.mgmtNetworkEthernetTypeSelected,
                  create_mgmt_network : this.createMgmtNetwork,
                  Edge_Gateway : this.Edge_Gateway,

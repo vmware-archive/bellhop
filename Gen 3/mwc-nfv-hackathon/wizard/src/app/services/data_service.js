@@ -42,8 +42,10 @@ module.exports = function ($http) {
   let _session_key = '';
 
   const _vnfTypes = VNF_TYPES;
-  const _vCPUs = [1, 2, 4, 8, 16];
-  const _RAMs = [1, 2, 4, 8, 16, 32, 64, 128, 256];
+  const _vCPUs_ovf = [1, 2, 4, 8, 16,32,64,128];
+  const _vCPUs = [1, 2, 4, 8, 16,32];
+  const _RAMs = [1, 2, 4, 8, 16, 32, 64, 128];
+  const _RAMs_ovf = [1, 2, 4, 8, 16, 32, 64, 128, 256,512,1024,2048,4096,6128];
   const _Flavors = FLAVORS;
   const _VcdNetworks = VCD_NETWORKS;
   const _OsNetworks = OS_NETWORKS;
@@ -76,6 +78,8 @@ module.exports = function ($http) {
       vCPU: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
       RAM: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
       Disk: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
+	  Huge_pages: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
+      VMDK: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
       Image: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
       Flavor: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
       flavorname: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','','']
@@ -525,8 +529,14 @@ module.exports = function ($http) {
   this.getVCPUs = function () {
     return _vCPUs;
   };
+  this.getVCPUs_ovf = function () {
+    return _vCPUs_ovf;
+  };
   this.getRAMs = function () {
     return _RAMs;
+  };
+  this.getRAMs_ovf = function () {
+    return _RAMs_ovf;
   };
   this.getFlavors = function () {
     return _Flavors;
@@ -732,8 +742,10 @@ module.exports = function ($http) {
 			image_id: _vnfConfiguration.Image[v],
 			flavor: _vnfConfiguration.Flavor[v],
 			flavorname: _vnfConfiguration.flavorname[v],
-			cpu: _vCPUs[_vnfConfiguration.vCPU[v]],
+			//cpu: _vCPUs[_vnfConfiguration.vCPU[v]],
+			cpu: _vnfConfiguration.vCPU[v],
 			disk: _vnfConfiguration.Disk[v],
+			huge_pages: _vnfConfiguration.Huge_pages[v],
 			ram: _vnfConfiguration.RAM[v] * 1024,
 			numa_affinity : _epaDefinition.NumaAffinity[v],
 			memory_reservation: _epaDefinition.MemoryReservation[v],

@@ -76,7 +76,7 @@ module.exports = function (dataService, $state) {
 	      }
       }
 
-      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'Heat' || this.OrchType === 'Ovf')) {
+      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0'  ||  this.OrchType == 'TOSCA 1.1' || this.OrchType === 'Heat' || this.OrchType === 'Ovf')) {
   
 	   /*	      if (this.currPath - 1 == 4){
 				
@@ -96,7 +96,12 @@ module.exports = function (dataService, $state) {
                                 this.currPath = this.currPath - 1 ;
                         }
 
-              }else {
+         }else if (this.VIMType === 'vCloud Director'  && this.OrchType == 'TOSCA 1.1' ){
+			//alert("I")
+			
+			  this.currPath = this.currPath ;
+			
+	    }else {
 
                         if (this.currPath - 1 == 4){
                                 this.currPath = this.currPath - 1 ;
@@ -130,7 +135,7 @@ module.exports = function (dataService, $state) {
 	      }
       }
 
-      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 1.1' || this.OrchType === 'Heat' || this.OrchType === 'Ovf')) {
+      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType == 'TOSCA 1.1' || this.OrchType === 'Cloudify 4.0'  || this.OrchType === 'Heat' || this.OrchType === 'Ovf')) {
   
 	   /*   if (this.currPath + 1 == 4){
 //               alert("I am here");
@@ -143,9 +148,14 @@ module.exports = function (dataService, $state) {
 
 	      if (this.OrchType === 'Ovf'){  
 			if (this.currPath + 1 == 5){
-                                this.currPath = this.currPath + 1 ;
-                        }
+                this.currPath = this.currPath + 1 ;
+            }
 
+	      }else if (this.VIMType === 'vCloud Director'  && this.OrchType == 'TOSCA 1.1' ){
+			//alert("I")
+			
+			  this.currPath = this.currPath ;
+			
 	      }else {
 
 			if (this.currPath + 1 == 4){

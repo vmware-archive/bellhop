@@ -81,6 +81,7 @@ module.exports = {
       'cpu': 'vCPU',
       'ram': 'RAM (MB)',
       'disk': 'Disk',
+      'VMDK': 'VMDK File Name',
       'numa_affinity' : 'Numa Affinity',
       'memory_reservation':'Memory Reservation',
       'latency_sensitivity':'Latency Sensitivity',

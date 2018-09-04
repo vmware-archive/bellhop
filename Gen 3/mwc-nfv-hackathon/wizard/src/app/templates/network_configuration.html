@@ -50,6 +50,15 @@
 		</span>
 	</div>
     </div> 
+	
+    <div class="form-group " ng-show="$ctrl.createMgmtNetwork && ($ctrl.OrchType == 'TOSCA 1.1')" >
+	<label class="required" for="mgmtNetwork">Management Subnet Cidr</label>
+    	<div>
+		<input type="text" name="{{MgmtSubnet}}" 
+		       ng-model="$ctrl.SubnetCidr" 
+                       placeholder="Subnet cidr" size="14"  required />
+	</div>	
+    </div>
       
     <div class="form-group" ng-show="$ctrl.NewNetwk && $ctrl.isOSM()">
     	<label class="required" for="mgmtNetwork">Management Network Type</label>
@@ -58,12 +67,12 @@
 		      ng-options="mgmtNetworkenetwork for mgmtNetworkenetwork in ETHERNETTYPE">
 	     </select>
       	</div>
-	<div class="col-xs-2">
-	     <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
-	           <clr-icon shape="info-circle" size="24"></clr-icon>
-		   <span class="tooltip-content">{{ $ctrl.MGMT_TYPE_NETWORK_TOOLTIP }}</span>
-             </span>
-	</div>
+		<div class="col-xs-2">
+			 <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
+				   <clr-icon shape="info-circle" size="24"></clr-icon>
+			   <span class="tooltip-content">{{ $ctrl.MGMT_TYPE_NETWORK_TOOLTIP }}</span>
+				 </span>
+		</div>
 
     </div>
 
@@ -210,10 +219,9 @@
 			    	  </span>
 			     </div>
 			   </div>
-			   <div class="form-group long col-xs-4" ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isOS_Subnet()" >
+			   <div class="form-group long col-xs-4" ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && ($ctrl.isOS_Subnet() || ($ctrl.OrchType == 'TOSCA 1.1'))" >
 				<div class="col-xs-4" style="margin: 5px;">
 			 	      <input type="text" name="{{Subnet}}" 
-					ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isOS_Subnet()"
 	           		        ng-model="$ctrl.Subnet[ $ctrl.indices[ $index ]]" 
 				        data-index="{{ $ctrl.indices[ $index ] }}" 
                                         placeholder="Subnet cidr" size="14"  required />
@@ -225,7 +233,7 @@
 					ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isVCD_Cloudify()"
 	           		        ng-model="$ctrl.Edge_Gateway[ $ctrl.indices[ $index ]]" 
 				        data-index="{{ $ctrl.indices[ $index ] }}" 
-                                        placeholder="Edge Gateway" size="14"  />
+                                        placeholder="Edge Gateway" size="14"  required />
                                       <span> </span>
 			 	      <input type="text" name="{{Subnet}}"
                                         ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isVCD_Cloudify()"
