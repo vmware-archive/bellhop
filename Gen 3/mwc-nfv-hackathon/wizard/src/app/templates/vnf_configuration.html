@@ -102,7 +102,7 @@
 			         steps="$ctrl.vCPUs"></range>
 		     </div>
 		</div>-->
-		<div ng-class="$ctrl.isOSM_or_VCD_Class($index)" ng-show="$ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index)">
+<!--		<div ng-class="$ctrl.isOSM_or_VCD_Class($index)" ng-show="$ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index)">
 		     <label for="CPU">CPU</label>
 		     <div class="select select_length">
 		          <select ng-required="true" id="CPU" ng-model="$ctrl.vCPUSelected[$index]" 
@@ -111,6 +111,18 @@
 		          </select>
 	             </div>
 		</div>
+-->		<div ng-class="$ctrl.isOSM_or_VCD_Class($index)" ng-show="$ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index)">
+                     <label for="CPU">CPU</label>
+                     <input type="number" ng-model="$ctrl.vCPUSelected[$index]" data-index="{{ $ctrl.indices[ $index ] }}" id="Image" placeholder="Select CPU" size="20" min="1" max="128" step="1"  value="1" />
+                   <!--  <div class="select select_length">
+                          <select ng-required="true" id="CPU" ng-model="$ctrl.vCPUSelected[$index]"
+                                 >
+                                  <option ng-repeat="CPU in $ctrl.vCPUs" value="{{CPU}}">{{CPU}}</option>
+                          </select>
+                     </div> -->
+
+                </div>
+
 
 		<div ng-class="$ctrl.isOSM_or_VCD_Class($index)" ng-show="$ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index)">
 		     <label for="RAM">RAM</label>
@@ -141,7 +153,7 @@
                     </div>
                 </div>
 				
-				<div ng-class="$ctrl.isOSM_or_VCD_and_NONE_Class($index)" ng-show="$ctrl.isOVF()">
+				<!-- div ng-class="$ctrl.isOSM_or_VCD_and_NONE_Class($index)" ng-show="$ctrl.isOVF()">
                         <label class="required" for="VMDK">Huge Pages</label>
 						<div class="col-xs-4 ">
                         <input ng-disabled=flase type="checkbox"  
@@ -154,7 +166,7 @@
                                  <span class="tooltip-content">{{ $ctrl.VMDK_TOOLTIP }}</span>
                            </span>
                     </div>
-                </div>
+                </div -->
 					
 					  
 		

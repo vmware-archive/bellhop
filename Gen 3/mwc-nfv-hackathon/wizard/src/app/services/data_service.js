@@ -129,7 +129,8 @@ module.exports = function ($http) {
 	  LatencySensitivity: [false, false, false, false, false,false,false, false, false, false, false,false,false, false, false, false, false,false,false,false],
 	  NumberNumaNode:[1,1,1, 1, 1,1,1,1,1, 1, 1,1,1,1,1, 1, 1,1,1,1],
 	  SRIOVInterfaces:['', '', '', '', ''],
-	  SRIOVInterfacesIndices:[1, 2, 3, 4, 5]
+	  SRIOVInterfacesIndices:[1, 2, 3, 4, 5],
+      Huge_Pages: [false, false, false, false, false,false,false, false, false, false, false,false,false, false, false, false, false,false,false,false]
     };
 
     _scripts = {
@@ -745,7 +746,7 @@ module.exports = function ($http) {
 			//cpu: _vCPUs[_vnfConfiguration.vCPU[v]],
 			cpu: _vnfConfiguration.vCPU[v],
 			disk: _vnfConfiguration.Disk[v],
-			huge_pages: _vnfConfiguration.Huge_pages[v],
+			huge_pages: _epaDefinition.Huge_Pages[v],
 			ram: _vnfConfiguration.RAM[v] * 1024,
 			numa_affinity : _epaDefinition.NumaAffinity[v],
 			memory_reservation: _epaDefinition.MemoryReservation[v],

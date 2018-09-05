@@ -85,6 +85,7 @@ module.exports = {
       'numa_affinity' : 'Numa Affinity',
       'memory_reservation':'Memory Reservation',
       'latency_sensitivity':'Latency Sensitivity',
+      'huge_pages':'Huge Pages',
       'number_numa_node' : 'Number of Numa Nodes',
       'config': 'Configure Script url',
       'create': 'Create Script url',

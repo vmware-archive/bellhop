@@ -33,6 +33,8 @@
   "ETHERNET_TYPE":"Select Network Type",
   "MGMT_TYPE_NETWORK_TOOLTIP":"Select Management Network Type",
   "MGMT_NETWORK_TOOLTIP":"Enter name of the netwrok for Management traffic",
-  "VMDK_TOOLTIP":"Enter valid vmdk file name with vmdk extension."
+  "VMDK_TOOLTIP":"Enter valid vmdk file name with vmdk extension.",
+  "HUGE_PAGE_TOOLTIP":"Select this to enable huge page support.",
+  "OS_NIC_INTERFACE_TOOLTIP": "'macvtap' is not supported on VIO environments"
 
 }

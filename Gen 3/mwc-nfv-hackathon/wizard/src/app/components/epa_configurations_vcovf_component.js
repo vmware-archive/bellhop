@@ -46,6 +46,7 @@ module.exports = {
 	this.LATENCY_SENSITIVITY_TOOLTIP = TOOLTIPS.LATENCY_SENSITIVITY_TOOLTIP;
 	this.NUMA_AFFINITY_TOOLTIP = TOOLTIPS.NUMA_AFFINITY_TOOLTIP;
 	this.NUMBER_NUMA_NODES_TOOLTIP = TOOLTIPS.NUMBER_NUMA_NODES_TOOLTIP;
+	this.HUGE_PAGE_TOOLTIP = TOOLTIPS.HUGE_PAGE_TOOLTIP;
         
         	
 	const config_epa = dataService.getEpaDefintion();
@@ -58,6 +59,7 @@ module.exports = {
 	$scope.NumberNumaNodeSelected = config_epa.NumberNumaNode;
 	this.LatencySensitivity =  config_epa.LatencySensitivity;
         this.MemoryReservation = config_epa.MemoryReservation;
+        $scope.HugePagesSelected = config_epa.Huge_Pages;
 	//$scope.NumaAffinitySelected = false;
 	//$scope.MemoryReservationSelected = false;
 	//$scope.LatencySensitivitySelected = false;
@@ -168,12 +170,14 @@ module.exports = {
 			  MemoryReservation: $scope.MemoryReservationSelected,
 			  LatencySensitivity: $scope.LatencySensitivitySelected,
 			  NumberNumaNode:$scope.NumberNumaNodeSelected,
-			  SRIOVInterfaces:$scope.SRIOVInterfacesSelected
+			  SRIOVInterfaces:$scope.SRIOVInterfacesSelected,
+                          Huge_Pages : $scope.HugePagesSelected
 					  
 			};
 			dataService.setEPA( config);
 			
 		}
+		console.log(" I am here");
 		console.log(config);
 		return isValid;
 		
