@@ -268,7 +268,14 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 }
      
 	 this.INTERFACE_PLACEHOLDER = "Select Type";
-	 this.INTERFACE_TOOLTIP= TOOLTIPS.NIC_INTERFACE_TOOLTIP;
+         if((this.OrchType == 'Heat' ) && (this.VIMType == 'OpenStack')){
+
+              this.INTERFACE_TOOLTIP = TOOLTIPS.OS_NIC_INTERFACE_TOOLTIP;
+         }
+	 else
+         {
+	     this.INTERFACE_TOOLTIP= TOOLTIPS.NIC_INTERFACE_TOOLTIP;
+         }
 
      /*angular.element(document).ready(() => {
 	   //alert("jquery");
