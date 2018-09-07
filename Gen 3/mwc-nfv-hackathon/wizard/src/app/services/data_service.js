@@ -746,6 +746,7 @@ module.exports = function ($http) {
 			//cpu: _vCPUs[_vnfConfiguration.vCPU[v]],
 			cpu: _vnfConfiguration.vCPU[v],
 			disk: _vnfConfiguration.Disk[v],
+			VMDK: _vnfConfiguration.VMDK[v],
 			huge_pages: _epaDefinition.Huge_Pages[v],
 			ram: _vnfConfiguration.RAM[v] * 1024,
 			numa_affinity : _epaDefinition.NumaAffinity[v],

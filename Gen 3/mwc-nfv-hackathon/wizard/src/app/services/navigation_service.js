@@ -269,7 +269,7 @@ module.exports = function (dataService, $state) {
 		      }
 	      }
       }
-      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'Heat' || this.OrchType === 'Ovf')) {
+      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.0' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'Heat' || this.OrchType === 'Ovf1')) {
 	      return true;
       }
       return false;

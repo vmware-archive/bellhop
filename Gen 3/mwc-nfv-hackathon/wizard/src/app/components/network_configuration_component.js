@@ -443,7 +443,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	
                 for (i = 0; i < this.indices.length; i++) {
 
-                        if(this.NICs[i] && this.numberOfNICs > 0){
+                        if((this.NICs[i] && this.numberOfNICs > 0) && (this.OrchType == 'Ovf')){
 
                                 $scope.ParentNetworkTypeSelected[i] = $scope.ParentNetworkTypeSelected[i] ;
                         }

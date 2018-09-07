@@ -70,16 +70,19 @@ def login_page():
 @app.route('/signup', methods=['GET', 'POST'])
 
 def signup():
-  sendMail = False
+  #sendMail = True
   pprint.pprint("received signup request")
   print("Request Data:%s",request.data)
   credentials = json.loads(request.data)
   pprint.pprint(credentials)
   status = db_user_signup(credentials['username'],credentials['password'],credentials['emailaddress'])
   print(status)
-  if(status == "True" and sendMail == True ):
+  #if(status == "True" and sendMail == True ):
+  if(status == "True" ):
       mail_text = draft_mail_text("User Registration",credentials['username'],credentials['password'])
       print "signup:",mail_text
+      #sendMail([credentials['emailaddress']],"VNF Onboarding User Registration",mail_text) 
+      print "signup:",credentials['emailaddress']
       sendMail([credentials['emailaddress']],"VNF Onboarding User Registration",mail_text) 
   return status
 
@@ -148,7 +151,7 @@ def upload():
 @app.route('/forgetpassword', methods=['GET', 'POST'])
 
 def forgetpassword():
-   sendMail = False
+   #sendMail = False
    print "Received forgetpassword request",request.data
    inputs = inputs = request.get_json()
    print "Forgetpassword",inputs

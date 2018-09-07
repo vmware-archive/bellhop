@@ -55,7 +55,7 @@ module.exports = {
 	$scope.MemoryReservationSelected = config_epa.MemoryReservation;
 	$scope.LatencySensitivitySelected = config_epa.LatencySensitivity;
 	$scope.NumberNumaNodeSelected = config_epa.NumberNumaNode;
-	
+$scope.HugePagesSelected = config_epa.Huge_Pages;	
 	//$scope.NumaAffinitySelected = false;
 	//$scope.MemoryReservationSelected = false;
 	//$scope.LatencySensitivitySelected = false;
@@ -97,7 +97,8 @@ module.exports = {
 			  MemoryReservation: $scope.MemoryReservationSelected,
 			  LatencySensitivity: $scope.LatencySensitivitySelected,
 			  NumberNumaNode:$scope.NumberNumaNodeSelected,
-			  SRIOVInterfaces:$scope.SRIOVInterfacesSelected
+			  SRIOVInterfaces:$scope.SRIOVInterfacesSelected,
+			  Huge_Pages : $scope.HugePagesSelected
 					  
 			};
 			dataService.setEPA( config);
