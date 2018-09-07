@@ -48,7 +48,7 @@
 				  <div class="form-group long col-xs-8">
 					<label > Memory Reservation</label>
 						<div >
-							<input type="text" id="mem_res" value ="{{$ctrl.MEMORY_RESERVATION}}" ng-model="MemoryReservationSelected[i]" name="MemoryReservation"  placeholder="{{$ctrl.INPUT_PLACEHOLDER}}">	<span>MB</span> 
+							&nbsp;&nbsp;<input type="text" id="mem_res" value ="{{$ctrl.MEMORY_RESERVATION}}" ng-model="MemoryReservationSelected[i]" name="MemoryReservation"  placeholder="{{$ctrl.INPUT_PLACEHOLDER}}">	<span>MB</span> 
 						</div>	
 
 					<div class="col-xs-2">
@@ -63,13 +63,13 @@
 				  <div class="form-group long col-xs-8">
 					<label > Latency Sensitivity</label>
 						<div class="col-xs-4 select">
-							<select ng-model="LatencySensitivitySelected[i]"
+ 							<select ng-model="LatencySensitivitySelected[i]"
                                       				ng-options="type for type in LATENCYSENSITIVITY">
-                                     			 </select>
+                                     			 </select> 
 						<!--	<input type="checkbox" id="lat_sen" value ="{{$ctrl.LATENCY_SENSITIVITY}}" ng-model="LatencySensitivitySelected[i]" name="MemoryReservation" >
 							<label for="lat_sen">High </label> -->
 						</div>	
-
+                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 					<div class="col-xs-2">
 					  <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
 						<clr-icon shape="info-circle" size="24"></clr-icon>
@@ -84,7 +84,7 @@
 							<input type="checkbox" value ="{{$ctrl.NUMA_AFFINITY}}" ng-model="NumaAffinitySelected[i]" name="NumaAffinity" id="numa_a" >
 							<label for="numa_a"></label>
 						</div>	
-
+                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 					<div class="col-xs-2">
 					  <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
 						<clr-icon shape="info-circle" size="24"></clr-icon>
@@ -96,11 +96,11 @@
 				   <div class="form-group long col-xs-8" ng-show="NumaAffinitySelected[i]">
 					<label class="required" for="numa_node"> Number of Numa nodes </label>
 						<div >
-							<input type="text"  ng-disabled="!NumaAffinitySelected[i]"  ng-model="NumberNumaNodeSelected[i]" id="NumaNode" placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="20"
+							&nbsp;&nbsp;<input type="text"  ng-disabled="!NumaAffinitySelected[i]"  ng-model="NumberNumaNodeSelected[i]" id="NumaNode" placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="24"
 						   />
 								<span></span>
 						</div>	
-
+                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 					<div class="col-xs-2">
 					  <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
 						<clr-icon shape="info-circle" size="24"></clr-icon>
@@ -114,8 +114,8 @@
                                                         <input type="checkbox" value ="{{$ctrl.Huge_Pages}}" ng-model="HugePagesSelected[i]" name="HugePages" id="Huge_pages" >
                                                         <label for="numa_a"></label>
                                                 </div>
-
-                                        <div class="col-xs-2">
+                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<div class="col-xs-2">
                                           <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
                                                 <clr-icon shape="info-circle" size="24"></clr-icon>
                                                 <span class="tooltip-content">{{ $ctrl.HUGE_PAGE_TOOLTIP }}</span>
