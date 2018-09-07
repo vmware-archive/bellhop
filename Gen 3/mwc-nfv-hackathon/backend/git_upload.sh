@@ -73,6 +73,16 @@ then
    mkdir $blueprint_folder 
    mkdir $blueprint_folder/Cloudify
    cd $blueprint_folder/Cloudify 
+elif [ "$4" = "Ovf" ]
+then
+   mkdir $blueprint_folder
+   mkdir $blueprint_folder/OVF
+   cd $blueprint_folder/OVF
+elif [ "$4" = "HEAT" ]
+then
+   mkdir $blueprint_folder
+   mkdir $blueprint_folder/HEAT
+   cd $blueprint_folder/HEAT
 else
   echo Error with $4
 fi
