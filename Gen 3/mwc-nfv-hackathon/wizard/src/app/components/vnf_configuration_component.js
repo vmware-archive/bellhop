@@ -310,7 +310,12 @@ module.exports = {
 		  }else if ((typeof this.Disk[i] == 'undefined') || (this.Disk[i] =="") || (this.Disk[i] == 0)|| isNaN(this.Disk[i]))
                   {
                       this.validCnt++;
+                  }else if ((this.VIMTypeSelected == 'vCloud Director' && this.OrchTypeSelected == 'Ovf') &&((typeof this.VMDK[i] == 'undefined') || (this.VMDK[i] =="") || (this.VMDK[i] == 0)))
+                  {
+                      this.validCnt++;
                   }
+
+
 	  }
 	  if(this.validCnt){
 		  isValid = false;
@@ -336,7 +341,13 @@ module.exports = {
 				this.flavorname[fl] = "";
 			}
 		}
-		
+
+		for (i = 0; i < this.numberOfVMs; i++) {		
+		     if(this.vCPUSelected[i] == 'None'){ 
+			this.vCPUSelected[i] = 1;
+		      }
+	
+		}	
 		var config = {
 			Availability_zone: this.Availability_zone,      
 		        Image: this.Image,

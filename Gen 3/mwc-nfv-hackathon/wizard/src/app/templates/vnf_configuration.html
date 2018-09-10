@@ -137,7 +137,7 @@
 		<div ng-class="$ctrl.isOSM_or_VCD_and_NONE_Class($index)" ng-show="$ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index)">
 			<label class="required" for="Disk">Disk</label>
 			<input type="text"  ng-model="$ctrl.Disk[$index]" id="Disk" 
-				placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="20" />
+				placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="20" required/>
 				<span>GB</span>
 		</div>
 

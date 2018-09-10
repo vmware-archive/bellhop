@@ -45,14 +45,14 @@
 		 <div  ng-repeat="i in $ctrl.VMsIndices | limitTo : $ctrl.numberOfVMs">
 		<button class="accordion" ng-click="doCollapse(i);"> <span id="arrow-{{$index}}"><clr-icon  shape="caret" style="transform: rotate(270deg);"></clr-icon></span> VM {{i+1}}</button>
 		<div class="panel" name="expand" id="expand-{{$index}}">
-				  <div class="form-group long col-xs-8">
-					<label > Memory Reservation</label>
+				  <div class="form-group long col-xs-8" >
+					<label > Memory Reservation </label>
 						<div >
-							&nbsp;&nbsp;<input type="text" id="mem_res" value ="{{$ctrl.MEMORY_RESERVATION}}" ng-model="MemoryReservationSelected[i]" name="MemoryReservation"  placeholder="{{$ctrl.INPUT_PLACEHOLDER}}">	<span>MB</span> 
+							&nbsp;&nbsp;<input type="text" id="mem_res" value ="{{$ctrl.MEMORY_RESERVATION}}" ng-model="MemoryReservationSelected[i]" name="MemoryReservation"  placeholder="{{$ctrl.INPUT_PLACEHOLDER}}"  ng-disabled="DisabledMemRev[i]">	<span>MB</span> 
 						</div>	
 
 					<div class="col-xs-2">
-					  <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
+					  <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-bottom-left">
 						<clr-icon shape="info-circle" size="24"></clr-icon>
 						<span class="tooltip-content">{{ $ctrl.MEMORY_RESERVATION_TOOLTIP}}</span>
 					  </span>
@@ -71,7 +71,7 @@
 						</div>	
                                         <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 					<div class="col-xs-2">
-					  <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
+					  <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-bottom-left">
 						<clr-icon shape="info-circle" size="24"></clr-icon>
 						<span class="tooltip-content">{{ $ctrl.LATENCY_SENSITIVITY_TOOLTIP }}</span>
 					  </span>
