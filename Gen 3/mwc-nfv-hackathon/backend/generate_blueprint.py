@@ -64,7 +64,9 @@ TEMPLATES = {'OpenStack': 'OS-template.yaml',
              'MultiVDU-vCloud Director-OSM-NSD' : 'MultiVDU-VCD-OSM-NSD-template.yaml',
              'MultiVDU-OpenStack-OSM' : 'MultiVDU-OS-OSM-template.yaml' ,
              'MultiVDU-OpenStack-OSM-NSD' : 'MultiVDU-OS-OSM-NSD-template.yaml',
-	     'MultiVDU-OS-HEAT' : 'MultiVDU-OS-HEAT-template.yaml'}	
+	     'MultiVDU-OS-HEAT' : 'MultiVDU-OS-HEAT-template.yaml',
+             'MultiVDU-OpenStack-RIFTware' : 'MultiVDU-OS-RIFTware-template.yaml',
+             'MultiVDU-OpenStack-Riftware-NSD' : 'MultiVDU-OS-RIFTware-NSD-template.yaml'}	
 
 session_dir = ''
 multivdu_inputs = {}
@@ -290,6 +292,8 @@ def populate_distinct_networks(inputs):
     inputs['vim_params']['Nics_External'] = []
     inputs['vim_params']['Nics_Internal'] = {}
     inputs['vim_params']['Nics_External_cp'] = {}
+    #For RIFT
+    inputs['vim_params']['Nics_Internal_cp_vdu'] = {}
     for paramskey in inputs['vim_params'].keys():
 	print "paramskey = {}".format(paramskey) 
         if re.match('Network(\d+)_name',paramskey):
@@ -384,6 +388,9 @@ def populate_distinct_networks(inputs):
                           print " populating Nics_Internal netname = {}".format(netname)
 	                  inputs['vim_params']['Nics_Internal'][str(netname)] =  []
                        inputs['vim_params']['Nics_Internal'][netname].append(vmname + '_'+ nic_key)
+		       #For RIFT
+                       print "Rift internal connection points {} vdu reference {}".format(vmname + '_' + nic_key,'vdu-' +str(vmnum + 1))
+                       inputs['vim_params']['Nics_Internal_cp_vdu'][vmname + '_' + nic_key] = inputs['vim_params']['vnfd_name'] + '_vdu_id_' + str(vmnum + 1)
                        vmdata['Internal_Connection_Points'].append(vmname + '_' + nic_key) 
 	               vmdata['nic' + str(j) + '_cp'] = vmname + '_'+ nic_key
 
@@ -570,7 +577,6 @@ def get_hash(fname, algo):
 
 
 def copy_scripts_for_riftware(params, workdir):
-    print("scripts dict :",params['scripts'])
 
     upload_dir = os.path.join('/tmp/uploads',params['username'])
     upload_scripts_dir = os.path.join(upload_dir,params['session_key'])
@@ -590,10 +596,10 @@ def copy_scripts_for_riftware(params, workdir):
             full_file_name = os.path.join(upload_scripts_dir, file_name)
             print("Before copying RIFT.io script - check if this is a valid file:",full_file_name)
             if (os.path.isfile(full_file_name)):
-                if (file_name in params['scripts']['create']):
-                    if ('_vnfd' in workdir):
-                        shutil.copy(full_file_name, cloud_init_dir)
-                        print("Copied file {} to cloud_init dir\n".format(os.path.basename(full_file_name)))
+                #if (file_name in params['scripts']['create']):
+                if ('_vnfd' in workdir):
+                      shutil.copy(full_file_name, cloud_init_dir)
+                      print("Copied file {} to cloud_init dir\n".format(os.path.basename(full_file_name)))
                 else:
                     shutil.copy(full_file_name, scripts_dir)
                     print("Copied file {} to scripts dir\n".format(os.path.basename(full_file_name)))
@@ -682,9 +688,10 @@ def create_riftware_vnfd_package(inputs, name, workdir):
     os.mkdir(icons_dir)
     images_dir = os.path.join(vnfd_dir, 'images')
     os.mkdir(images_dir)
-    copy_scripts_for_riftware(inputs['params'], vnfd_dir)
+    copy_scripts_for_riftware(inputs, vnfd_dir)
+    populate_distinct_networks(inputs)
 
-    generate_standard_riftio_blueprint(inputs['params'], vnfd_dir, name)
+    generate_standard_riftio_blueprint(inputs, vnfd_dir, name)
    
     create_riftware_manifest_file(name+'_vnfd', vnfd_dir)
     copy_README(inputs, workdir)
@@ -709,9 +716,9 @@ def create_riftware_nsd_package(inputs, name, workdir):
     os.mkdir(vnf_config_dir)
     icons_dir = os.path.join(nsd_dir, 'icons')
     os.mkdir(icons_dir)
-    copy_scripts_for_riftware(inputs['params'], nsd_dir)
+    copy_scripts_for_riftware(inputs, nsd_dir)
 
-    generate_standard_riftio_nsd_blueprint(inputs['params'], nsd_dir, name)
+    generate_standard_riftio_nsd_blueprint(inputs, nsd_dir, name)
 
     create_riftware_manifest_file(name+'_nsd', nsd_dir)
     copy_README(inputs, workdir)
@@ -793,14 +800,14 @@ def generate_standard_osm_nsd_blueprint(params, workdir, name):
         f.write(out)
 
 def generate_standard_riftio_blueprint(params, workdir, name):
-    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['RIFTware_' + params['env_type']]))
+    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['MultiVDU-' + params['vim_params']['env_type'] + '-RIFTware']))
     out = template.render(params)
     out_file = os.path.join(workdir, name + '_vnfd.yaml')
     with open(out_file, 'w') as f:
         f.write(out)
 
 def generate_standard_riftio_nsd_blueprint(params, workdir, name):
-    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['RIFTware_NSD_' + params['env_type']]))
+    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['MultiVDU-' + params['vim_params']['env_type'] + '-Riftware-NSD']))
     out = template.render(params)
     out_file = os.path.join(workdir, name + '_nsd.yaml')
     with open(out_file, 'w') as f:
@@ -1008,7 +1015,7 @@ def create_multivdu_blueprint_package(inputs):
     try:
        create_work_dir(workdir)
        #if get_orch_types(inputs['params']) not in ['OSM 3.0', 'RIFT.ware 5.3', 'NONE']:
-       if get_orch_types(inputs) not in ['OSM 3.0', 'RIFT.ware 5.3', 'HEAT', 'Ovf']:
+       if get_orch_types(inputs) not in ['OSM 3.0', 'RIFT.ware 5.3','RIFT.ware 6.1', 'HEAT', 'Ovf']:
           add_scripts(inputs, workdir)
           copy_README(inputs, workdir)
        print "The input parameter is ", get_orch_types(inputs)
@@ -1082,6 +1089,19 @@ def create_multivdu_blueprint_package(inputs):
                   print "The git flag inside ", get_git_flag(inputs)
                   Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
                return output_file, workdir 
+       elif  get_orch_types(inputs) == 'RIFT.ware 6.1':
+             print "inside RIFT.ware block, inputs: ", inputs
+             vnfd_package = create_riftware_vnfd_package(inputs, name, workdir)
+             nsd_package = create_riftware_nsd_package(inputs, name, workdir)
+             copy_inputs_template(inputs, workdir)
+             output_file = create_package(name, workdir)
+             print "Got the output file", output_file
+             print "Got the working directory",workdir
+             print "The git flag outside ", get_git_flag(inputs)
+             if get_git_flag(inputs) == True:
+                print "The git flag inside ", get_git_flag(inputs)
+                Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
+             return output_file, workdir
 
     finally:
        print("inside finally")

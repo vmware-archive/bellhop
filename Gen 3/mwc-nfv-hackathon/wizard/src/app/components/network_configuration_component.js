@@ -152,7 +152,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 this.enumarated = new Array(lastIndex + 1);
 
          this.isOSM = function() {
-            if(this.OrchType == 'OSM 3.0'){
+            if(this.OrchType == 'OSM 3.0' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){ 
                return true;
             }
            else{
@@ -212,8 +212,8 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 for (let index = lastIndex; index >= prelastIndex; index--) {
 		 this.NICshow[this.indices[index]] = this.numberOfNICs > index;
 	 }
-	
-	 if (this.OrchType == 'OSM 3.0' || this.OrchType == 'RIFT.ware 5.3'){	
+
+         if (this.OrchType == 'OSM 3.0' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){ 	
 		 this.NIC_PLACEHOLDER = ['Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network', 'Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network'];
 		
 	 } else{

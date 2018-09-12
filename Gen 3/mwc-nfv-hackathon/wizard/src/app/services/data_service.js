@@ -746,8 +746,8 @@ module.exports = function ($http) {
 			//cpu: _vCPUs[_vnfConfiguration.vCPU[v]],
 			cpu: _vnfConfiguration.vCPU[v],
 			disk: _vnfConfiguration.Disk[v],
-			VMDK: _vnfConfiguration.VMDK[v],
-			huge_pages: _epaDefinition.Huge_Pages[v],
+			//VMDK: _vnfConfiguration.VMDK[v],
+			//huge_pages: _epaDefinition.Huge_Pages[v],
 			ram: _vnfConfiguration.RAM[v] * 1024,
 			numa_affinity : _epaDefinition.NumaAffinity[v],
 			memory_reservation: _epaDefinition.MemoryReservation[v],
@@ -755,6 +755,10 @@ module.exports = function ($http) {
 			number_numa_node: _epaDefinition.NumberNumaNode[v],
 			scripts: _scriptsDefinition
 		}
+		if (_vnfDefinition.OrchType == 'Ovf' ){
+		  vm_params['huge_pages'] =  _epaDefinition.Huge_Pages[v];
+	          vm_params['VMDK'] = _vnfConfiguration.VMDK[v];
+                }
 			
 		for (let i = 0; i <_nicDefinition.NICs[v].length; i++){
 		  if (_nicDefinition.NICs[v][i].trim()){

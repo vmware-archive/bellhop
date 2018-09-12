@@ -244,7 +244,7 @@ module.exports = function (dataService, $state) {
 		   
 		   path = this.epas[8].href;
 		   
-	   }else if (this.VIMType === 'OpenStack' && this.OrchType === 'RIFT.ware 5.3') {
+	   }else if (this.VIMType === 'OpenStack' && (this.OrchType === 'RIFT.ware 5.3' || this.OrchType === 'RIFT.ware 6.1')) {
 		   //alert();
 		   path = this.epas[9].href;
 		   

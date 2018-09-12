@@ -219,7 +219,7 @@ module.exports = {
    
 
     this.isRIFT = function() {
-      return this.OrchTypeSelected === this.RIFT_NAME;
+      return this.OrchTypeSelected === this.RIFT_NAME || this.OrchTypeSelected === 'RIFT.ware 6.1';
     };
   
     this.isOSM_VCDClass = function(index) {
@@ -261,7 +261,7 @@ module.exports = {
     };
     
     this.isDISK_RAM_CPU = function(){
-      if(this.isVCD() || (this.isOpenStack() && this.isOSM())){
+      if(this.isVCD() || (this.isOpenStack() && (this.isOSM() || this.isRIFT()))){
           return true;
         }
         else{
@@ -324,7 +324,7 @@ module.exports = {
       if( isValid ) {
 		  
 		  
-		if(this.VIMTypeSelected == 'vCloud Director' || (this.VIMTypeSelected == 'OpenStack' &&  (this.OrchTypeSelected == 'OSM 3.0' || this.OrchTypeSelected == 'RIFT.ware 5.3'))) {
+		if(this.VIMTypeSelected == 'vCloud Director' || (this.VIMTypeSelected == 'OpenStack' &&  (this.OrchTypeSelected == 'OSM 3.0' || this.OrchTypeSelected == 'RIFT.ware 5.3' || this.OrchTypeSelected == 'RIFT.ware 6.1'))) {
 		        for (let cf = 0; cf <this.Flavor.length; cf++){
 			    if(this.Flavor[cf] == 'auto'){			
 				this.Flavor[cf] = this.Flavors[Object.keys(this.Flavors)[0]];	  

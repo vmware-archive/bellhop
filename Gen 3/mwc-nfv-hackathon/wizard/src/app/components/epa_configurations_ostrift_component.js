@@ -21,10 +21,6 @@
 # contact:  osslegalrouting@vmware.com
 
 ###########################################################################*/
-
-/**
- * Created by jakub on 1/19/17.
- */
 const TOOLTIPS = require('../config/tooltips.json');
 
 module.exports = {
@@ -55,7 +51,7 @@ module.exports = {
 	$scope.MemoryReservationSelected = config_epa.MemoryReservation;
 	$scope.LatencySensitivitySelected = config_epa.LatencySensitivity;
 	$scope.NumberNumaNodeSelected = config_epa.NumberNumaNode;
-$scope.HugePagesSelected = config_epa.Huge_Pages;	
+	
 	//$scope.NumaAffinitySelected = false;
 	//$scope.MemoryReservationSelected = false;
 	//$scope.LatencySensitivitySelected = false;
@@ -64,8 +60,12 @@ $scope.HugePagesSelected = config_epa.Huge_Pages;
 	$scope.SRIOVInterfacesSelected = [];
 	
 	const config_vnf = dataService.getVnfDefinition();
-	this.VIMType = config_vnf.VIMType;
-	this.OrchType = config_vnf.OrchType;
+	 this.VIMType = config_vnf.VIMType;
+	 this.OrchType = config_vnf.OrchType;
+	 this.numberOfVMs = config_vnf.numberOfVMs;
+	 this.VMsIndices = config_vnf.VMsIndices;
+	 const vnfconfig = dataService.getVnfConfiguration();
+	 this.FlavorSelected = vnfconfig.Flavor;
 	
 	
 	const config_nic = dataService.getNicDefintion();
@@ -82,23 +82,66 @@ $scope.HugePagesSelected = config_epa.Huge_Pages;
 		return NICs;
 	}
 	
+	$scope.doCollapse = function(index){
+   
+	    var id ="expand-" + index;
+		var spanId = "arrow-"+index;
+		var x = document.getElementById(id);
+		if (x.style.display === "block") {
+				x.style.display = "none";
+				document.getElementById(spanId).innerHTML = '<clr-icon shape="caret" style="transform: rotate(270deg);"></clr-icon>';
+		} else {
+				x.style.display = "block";
+				document.getElementById(spanId).innerHTML = '<clr-icon shape="caret" style="transform: rotate(180deg);"></clr-icon>';
+		}
+	    
+		var vrows = document.getElementsByName("expand");
+	
+		for (i = 0; i <= vrows.length; i++) {
+			if (Number(i) != Number(index)) {
+				
+				vrows[i].style.display = "none";
+				innerId = "arrow-"+i;
+				document.getElementById(innerId).innerHTML = '<clr-icon shape="caret" style="transform: rotate(270deg);"></clr-icon>';
+							
+			}
+			
+		}
+	};
 	dataService.setSubmitCallback( function () {
 		
 		this.formSubmit = true;
 		var isValid = this.forms.epaDefinitionForm.$valid;
-		
-		if( isValid ) {
-			if(!$scope.NumaAffinitySelected)
-			{
-				$scope.NumberNumaNodeSelected = 0;
-			}
+                 this.validCnt = 0 ;
+                 for (i = 0; i < this.numberOfVMs; i++) {
+
+                  //alert(this.Image[i]);
+                     if($scope.NumaAffinitySelected[i]){
+
+                                if ((typeof $scope.NumberNumaNodeSelected[i] == 'undefined') || ($scope.NumberNumaNodeSelected[i] =="") ||  isNaN($scope.NumberNumaNodeSelected[i])){
+                                this.validCnt++;
+                         }
+
+                         }
+                  }
+                  if(this.validCnt){
+                          isValid = false;
+                  }
+
+
+                if( isValid ) {
+                      for (i = 0; i < this.numberOfVMs; i++) {
+                        if(!$scope.NumaAffinitySelected[i])
+                        {
+                                $scope.NumberNumaNodeSelected[i] = 0;
+                        }
+                      }
 			var config = {
 			  NumaAffinity: $scope.NumaAffinitySelected,
 			  MemoryReservation: $scope.MemoryReservationSelected,
 			  LatencySensitivity: $scope.LatencySensitivitySelected,
 			  NumberNumaNode:$scope.NumberNumaNodeSelected,
-			  SRIOVInterfaces:$scope.SRIOVInterfacesSelected,
-			  Huge_Pages : $scope.HugePagesSelected
+			  SRIOVInterfaces:$scope.SRIOVInterfacesSelected
 					  
 			};
 			dataService.setEPA( config);

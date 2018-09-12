@@ -53,6 +53,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 this.VCD_CLOUDIFY_INTERFACES = ['Select Type','Default'];
 	 this.OPENSTACK_CLOUDIFY_INTERFACES = ['Select Type','normal','direct','macvtap'];
 	 this.OPENSTACK_HEAT_INTERFACES = ['Select Type','normal','direct','direct-physical', 'macvtap'];
+         this.OPENSTACKRIFTINTERFACES = ['Select Type','VIRTIO','VMXNET3','PCI-PASSTHROUGH','SR-IOV','E1000','RTL8139','PCNET','OM-MGMT'];
 	 
 	 
 	 const config_vnf = dataService.getVnfDefinition();
@@ -195,7 +196,11 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 			this.possibleInterfaces = this.OPENSTACK_HEAT_INTERFACES;
                 }else if(this.OrchType == 'OSM 3.0') {
                         this.possibleInterfaces = this.OPENSTACK_OSM_INTERFACES;
-		}else {
+		
+                }else if(this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1') {
+                      this.possibleInterfaces = this.OPENSTACKRIFTINTERFACES;
+ 		}
+                else {
 			
 			this.possibleInterfaces = this.OPENSTACKINTERFACES; 
 		}
@@ -260,7 +265,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
        this.NICshow[this.indices[index]] = this.numberOfNICs  > index;
      }*/
 	
-	  if (this.OrchType == 'OSM 3.0' || this.OrchType == 'RIFT.ware 5.3'){	
+	  if (this.OrchType == 'OSM 3.0' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){	
 		this.NIC_PLACEHOLDER = ['Enter Mgmt NIC','Enter NIC name','Enter NIC name','Enter NIC name','Enter NIC name','Enter NIC name'];
 		
 	 } else{
