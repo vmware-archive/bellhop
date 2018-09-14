@@ -1089,7 +1089,7 @@ def create_multivdu_blueprint_package(inputs):
                   print "The git flag inside ", get_git_flag(inputs)
                   Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
                return output_file, workdir 
-       elif  get_orch_types(inputs) == 'RIFT.ware 6.1':
+       elif  get_orch_types(inputs) == 'RIFT.ware 6.1' or get_orch_types(inputs) == 'RIFT.ware 5.3':
              print "inside RIFT.ware block, inputs: ", inputs
              vnfd_package = create_riftware_vnfd_package(inputs, name, workdir)
              nsd_package = create_riftware_nsd_package(inputs, name, workdir)
