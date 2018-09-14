@@ -83,6 +83,11 @@ then
    mkdir $blueprint_folder
    mkdir $blueprint_folder/HEAT
    cd $blueprint_folder/HEAT
+elif [ "$4" = "RIFT.ware 6.1" ] || [ "$4" = "RIFT.ware 5.3" ]
+then
+   mkdir $blueprint_folder
+   mkdir $blueprint_folder/RIFTware
+   cd $blueprint_folder/RIFTware
 else
   echo Error with $4
 fi
