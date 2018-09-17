@@ -1,8 +1,9 @@
-/*#############################################################################
-##
+/*#########################################################################
 # Copyright 2017-2018 VMware Inc.
 # This file is part of VNF-ONboarding
 # All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,10 +19,9 @@
 #
 # For those usages not covered by the Apache License, Version 2.0 please
 # contact:  osslegalrouting@vmware.com
- 
-##
- 
-#############################################################################*/
+
+###########################################################################*/
+
 const TOOLTIPS = require('../config/tooltips.json');
 
 module.exports = {
@@ -59,14 +59,14 @@ module.exports = {
 	
 	
 	
-	this.OrchType = ['OSM 3.0','Cloudify 3.4','Cloudify 4.0','TOSCA 1.1', 'RIFT.ware 5.3'];
+    this.OrchType = ['OSM 3.0','Cloudify 3.4','Cloudify 4.0','TOSCA 1.1','Heat', 'RIFT.ware 5.3','RIFT.ware 6.1'];
     this.OrchTypeSelected = config.OrchType;
-	this.OrchTypeSelected = config.OrchType;
+    this.OrchTypeSelected = config.OrchType;
 
 	
-	this.VNFDname = config.VNFDname; 
+    this.VNFDname = config.VNFDname; 
     
-	 this.vnfDescription = config.VNFDescription || this.VNFTypeSelected;
+    this.vnfDescription = config.VNFDescription || this.VNFTypeSelected;
     this.VNFType = dataService.getVNFTypes();
     this.VNFTypeSelected = config.VNFType;
 	
@@ -103,6 +103,11 @@ module.exports = {
        if(isNaN(this.numberOfVMs) || this.numberOfVMs > this.maxvalue || this.numberOfVMs < this.minvalue){
                 $scope.maxNicsError = true;
         }
+        if(this.VIMTypeSelected == 'vCloud Director'){
+		this.OrchType[4] = "Ovf";
+	}else{
+		this.OrchType[4] = "Heat";
+	}
 
      });
     

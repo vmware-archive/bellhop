@@ -1,8 +1,11 @@
 #!/bin/bash
+
 #########################################################################
 # Copyright 2017-2018 VMware Inc.
 # This file is part of VNF-ONboarding
 # All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -70,6 +73,21 @@ then
    mkdir $blueprint_folder 
    mkdir $blueprint_folder/Cloudify
    cd $blueprint_folder/Cloudify 
+elif [ "$4" = "Ovf" ]
+then
+   mkdir $blueprint_folder
+   mkdir $blueprint_folder/OVF
+   cd $blueprint_folder/OVF
+elif [ "$4" = "HEAT" ]
+then
+   mkdir $blueprint_folder
+   mkdir $blueprint_folder/HEAT
+   cd $blueprint_folder/HEAT
+elif [ "$4" = "RIFT.ware 6.1" ] || [ "$4" = "RIFT.ware 5.3" ]
+then
+   mkdir $blueprint_folder
+   mkdir $blueprint_folder/RIFTware
+   cd $blueprint_folder/RIFTware
 else
   echo Error with $4
 fi

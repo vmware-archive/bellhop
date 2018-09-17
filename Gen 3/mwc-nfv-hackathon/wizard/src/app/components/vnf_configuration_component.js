@@ -1,8 +1,9 @@
-/*#############################################################################
-##
+/*#########################################################################
 # Copyright 2017-2018 VMware Inc.
 # This file is part of VNF-ONboarding
 # All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,10 +19,9 @@
 #
 # For those usages not covered by the Apache License, Version 2.0 please
 # contact:  osslegalrouting@vmware.com
- 
-##
- 
-#############################################################################*/
+
+###########################################################################*/
+
 const TOOLTIPS = require('../config/tooltips.json');
 
 module.exports = {
@@ -36,6 +36,7 @@ module.exports = {
     this.CUSTOM_FLAVOR = "auto"; 
     this.TOSCA_NAME = "TOSCA 1.1"; 
     this.OSM_NAME = 'OSM 3.0';
+    this.OVF_NAME = 'Ovf';
     this.RIFT_NAME = 'RIFT.ware 5.3';
     this.DISABLED_FORM_GROUP = 'form-group disabled';
     this.FORM_GROUP = 'form-group';
@@ -49,6 +50,7 @@ module.exports = {
     this.DISK_TOOLTIP = TOOLTIPS.DISK;
     this.FLAVOR_TOOLTIP = TOOLTIPS.FLAVOR_TOOLTIP;
     this.FLAVOR_NAME_TOOLTIP = TOOLTIPS.FLAVOR_NAME_TOOLTIP;
+    this.VMDK_TOOLTIP = TOOLTIPS.VMDK_TOOLTIP;
 	 
 
 	//vnf VMs
@@ -65,7 +67,7 @@ module.exports = {
 	this.VIMTypeSelected = this.VIMType;
 	this.OrchTypeSelected = this.OrchType ;
 	
-	$scope.doSomething = function(index){
+	$scope.doCollapse = function(index){
    
 	    var id ="expand-" + index;
 		var spanId = "arrow-"+index;
@@ -92,6 +94,13 @@ module.exports = {
 		}
 	};
 	
+	this.isVCD = function() {
+      return this.VIMTypeSelected === this.VCD_NAME;
+    };
+	
+	 this.isOVF = function() {
+      return this.OrchTypeSelected === this.OVF_NAME;
+    };
 	
 	// VNF configuration
     var config = dataService.getVnfConfiguration();
@@ -100,55 +109,92 @@ module.exports = {
 	this.Image = config.Image;
 	this.indices = config.ImageIndices;
 	
+	//Availability_zone	
+	/*this.Availability_zone = config.Availability_zone
+	for (let d = 0; d <this.Availability_zone.length; d++){
+			     
+		this.Availability_zone[d] = this.Availability_zone[d] || '';
+	}*/
 	//Disk
 	this.Disk = config.Disk
 	for (let d = 0; d <this.Disk.length; d++){
 			     
 		this.Disk[d] = this.Disk[d] || '10';
+	}
+	
+    // VMDK 
+	this.VMDK = config.VMDK
+    for (let d = 0; d <this.VMDK.length; d++){
+        this.VMDK[d] = this.VMDK[d];
     }
 	
-       
+	//Huge pages
+	this.Huge_pages = config.Huge_pages
+    for (let d = 0; d <this.Huge_pages.length; d++){
+        this.Huge_pages[d] = this.Huge_pages[d];
+    }
 	// CPU 
-    this.vCPUs = dataService.getVCPUs();
+	if(this.isVCD() && this.isOVF() ) {  
+		this.vCPUs = dataService.getVCPUs_ovf();
+	} else {
+		
+		this.vCPUs = dataService.getVCPUs();
+	}
+	
 	this.vCPU = config.vCPU;
 	this.vCPUSelected = this.vCPU;
 	for (let c = 0; c <this.vCPU.length; c++){
 			     
-		this.vCPUSelected[c] = this.vCPU[c] || '0';	  
-    }
+		this.vCPUSelected[c] = this.vCPU[c] || '1';	  
+	}
     
     
 	//RAM
-    this.RAMs = dataService.getRAMs();
+	//this.RAMs = dataService.getRAMs();
+	if(this.isVCD() && this.isOVF() ) {  
+		this.RAMs = dataService.getRAMs_ovf();
+	} else {
+		
+		this.RAMs = dataService.getRAMs();
+	}
 	this.RAM = config.RAM;
 	this.RAMSelected = this.RAM;
 	for (let r = 0; r <this.RAM.length; r++){
 			     
 		this.RAMSelected[r] = this.RAM[r] || '1';	  
-    }
-   
+	}
     
 	// Flavor
-    this.Flavors = dataService.getFlavors();
+        this.Flavors = dataService.getFlavors();
 	this.Flavor = config.Flavor
 	this.FlavorSelected = this.Flavor;
 	for (let fl = 0; fl <this.Flavor.length; fl++){
 			     
 		this.FlavorSelected[fl] = this.Flavor[fl] || this.Flavors[Object.keys(this.Flavors)[0]];	  
-    }
+	}
    
-	this.flavorname = config.flavorname;
-    
-         
+    this.flavorname = config.flavorname;
 
-   
-    
-	this.forms = {};
+    this.forms = {};
     this.formSubmit = false;
+    this.isOS_Subnet = function(){
+	if((this.VIMType == 'OpenStack') && (this.OrchType == 'Heat' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' )){
+               return true;
+            }
+           else{
+              return false;
+           }
+    }    
+    this.isOS_Heat = function() {
+            if((this.OrchType == 'Heat' ) && (this.VIMType == 'OpenStack')){
+               return true;
+            }
+           else{
+              return false;
+           }
+         };
 
-    this.isVCD = function() {
-      return this.VIMTypeSelected === this.VCD_NAME;
-    };
+    
 
     this.isVCDClass = function() {
       return this.isVCD() ? this.FORM_GROUP : this.DISABLED_FORM_GROUP;
@@ -170,10 +216,12 @@ module.exports = {
       return this.OrchTypeSelected === this.OSM_NAME;
     };
 
-    this.isRIFT = function() {
-      return this.OrchTypeSelected === this.RIFT_NAME;
-    };
    
+
+    this.isRIFT = function() {
+      return this.OrchTypeSelected === this.RIFT_NAME || this.OrchTypeSelected === 'RIFT.ware 6.1';
+    };
+  
     this.isOSM_VCDClass = function(index) {
         if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1')){
             return this.FORM_GROUP;
@@ -184,7 +232,7 @@ module.exports = {
     };
     
     this.isOSM_TOSCA_CUSTOM_FLAVOR_Class = function(index) {
-        if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0'|| this.OrchTypeSelected == 'NONE' )){
+        if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0'|| this.OrchTypeSelected == 'Heat' )){
 	     return this.FORM_GROUP
         }
         else{
@@ -193,7 +241,7 @@ module.exports = {
     };
     
     this.isOSM_or_VCD_Class = function(index) {
-        if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0'|| this.OrchTypeSelected == 'NONE' )){
+        if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0'|| this.OrchTypeSelected == 'Heat' )){
 	     return this.FORM_GROUP
         }
         else{
@@ -201,13 +249,29 @@ module.exports = {
         }
     };
     this.isOSM_or_VCD_and_NONE_Class = function(index) {
-        if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0'|| this.OrchTypeSelected == 'NONE' )){
+        if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0'|| this.OrchTypeSelected == 'Heat' )){
 	     return this.FORM_GROUP
         }
+        else if (this.isVCD() && this.OrchTypeSelected != 'Ovf'){
+           return this.FORM_GROUP;
+        }
         else{
-           return ((this.isOSM())|| (this.isRIFT()) || (this.isVCD() && this.OrchTypeSelected != 'NONE')) ? this.FORM_GROUP : this.DISABLED_FORM_GROUP;
+           return ((this.isOSM())|| (this.isRIFT()) || (this.isVCD() && this.OrchTypeSelected != 'Heat')) ? this.FORM_GROUP : this.DISABLED_FORM_GROUP;
         }
     };
+    
+    this.isDISK_RAM_CPU = function(){
+      if(this.isVCD() || (this.isOpenStack() && (this.isOSM() || this.isRIFT()))){
+          return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+
+   
+	
     this.isCUSTOM_FLAVOR = function(index) {
         if(this.FlavorSelected[index] == "auto"){     
             return true;
@@ -246,10 +310,12 @@ module.exports = {
 		  }else if ((typeof this.Disk[i] == 'undefined') || (this.Disk[i] =="") || (this.Disk[i] == 0)|| isNaN(this.Disk[i]))
                   {
                       this.validCnt++;
+                  }else if ((this.VIMTypeSelected == 'vCloud Director' && this.OrchTypeSelected == 'Ovf') &&((typeof this.VMDK[i] == 'undefined') || (this.VMDK[i] =="") || (this.VMDK[i] == 0)))
+                  {
+                      this.validCnt++;
                   }
 
-		  		  		  
-		  
+
 	  }
 	  if(this.validCnt){
 		  isValid = false;
@@ -258,28 +324,41 @@ module.exports = {
       if( isValid ) {
 		  
 		  
-		if(this.VIMTypeSelected == 'vCloud Director' || (this.VIMTypeSelected == 'OpenStack' &&  (this.OrchTypeSelected == 'OSM 3.0' || this.OrchTypeSelected == 'RIFT.ware 5.3'))) {
+		if(this.VIMTypeSelected == 'vCloud Director' || (this.VIMTypeSelected == 'OpenStack' &&  (this.OrchTypeSelected == 'OSM 3.0' || this.OrchTypeSelected == 'RIFT.ware 5.3' || this.OrchTypeSelected == 'RIFT.ware 6.1'))) {
+		        for (let cf = 0; cf <this.Flavor.length; cf++){
+			    if(this.Flavor[cf] == 'auto'){			
+				this.Flavor[cf] = this.Flavors[Object.keys(this.Flavors)[0]];	  
+			    }
+			}
 			this.FlavorSelected = this.Flavor;
 			this.flavorname = ['', '', '', '', '',''];
 		}
 		for (let fl = 0; fl <this.Flavor.length; fl++){
-			if((this.FlavorSelected[fl] != 'auto' && ( this.VIMTypeSelected == 'OpenStack' &&  (this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0' )))){
+			if((this.FlavorSelected[fl] != 'auto' && ( this.VIMTypeSelected == 'OpenStack' &&  (this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0' || this.OrchTypeSelected == 'Heat')))){
 				this.Disk[fl] = this.Disk[fl] || '10';
 				this.RAMSelected[fl] = this.RAM[fl] || '1';
 				this.vCPUSelected[fl] = this.vCPU[fl] || '0';	 
 				this.flavorname[fl] = "";
 			}
 		}
-		
+
+		for (i = 0; i < this.numberOfVMs; i++) {		
+		     if(this.vCPUSelected[i] == 'None'){ 
+			this.vCPUSelected[i] = 1;
+		      }
+	
+		}	
 		var config = {
-                
-          Image: this.Image,
-          vCPU: this.vCPUSelected,
-          RAM: this.RAMSelected,
-          Disk: this.Disk,
-          Flavor: this.FlavorSelected,
-          flavorname: this.flavorname
-        };
+			Availability_zone: this.Availability_zone,      
+		        Image: this.Image,
+			vCPU: this.vCPUSelected,
+			RAM: this.RAMSelected,
+			Disk: this.Disk,
+			VMDK: this.VMDK,
+			Huge_pages: this.Huge_pages,
+			Flavor: this.FlavorSelected,
+			flavorname: this.flavorname
+		};
 		//console.log(config);
         dataService.setVNFC( config);
 		console.log("getVnfConfiguration");

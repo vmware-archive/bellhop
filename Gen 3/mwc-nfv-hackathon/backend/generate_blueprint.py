@@ -1,10 +1,11 @@
 #!/usr/bin/env/python
 
 #########################################################################
-##
 # Copyright 2017-2018 VMware Inc.
 # This file is part of VNF-ONboarding
 # All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -20,9 +21,7 @@
 #
 # For those usages not covered by the Apache License, Version 2.0 please
 # contact:  osslegalrouting@vmware.com
- 
-##
- 
+
 ###########################################################################
 
 import argparse
@@ -64,7 +63,10 @@ TEMPLATES = {'OpenStack': 'OS-template.yaml',
              'MultiVDU-vCloud Director-OSM' : 'MultiVDU-VCD-OSM-template.yaml' ,
              'MultiVDU-vCloud Director-OSM-NSD' : 'MultiVDU-VCD-OSM-NSD-template.yaml',
              'MultiVDU-OpenStack-OSM' : 'MultiVDU-OS-OSM-template.yaml' ,
-             'MultiVDU-OpenStack-OSM-NSD' : 'MultiVDU-OS-OSM-NSD-template.yaml'}
+             'MultiVDU-OpenStack-OSM-NSD' : 'MultiVDU-OS-OSM-NSD-template.yaml',
+	     'MultiVDU-OS-HEAT' : 'MultiVDU-OS-HEAT-template.yaml',
+             'MultiVDU-OpenStack-RIFTware' : 'MultiVDU-OS-RIFTware-template.yaml',
+             'MultiVDU-OpenStack-Riftware-NSD' : 'MultiVDU-OS-RIFTware-NSD-template.yaml'}	
 
 session_dir = ''
 multivdu_inputs = {}
@@ -118,6 +120,7 @@ def copy_README(inputs, workdir):
     with open(out_file, 'w') as f:
         f.write(rendered)
 
+
 def get_file_from_url(url):
     return requests.get(url).text, ('.' + url).split('.')[-1]
 
@@ -145,6 +148,7 @@ def cleanup(workdir):
       print("gb:cleanup:workdir:%s\n",workdir)
       shutil.rmtree(workdir)
 
+
 def create_package(name, workdir):
     shutil.make_archive(
         os.path.abspath(workdir),
@@ -152,6 +156,7 @@ def create_package(name, workdir):
         os.path.dirname(workdir),
         name)
     return workdir + '.zip'
+
 
 def GetHashofDirs(directory, verbose=0):
   import hashlib, os
@@ -187,14 +192,13 @@ def GetHashofDirs(directory, verbose=0):
 
   return SHAhash.hexdigest()
 
+
 def create_vmdk_package(inputs, name, workdir):
     vmdk_dir = os.path.join(workdir, name + '_vmdk')
     os.mkdir(vmdk_dir)
-    generate_standard_vmdk_blueprint(inputs, inputs['params'], vmdk_dir, name)
-    if get_flavor_type(inputs['params']) == 'auto':
-        generate_flavor_blueprint(inputs, inputs['params'], workdir, name)
+    generate_standard_vmdk_blueprint(inputs,vmdk_dir, name)
     create_vmdk_manifest_file(name+'_vmdk', vmdk_dir)
-    add_scripts(inputs['params'], vmdk_dir)   
+    #add_scripts(inputs['params'], vmdk_dir)   
     i = datetime.now()
     readme="VMDK descriptor package is generated. \nCreated on " + i.strftime('%Y/%m/%d %H:%M:%S')
     readme_file = os.path.join(vmdk_dir, 'README.txt') 
@@ -207,6 +211,7 @@ def create_vmdk_package(inputs, name, workdir):
         name + '_vmdk')
 
     shutil.rmtree(vmdk_dir)
+
 
 def create_osm_vnfd_package(inputs, name, workdir):
     vnfd_dir = os.path.join(workdir, name + '_vnfd')
@@ -240,6 +245,7 @@ def create_osm_vnfd_package(inputs, name, workdir):
     shutil.rmtree(vnfd_dir)
     return vnfd_tar
 
+
 def create_osm_nsd_package(inputs, name, workdir):
     nsd_dir = os.path.join(workdir, name + '_nsd')
     os.mkdir(nsd_dir)
@@ -271,34 +277,6 @@ def create_osm_nsd_package(inputs, name, workdir):
     return nsd_tar
 
 
-#def populate_distinct_networks(inputs):
-#    unique_networks = []
-#    i = 0
-#    num_nics_supported = 6
-#    network_name = ''
-#    while i < len(inputs['params']):
-#        j = 1
-#        while j < num_nics_supported:
-#           nic_key = 'nic' + str(j) + '_name'
-#           if nic_key in inputs['params'][i]:
-#              network_name = inputs['params'][i]['nic' + str(j) + '_name']
-#              print "1 = {}".format(network_name)
-#              if network_name not in unique_networks :
-#                  print "2 = {}".format(network_name)
-#                  unique_networks.append(network_name)
-#                  if 'unique_networks' not in inputs['vim_params']:
-#                      print "3 = {}".format(network_name)
-#                      inputs['vim_params']['unique_networks'] = []
-#                      inputs['vim_params']['unique_networks'].append(network_name)
-#                  else:
-#                      print "4 = {}".format(network_name)
-#                      inputs['vim_params']['unique_networks'].append(network_name)
-#           j += 1
-#        i += 1
-#    print "unique_networks = {}".format(unique_networks)
-#    #inputs['params']['vim_params']['unique_networks'] = unique_networks
-#    print inputs
-
 def populate_distinct_networks(inputs):
     unique_networks = []
     i = 0
@@ -314,6 +292,8 @@ def populate_distinct_networks(inputs):
     inputs['vim_params']['Nics_External'] = []
     inputs['vim_params']['Nics_Internal'] = {}
     inputs['vim_params']['Nics_External_cp'] = {}
+    #For RIFT
+    inputs['vim_params']['Nics_Internal_cp_vdu'] = {}
     for paramskey in inputs['vim_params'].keys():
 	print "paramskey = {}".format(paramskey) 
         if re.match('Network(\d+)_name',paramskey):
@@ -408,6 +388,9 @@ def populate_distinct_networks(inputs):
                           print " populating Nics_Internal netname = {}".format(netname)
 	                  inputs['vim_params']['Nics_Internal'][str(netname)] =  []
                        inputs['vim_params']['Nics_Internal'][netname].append(vmname + '_'+ nic_key)
+		       #For RIFT
+                       print "Rift internal connection points {} vdu reference {}".format(vmname + '_' + nic_key,'vdu-' +str(vmnum + 1))
+                       inputs['vim_params']['Nics_Internal_cp_vdu'][vmname + '_' + nic_key] = inputs['vim_params']['vnfd_name'] + '_vdu_id_' + str(vmnum + 1)
                        vmdata['Internal_Connection_Points'].append(vmname + '_' + nic_key) 
 	               vmdata['nic' + str(j) + '_cp'] = vmname + '_'+ nic_key
 
@@ -420,10 +403,103 @@ def populate_distinct_networks(inputs):
            j += 1
         vmnum += 1
     print "inputs:{}".format(inputs)   
+
+def populate_distinct_ovf_networks(inputs):
+    # Data structures to populate  information for Ovf networks
+    inputs['vim_params']['NeworOldNetwork'] = {}
+    inputs['vim_params']['EdgeGatway'] = {}
+    inputs['vim_params']['netmask'] = {}
+    inputs['vim_params']['start_ip'] = {}
+    inputs['vim_params']['end_ip'] = {}
+    for paramskey in inputs['vim_params'].keys():
+        print "paramskey = {}".format(paramskey)
+        if re.match('Network(\d+)_name',paramskey):
+          commonkey = paramskey.split('_')[0]
+          print "commonkey={}".format(commonkey)
+          newnetkey = 'Create ' + commonkey
+          print "newnetykey = {}".format(newnetkey)
+          netname = inputs['vim_params'][paramskey]
+          netnum =  paramskey.split('Network')[1]
+          netindex = netnum.split('_')[0]
+          print "netindex = {}".format(netindex)
+          print "populate distinct networks = {}".format(str(netname))
+          if newnetkey in inputs['vim_params']:
+             inputs['vim_params']['NeworOldNetwork'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])
+             #inputs['vim_params']['NeworOldNetwork'][commonkey] = str(inputs['vim_params'][commonkey + '_name' ])
+             inputs['vim_params']['EdgeGatway'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])
+             inputs['vim_params']['netmask'][str(netname)] = str(inputs['vim_params']['Netmask_' + commonkey ])
+             inputs['vim_params']['start_ip'][str(netname)] = str(inputs['vim_params']['Static_Range_Start_Ip' + netindex ])
+             inputs['vim_params']['end_ip'][str(netname)] = str(inputs['vim_params']['Static_Range_End_Ip' + netindex ])
+    print "VCD OVF distinct networks inputs:{}".format(inputs)
  
-          
-              
-    
+def populate_distinct_cloudify_networks(inputs):
+    # Data structures to populate  information for Ovf networks
+    inputs['vim_params']['NeworOldNetwork'] = {}
+    inputs['vim_params']['EdgeGatway'] = {}
+    inputs['vim_params']['GatwayIP'] = {}
+    inputs['vim_params']['netmask'] = {}
+    inputs['vim_params']['primary_dns'] = {}
+    inputs['vim_params']['secondary_dns'] = {}
+    inputs['vim_params']['dhcp_start_ip'] = {}
+    inputs['vim_params']['dhcp_end_ip'] = {}
+    inputs['vim_params']['dns_suffix'] = {}
+    inputs['vim_params']['static_ip_start'] = {}
+    inputs['vim_params']['static_ip_end'] = {}
+    for paramskey in inputs['vim_params'].keys():
+        print "paramskey = {}".format(paramskey)
+        if re.match('Network(\d+)_name',paramskey):
+          commonkey = paramskey.split('_')[0]
+          print "commonkey={}".format(commonkey)
+          newnetkey = 'Create ' + commonkey
+          print "newnetykey = {}".format(newnetkey)
+          netname = inputs['vim_params'][paramskey]
+          netnum =  paramskey.split('Network')[1]
+          netindex = netnum.split('_')[0]
+          print "netindex = {}".format(netindex)
+          print "populate distinct networks = {}".format(str(netname))
+          if newnetkey in inputs['vim_params']:
+             if get_env_types(inputs) == 'OpenStack':             
+                inputs['vim_params']['NeworOldNetwork'][str(netname)] = str(inputs['vim_params']['Subnet_' + commonkey ])
+             else:
+	        inputs['vim_params']['NeworOldNetwork'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])
+                #inputs['vim_params']['NeworOldNetwork'][commonkey] = str(inputs['vim_params'][commonkey + '_name' ])
+	        inputs['vim_params']['EdgeGatway'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])
+	        inputs['vim_params']['GatwayIP'][str(netname)] = str(inputs['vim_params']['Gateway_IP_' + commonkey ])
+                inputs['vim_params']['netmask'][str(netname)] = str(inputs['vim_params']['Netmask_' + commonkey ])
+                inputs['vim_params']['primary_dns'][str(netname)] = str(inputs['vim_params']['DNS1_' + commonkey ])
+                inputs['vim_params']['secondary_dns'][str(netname)] = str(inputs['vim_params']['DNS2_' + commonkey ])
+                inputs['vim_params']['dhcp_start_ip'][str(netname)] = str(inputs['vim_params']['DHCP_Start_' + commonkey ])
+                inputs['vim_params']['dhcp_end_ip'][str(netname)] = str(inputs['vim_params']['DHCP_End_' + commonkey ])
+#               inputs['vim_params']['dns_suffix'][str(netname)] = str(inputs['vim_params']['DNS_Suffix_' + commonkey ])
+                inputs['vim_params']['static_ip_start'][str(netname)] = str(inputs['vim_params']['Static_Range_Start_Ip' + netindex ])
+                inputs['vim_params']['static_ip_end'][str(netname)] = str(inputs['vim_params']['Static_Range_End_Ip' + netindex ])
+    print "Cloudify distinct networks inputs:{}".format(inputs)
+
+def populate_distinct_tosca_networks(inputs):
+    # Data structures to populate  information for New networks in Cloudify
+    inputs['vim_params']['NeworOldNetwork'] = {}
+    for paramskey in inputs['vim_params'].keys():
+        print "paramskey = {}".format(paramskey)
+        if re.match('Network(\d+)_name',paramskey):
+          commonkey = paramskey.split('_')[0]
+          print "commonkey={}".format(commonkey)
+          newnetkey = 'Create ' + commonkey
+          print "newnetykey = {}".format(newnetkey)
+          netname = inputs['vim_params'][paramskey]
+          print "populate distinct networks = {}".format(str(netname))
+          if newnetkey in inputs['vim_params']:
+#             if get_env_types(inputs) == 'OpenStack':
+             inputs['vim_params']['NeworOldNetwork'][str(netname)] = str(inputs['vim_params']['Subnet_' + commonkey ])
+#             else:
+#                inputs['vim_params']['NeworOldNetwork'][str(netname)] = str(inputs['vim_params']['Edge_Gateway_' + commonkey ])
+
+        mgmt_network = inputs['vim_params']['mgmt_network']
+        print "Management network Value: ", inputs['vim_params']['create_mgmt_network']
+        if inputs['vim_params']['create_mgmt_network'] == True: 
+           #inputs['vim_params']['NeworOldNetwork'][mgmt_network] = inputs['vim_params']['create_mgmt_network']
+           inputs['vim_params']['NeworOldNetwork'][mgmt_network] = inputs['vim_params']['subnet_cidr']
+
+    print "TOSCA distinct networks inputs:{}".format(inputs)
 
 def add_scripts_osm(params,workdir):
     scripts_dir = os.path.join(workdir, 'scripts')
@@ -453,15 +529,35 @@ def add_scripts_osm(params,workdir):
                #shutil.copy(full_file_name, scripts_dir)
                shutil.copy(full_file_name, cloud_init_dir)
 
+def add_scripts_HEAT(params,workdir):
+    scripts_dir = os.path.join(workdir, 'scripts')
+    #cloud_init_dir = os.path.join(workdir, 'cloud_init')
+    if not os.path.exists((os.path.join(workdir,'scripts'))):
+       scripts_dir = os.path.join(workdir,'scripts')
+       print("gb:scripts_dir:",scripts_dir)
+       os.mkdir(scripts_dir)
+
+    #if not os.path.exists((os.path.join(workdir,'cloud_init'))):
+    #   scripts_dir = os.path.join(workdir,'cloud_init')
+    #   print("gb:scripts_dir:",cloud_init_dir)
+    #   os.mkdir(scripts_dir)
+
+    upload_dir = os.path.join('/tmp/uploads',params['username'])
+    upload_scripts_dir = os.path.join(upload_dir,params['session_key'])
+    print("gb:upload_scripts_dir:",upload_scripts_dir)
+    if os.path.isdir(upload_scripts_dir):
+       src_files = os.listdir(upload_scripts_dir)
+       print("gb:list uploaded files:",src_files)
+       for file_name in src_files:
+           full_file_name = os.path.join(upload_scripts_dir, file_name)
+           #print("Check create dict:%s",params[i]['scripts']);
+           print("gb:full file name:",full_file_name)
+           if (os.path.isfile(full_file_name)):
+               print("print file name %s\n", os.path.basename(full_file_name))
+               shutil.copy(full_file_name, scripts_dir)
+               #shutil.copy(full_file_name, cloud_init_dir)
 
 	
-#def populate_distinct_networks(inputs):
-#    final_list = []
-#    for num in duplicate:
-#        if num not in final_list:
-#            final_list.append(num)
-#    return final_list
-     
 def get_hash(fname, algo):
     import hashlib, os
     if algo == "SHA256":
@@ -479,8 +575,8 @@ def get_hash(fname, algo):
     print("{} Hash of file {}: {}".format(algo, fname, SHAhash.hexdigest()))
     return SHAhash.hexdigest()
 
+
 def copy_scripts_for_riftware(params, workdir):
-    print("scripts dict :",params['scripts'])
 
     upload_dir = os.path.join('/tmp/uploads',params['username'])
     upload_scripts_dir = os.path.join(upload_dir,params['session_key'])
@@ -500,13 +596,14 @@ def copy_scripts_for_riftware(params, workdir):
             full_file_name = os.path.join(upload_scripts_dir, file_name)
             print("Before copying RIFT.io script - check if this is a valid file:",full_file_name)
             if (os.path.isfile(full_file_name)):
-                if (file_name in params['scripts']['create']):
-                    if ('_vnfd' in workdir):
-                        shutil.copy(full_file_name, cloud_init_dir)
-                        print("Copied file {} to cloud_init dir\n".format(os.path.basename(full_file_name)))
+                #if (file_name in params['scripts']['create']):
+                if ('_vnfd' in workdir):
+                      shutil.copy(full_file_name, cloud_init_dir)
+                      print("Copied file {} to cloud_init dir\n".format(os.path.basename(full_file_name)))
                 else:
                     shutil.copy(full_file_name, scripts_dir)
                     print("Copied file {} to scripts dir\n".format(os.path.basename(full_file_name)))
+
 
 def create_vmdk_manifest_file(name, directory):
   print("VMDK - Creating VMDK manifest file for ****", name)
@@ -539,6 +636,7 @@ def create_vmdk_manifest_file(name, directory):
       # Print the stack traceback
       traceback.print_exc()
       return -2
+
  
 def create_riftware_manifest_file(name, directory):
   print("RIFT.io - Creating RIFT.ware manifest file for", name)
@@ -579,6 +677,7 @@ def create_riftware_manifest_file(name, directory):
       traceback.print_exc()
       return -2
 
+
 def create_riftware_vnfd_package(inputs, name, workdir):
     print("RIFT.io - Creating RIFT.ware VNFD Package")
     vnfd_dir = os.path.join(workdir, name + '_vnfd')
@@ -589,9 +688,10 @@ def create_riftware_vnfd_package(inputs, name, workdir):
     os.mkdir(icons_dir)
     images_dir = os.path.join(vnfd_dir, 'images')
     os.mkdir(images_dir)
-    copy_scripts_for_riftware(inputs['params'], vnfd_dir)
+    copy_scripts_for_riftware(inputs, vnfd_dir)
+    populate_distinct_networks(inputs)
 
-    generate_standard_riftio_blueprint(inputs['params'], vnfd_dir, name)
+    generate_standard_riftio_blueprint(inputs, vnfd_dir, name)
    
     create_riftware_manifest_file(name+'_vnfd', vnfd_dir)
     copy_README(inputs, workdir)
@@ -616,9 +716,9 @@ def create_riftware_nsd_package(inputs, name, workdir):
     os.mkdir(vnf_config_dir)
     icons_dir = os.path.join(nsd_dir, 'icons')
     os.mkdir(icons_dir)
-    copy_scripts_for_riftware(inputs['params'], nsd_dir)
+    copy_scripts_for_riftware(inputs, nsd_dir)
 
-    generate_standard_riftio_nsd_blueprint(inputs['params'], nsd_dir, name)
+    generate_standard_riftio_nsd_blueprint(inputs, nsd_dir, name)
 
     create_riftware_manifest_file(name+'_nsd', nsd_dir)
     copy_README(inputs, workdir)
@@ -634,22 +734,8 @@ def create_riftware_nsd_package(inputs, name, workdir):
     return nsd_tar
 
 
-#def get_orch_types(params):
-#	orch = params['orch_type']
-#	## TODO : (this is workaround) need to will handle Cloudify 4.0 in proper way.
-#    
-#	#if params['orch_type'] == 'Cloudify 4.0':
-#	#   orch = 'Cloudify 3.4'
-#	   
-#	return orch 
-
 def get_orch_types(params):
        orch = params['vim_params']['orch_type']
-       ## TODO : (this is workaround) need to will handle Cloudify 4.0 in proper way.
-
-       #if params['orch_type'] == 'Cloudify 4.0':
-       #   orch = 'Cloudify 3.4'
-
        return orch
 
 def get_git_flag(params):
@@ -692,53 +778,8 @@ def add_scripts(params,workdir):
                print("print file name %s\n", os.path.basename(full_file_name))
                shutil.copy(full_file_name, scripts_dir)
 
-#def add_scripts(params, workdir):
-#    #params['scripts'] = None if all(not s for p, s in params['scripts'].iteritems()) else params['scripts']
-#    #print("add_scripts: %s\n",params)
-#    #scripts = params['scripts']
-#    #print("scripts dict :%s\n",params['scripts'])
-#    scripts_dir = ''
-#    
-#    if params['scripts']:
-#        scripts_dir = os.path.join(workdir, 'scripts')
-#        os.mkdir(scripts_dir)
-#        #if os.path.isdir('/tmp/uploads/'):
-#        #   print("Uploading File in /tmp/uploads")
-#        #   shutil.copytree('/tmp/uploads',scripts_dir)
-#        
-#
-##        for phase, script in scripts.iteritems():
-##            if script:
-##                if validators.url(script):
-##                    body, ext = get_file_from_url(script)
-##                else:
-##                    body, ext = script, ''
-##                write_scripts_file(scripts_dir, phase, ext, body)
-##                params['scripts'][phase] = os.path.join('scripts', phase + '.' + ext)
-#
-#    if not os.path.exists((os.path.join(workdir,'scripts'))):
-#        scripts_dir = os.path.join(workdir,'scripts')
-#        print("gb:scripts_dir:",scripts_dir)
-#        os.mkdir(scripts_dir)
-#    upload_dir = os.path.join('/tmp/uploads',params['username'])
-#    upload_scripts_dir = os.path.join(upload_dir,params['session_key'])
-#    print("gb:upload_scripts_dir:",upload_scripts_dir)
-#    if os.path.isdir(upload_scripts_dir):
-#       src_files = os.listdir(upload_scripts_dir)
-#       print("gb:list uploaded files:",src_files)
-#       for file_name in src_files:
-#			full_file_name = os.path.join(upload_scripts_dir, file_name)
-#			print("Check create dict:%s",params['scripts']); 
-#			print("gb:full file name:",full_file_name)
-#			if (os.path.isfile(full_file_name)):
-#				print("print file name %s\n", os.path.basename(full_file_name))
-#				shutil.copy(full_file_name, scripts_dir)
-#   
 def generate_cloudify_blueprint(params, workdir, name):
-   #template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES[params['env_type']])) 
     template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES[params['vim_params']['env_type']]))
-    print("Inside generate cloudify blueprint :%s\n",params)
-    print("Print Template : %s\n",template)
     out = template.render(params)
     out_file = os.path.join(workdir, name + '.yaml')
     with open(out_file, 'w') as f:
@@ -759,14 +800,14 @@ def generate_standard_osm_nsd_blueprint(params, workdir, name):
         f.write(out)
 
 def generate_standard_riftio_blueprint(params, workdir, name):
-    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['RIFTware_' + params['env_type']]))
+    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['MultiVDU-' + params['vim_params']['env_type'] + '-RIFTware']))
     out = template.render(params)
     out_file = os.path.join(workdir, name + '_vnfd.yaml')
     with open(out_file, 'w') as f:
         f.write(out)
 
 def generate_standard_riftio_nsd_blueprint(params, workdir, name):
-    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['RIFTware_NSD_' + params['env_type']]))
+    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['MultiVDU-' + params['vim_params']['env_type'] + '-Riftware-NSD']))
     out = template.render(params)
     out_file = os.path.join(workdir, name + '_nsd.yaml')
     with open(out_file, 'w') as f:
@@ -810,17 +851,15 @@ def generate_riftio_package(params, workdir, name, create_nsd=True):
         The files have already been copied to the correct folder inside the tar.gz package
     '''
     shutil.rmtree(cinit_scripts_dir)
-    
-def generate_standard_vmdk_blueprint(inputs, params, workdir, name):
-    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['NONE_' + params['env_type']]))
+
+
+def generate_standard_ovf_blueprint(params, workdir, name):
+    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['NONE_' + params['vim_params']['env_type']]))
     out = template.render(params)
-    if get_env_types(inputs['params']) == 'OpenStack':
-        out_file = os.path.join(workdir, name + '.yaml')
-    else: 
-        out_file = os.path.join(workdir, name + '.ovf')
+    out_file = os.path.join(workdir, name + '.ovf')
     with open(out_file, 'w') as f:
         f.write(out)
-
+    
 def generate_standard_heat_blueprint(params, workdir, name):
     template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['NONE_' + params['env_type']]))
     out = template.render(params)
@@ -828,8 +867,48 @@ def generate_standard_heat_blueprint(params, workdir, name):
     with open(out_file, 'w') as f:
         f.write(out)
 
+def generate_basic_HEAT_template(inputs,workdir,name):
+    print "reached generate_basic_HEAT_template"
+    populate_heat_network_info(inputs)
+    add_scripts_HEAT(inputs,workdir)
+    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['MultiVDU-OS-HEAT']))
+    out = template.render(inputs)
+    out_file = os.path.join(workdir, name + '.yaml')
+    with open(out_file, 'w') as f:
+        f.write(out)
+
+def populate_heat_network_info(inputs):
+    inputs['vim_params']['NewNetworks'] =  {}
+    for paramskey in inputs['vim_params'].keys():
+         print "paramskey = {}".format(paramskey)
+         if re.match('Network(\d+)_name',paramskey):
+            commonkey = paramskey.split('_')[0]
+            print "commonkey={}".format(commonkey)
+            netnum = re.search('Network(.+)',commonkey).group(1)
+            netname = inputs['vim_params'][paramskey]
+            newnetkey = 'Create ' + commonkey
+            print "newnetykey = {}".format(newnetkey)
+            print "populate distinct networks = {}".format(str(netname))
+            print "newnetykey = {}".format(newnetkey)
+            if newnetkey in inputs['vim_params']:
+               inputs['vim_params']['NewNetworks'][str(netname)] = str(inputs['vim_params']['Subnet_' + commonkey ])
+    vmnum = 0
+    for vmdata in inputs['params']:
+       if vmdata['flavor'] == '2':
+          vmdata['flavor'] = 'm1.small'
+       elif vmdata['flavor'] == '3':
+          vmdata['flavor'] = 'm1.medium'
+       elif vmdata['flavor'] == '4':
+          vmdata['flavor'] = 'm1.large'
+       if'create' in   vmdata['scripts']:
+          if 'cloud_init_file' not in vmdata and vmdata['scripts']['create'][vmnum] != '':
+              vmdata['cloud_init_file'] = ''
+              vmdata['cloud_init_file'] = vmdata['scripts']['create'][vmnum]
+       vmnum += 1
+
+
 def generate_standard_tosca_blueprint(params, workdir, name):
-    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['TOSCA_' + params['env_type']]))
+    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['TOSCA_' + params['vim_params']['env_type']]))
     out = template.render(params)
     out_file = os.path.join(workdir, name + '-TOSCA.yaml')
     with open(out_file, 'w') as f:
@@ -880,10 +959,7 @@ def create_blueprint_package(inputs):
             if get_git_flag(inputs['params']) == True: 
                 print "The git flag inside ", get_git_flag(inputs['params']) 
                 print("params for git upload : output file = %s\n, workdir = %s\n,orch_name = %s\n,commit_comment = %s\n",output_file, workdir, orch_name, commit_comment)
-#                Process=subprocess.call(['./git_upload.sh', output_file, workdir, orch_name, commit_comment])
                 Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name, vnf_name])
-#                Process=subprocess.call(['./git_upload.sh', output_file, workdir])  
-#            Process=subprocess.call(['./git_upload.sh', output_file, workdir])
             return output_file, workdir
         elif get_orch_types(inputs['params']) == 'OSM 3.0':
            vnfd_package=create_osm_vnfd_package(inputs, name, workdir)
@@ -892,13 +968,10 @@ def create_blueprint_package(inputs):
            print "The git flag outside ", get_git_flag(inputs['params']) 
            if get_git_flag(inputs['params']) == True: 
                print "The git flag inside ", get_git_flag(inputs['params']) 
-#               Process=subprocess.call(['./git_upload.sh', output_file, workdir])
                Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name, vnf_name])
-#           Process=subprocess.call(['./git_upload.sh', output_file, workdir])
            return output_file, workdir
         elif get_orch_types(inputs['params']) == 'RIFT.ware 5.3':
            print "inside RIFT.ware block, inputs: ", inputs
-           #generate_riftio_package(inputs['params'], workdir, name, True)
            vnfd_package = create_riftware_vnfd_package(inputs, name, workdir)
            nsd_package = create_riftware_nsd_package(inputs, name, workdir)
            output_file = create_package(name, workdir)
@@ -917,14 +990,6 @@ def create_blueprint_package(inputs):
                    print "The git flag inside ", get_git_flag(inputs['params'])
                    Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
                return output_file, workdir
-            else:
-               vmdk_package=create_vmdk_package(inputs, name, workdir)
-               output_file = create_package(name, workdir)
-               print "The git flag outside ", get_git_flag(inputs['params'])
-               if get_git_flag(inputs['params']) == True:
-                  print "The git flag inside ", get_git_flag(inputs['params'])
-                  Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name, vnf_name])
-               return output_file, workdir
         elif get_orch_types(inputs['params']) == 'TOSCA 1.1':
            generate_standard_tosca_blueprint(inputs['params'], workdir, name)
            if get_env_types(inputs['params']) == 'OpenStack':
@@ -934,23 +999,23 @@ def create_blueprint_package(inputs):
            output_file = create_package(name, workdir)
            print "Got the output file", output_file
            print "Got the working directory",workdir 
-#             Process=subprocess.Popen('./git_upload.sh %s' % (output_file), shell=True) 
            print "The git flag outside ", get_git_flag(inputs['params']) 
            if get_git_flag(inputs['params']) == True: 
                 print "The git flag inside ", get_git_flag(inputs['params']) 
                 Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
-#           Process=subprocess.call(['./git_upload.sh', output_file, workdir])
            return output_file, workdir
     finally:
         print("inside finally")
         cleanup(workdir)
 
 def create_multivdu_blueprint_package(inputs):
+    if get_orch_types(inputs) == 'Heat':
+       inputs['vim_params']['orch_type'] = 'HEAT'
     name, workdir = gen_name_and_workdir(inputs)
     try:
        create_work_dir(workdir)
        #if get_orch_types(inputs['params']) not in ['OSM 3.0', 'RIFT.ware 5.3', 'NONE']:
-       if get_orch_types(inputs) not in ['OSM 3.0', 'RIFT.ware 5.3', 'NONE']:
+       if get_orch_types(inputs) not in ['OSM 3.0', 'RIFT.ware 5.3','RIFT.ware 6.1', 'HEAT', 'Ovf']:
           add_scripts(inputs, workdir)
           copy_README(inputs, workdir)
        print "The input parameter is ", get_orch_types(inputs)
@@ -961,7 +1026,8 @@ def create_multivdu_blueprint_package(inputs):
        env_name= get_env_types(inputs)
        vnf_name= get_vnf_types(inputs)
 
-       if get_orch_types(inputs) == 'Cloudify 3.4' or get_orch_types(inputs) == 'Cloudify 4.0' or get_orch_types(inputs) == 'C loudify 4.3' :
+       if get_orch_types(inputs) == 'Cloudify 3.4' or get_orch_types(inputs) == 'Cloudify 4.0' or get_orch_types(inputs) == 'Cloudify 4.3' :
+          populate_distinct_cloudify_networks(inputs)
           generate_cloudify_blueprint(inputs, workdir, name)
           for vm in inputs['params']:
               print "data ****************", vm['flavor']
@@ -973,10 +1039,7 @@ def create_multivdu_blueprint_package(inputs):
           if get_git_flag(inputs) == True:
              print "The git flag inside ", get_git_flag(inputs)
              print("params for git upload : output file = %s\n, workdir = %s\n,orch_name = %s\n,commit_comment = %s\n",output_file, workdir, orch_name, commit_comment)
-#                Process=subprocess.call(['./git_upload.sh', output_file, workdir, orch_name, commit_comment])
              Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name, vnf_name])
-#                Process=subprocess.call(['./git_upload.sh', output_file, workdir])
-#            Process=subprocess.call(['./git_upload.sh', output_file, workdir])
           return output_file, workdir
        elif get_orch_types(inputs) == 'OSM 3.0':
            vnfd_package=create_osm_vnfd_package(inputs, name, workdir)
@@ -985,10 +1048,60 @@ def create_multivdu_blueprint_package(inputs):
            print "The git flag outside ", get_git_flag(inputs)
            if get_git_flag(inputs) == True:
                print "The git flag inside ", get_git_flag(inputs)
-#               Process=subprocess.call(['./git_upload.sh', output_file, workdir])
                Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name, vnf_name])
-#           Process=subprocess.call(['./git_upload.sh', output_file, workdir])
            return output_file, workdir
+       elif get_orch_types(inputs) == 'TOSCA 1.1':
+           populate_distinct_tosca_networks(inputs)
+           generate_standard_tosca_blueprint(inputs, workdir, name)
+#           if get_env_types(inputs['params']) == 'OpenStack':
+#               if get_flavor_type(inputs['params']) == 'Custom Flavor':
+ #                  generate_flavor_blueprint(inputs, inputs['params'], workdir, name)
+           copy_inputs_template(inputs, workdir)
+           output_file = create_package(name, workdir)
+           print "Got the output file", output_file
+           print "Got the working directory",workdir
+           print "The git flag outside ", get_git_flag(inputs)
+           if get_git_flag(inputs) == True:
+                print "The git flag inside ", get_git_flag(inputs)
+                Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
+           return output_file, workdir
+       elif get_orch_types(inputs) == 'Ovf':
+           populate_distinct_ovf_networks(inputs)
+           generate_standard_ovf_blueprint(inputs, workdir, name)
+           #create_vmdk_manifest_file((name+'_vmdk', workdir)
+           #copy_inputs_template(inputs, workdir)
+           output_file = create_package(name, workdir)
+           if get_git_flag(inputs) == True:
+                Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
+           return output_file, workdir
+       elif get_orch_types(inputs) == 'HEAT':
+           if get_env_types(inputs) == 'OpenStack':
+               #generate_standard_heat_blueprint(inputs['params'], workdir, name)
+               generate_basic_HEAT_template(inputs,workdir,name)
+               #if get_flavor_type(inputs['params']) == 'Custom Flavor':
+               # generate_flavor_blueprint(inputs, inputs['params'], workdir, name)
+               copy_inputs_template(inputs, workdir)
+               output_file = create_package(name, workdir)
+               print "Got the output file", output_file
+               print "Got the working directory",workdir
+               print "The git flag outside ", get_git_flag(inputs)
+               if get_git_flag(inputs) == True:
+                  print "The git flag inside ", get_git_flag(inputs)
+                  Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
+               return output_file, workdir 
+       elif  get_orch_types(inputs) == 'RIFT.ware 6.1' or get_orch_types(inputs) == 'RIFT.ware 5.3':
+             print "inside RIFT.ware block, inputs: ", inputs
+             vnfd_package = create_riftware_vnfd_package(inputs, name, workdir)
+             nsd_package = create_riftware_nsd_package(inputs, name, workdir)
+             copy_inputs_template(inputs, workdir)
+             output_file = create_package(name, workdir)
+             print "Got the output file", output_file
+             print "Got the working directory",workdir
+             print "The git flag outside ", get_git_flag(inputs)
+             if get_git_flag(inputs) == True:
+                print "The git flag inside ", get_git_flag(inputs)
+                Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name])
+             return output_file, workdir
 
     finally:
        print("inside finally")
@@ -998,8 +1111,6 @@ def convert_payload_to_json(inputs):
     print "convert_payload_to_json:",inputs
     inputkeys = inputs['params'].keys()
     print "inputkeys={}".format(inputkeys) 
-    #if 'number_of_vms' in inputs.keys():
-    #pdb.set_trace()
     
     if 'vnf_num_vms' in inputs['params'].keys():
         number_of_vms = inputs['params']['vnf_num_vms']
@@ -1310,8 +1421,6 @@ def convert_payload_to_json(inputs):
                        multivdu_inputs[keys]['nic_types'].insert(2,networks[int(k_comp[1]) - 1])
                    else:
                        multivdu_inputs[keys]['nic_types'].insert(2,networks[int(k_comp[1]) -1]) 
-   
-
 
         if paramskey == 'Interfaces4_name':
            for keys in multivdu_inputs.keys():
@@ -1330,93 +1439,11 @@ def convert_payload_to_json(inputs):
                   else:
                       multivdu_inputs[keys]['nic_types'].insert(2,networks[int(k_comp[1]) -1])                       
                        
-#                       if paramskey == 'Interfaces1_name':
-#        o_index = 1
-#        for keys in multivdu_inputs.keys():
-#            print keys
-#
-#            if re.match('VM-*',keys):
-#                print "matched_keys={}".format(keys)
-#                k_comp = keys.split("-")
-#                print k_comp
-##if int(k_comp[1]) == index:
-#                i_index = 1
-#                for nic_type in inputs['params'][paramskey]:
-#                if o_index == i_index:
-#                           if 'nic_types' not in multivdu_inputs[keys]:
-#                               multivdu_inputs[keys]['nic_types'] = []
-#                               multivdu_inputs[keys]['nic_types'].append(nic_type)
-#                           else:
-#                                multivdu_inputs[keys]['nic_types'].append(nic_type)
-#                       i_index += 1
-#                   o_index += 1 	 
-#	     
-#
-#
-#        if paramskey == 'Interfaces2_name':
-#           o_index = 1
-#           for keys in multivdu_inputs.keys():
-#               print keys
-#
-#               if re.match('VM-*',keys):
-#                  print "matched_keys={}".format(keys)
-#                  k_comp = keys.split("-")
-#                  print k_comp
-#                  #if int(k_comp[1]) == index:
-#                  i_index = 1
-#                  for nic_type in inputs['params'][paramskey]:
-#                      if o_index == i_index:
-#                         if 'nic_types' not in multivdu_inputs[keys]:
-#                             multivdu_inputs[keys]['nic_types'] = []
-#                             multivdu_inputs[keys]['nic_types'].append(nic_type)
-#                         else:
-#                             multivdu_inputs[keys]['nic_types'].append(nic_type)
-#                      i_index += 1
-#                  o_index += 1
-#
-#
-#         
-#        if paramskey == 'Interfaces3_name':
-#           o_index = 1
-#           for keys in multivdu_inputs.keys():
-#               print keys
-#
-#               if re.match('VM-*',keys):
-#                  print "matched_keys={}".format(keys)
-#                  k_comp = keys.split("-")
-#                  print k_comp
-#                  #if int(k_comp[1]) == index:
-#                  i_index = 1
-#                  for nic_type in inputs['params'][paramskey]:
-#                      if o_index == i_index:
-#                         if 'nic_types' not in multivdu_inputs[keys]:
-#                             multivdu_inputs[keys]['nic_types'] = []
-#                             multivdu_inputs[keys]['nic_types'].append(nic_type)
-#                         else:
-#                             multivdu_inputs[keys]['nic_types'].append(nic_type)
-#                      i_index += 1
-#                  o_index += 1
-#
-
     print "multivdu_inputs={}".format(multivdu_inputs)
     return multivdu_inputs
 
 
-
 if __name__ == '__main__':
-    #args = parse_argv()
-    #with open(args.inputs) as f:
-    #    inputs = yaml.load(f.read())
-    #    output_file, workdir = create_blueprint_package(inputs)
-    #    print "Got the output file", output_file
-        #Process=subprocess.Popen('./git_upload.sh %s' % (str(output_file)))
-       # subprocess.call(["git_upload.sh","output_file"],shell=True)
-    #inputs = '{"params": { "Interfaces1_name": ["VIRTIO", "PCI-PASSTHOUGH", "DIRECT"],"Interfaces2_name": [" ","E1000", "SR-IOV"], "git_upload": "False", "orch_type": "OSM 3.0","ram": ["1024", "2048", "4096"],"nic1_name": ["FlatNet", "system", "DIRECT"],"nic2_name": ["FLATNET", "COOL", "DAYLIGHT"],"flavorname": "","env_type": "OpenStack","image_id": ["ubuntu ", "multi_nic ", "ubuntu1_nic"],"memory_reservation": ["True", "Flase", "True"],"numa_affinity": ["True", "False", "True", "False"],"scripts": { "create": ""},"vnf_type": "vRouter", "number_numa_node": ["0", "1", "3", "4"],"vnfd_name": "singlevdu", "flavor": ["test"," ","trial"],"disk": ["10", "20", "30"],"cpu": ["1", "2", "3", "2", "2"], "latency_sensitivity": ["True", "False", "True"],"number_of_vms" : 4 ,"flavorname": ["m1.small"," " ,"m1.large"]}}'
-
-    #inputs = '{"params":{"env_type":"vCloud Director","orch_type":"Cloudify 4.0","vnf_type":"vRouter","vnfd_name":"TestVNF","vnf_num_vms":2,"image_id":["Test","Ubuntu","","","",""],"Flavor":["2","2","2","2","2","2"],"flavorname":["","","","","",""],"number_numa_node":0,"scripts":{"create":["","","","","",""],"config":["","","","","",""],"delete":["","","","","",""]},"git_upload":false,"nic_1_name":["Mgmt","FlatNet","","","",""],"nic_2_name":["Mgmt","","","","",""],"nic_3_name":["","","","","",""],"nic_4_name":["","","","","",""],"nic_5_name":["","","","","",""],"nic_6_name":["","","","","",""],"Interfaces1_name":["Default","Default","","","",""],"Interfaces2_name":["Default","","","","",""],"Interfaces3_name":["Select Type","","","","",""],"Interfaces4_name":["Select Type","","","","",""],"Interfaces5_name":["Select Type","","","","",""],"Interfaces6_name":["Select Type","","","","",""]}}'
-
-   #inputs = '{"params":{"env_type":"vCloud Director","orch_type":"TOSCA 1.1","vnf_type":"vRouter","vnfd_name":"Test","vnf_num_vms":2, "image_id":["Ubuntu","ubuntu","","","",""],"Flavor":["2","2","2","2","2","2"],"flavorname":["","","","","",""],"numa_affinity":[true,false,false,false,false,false], "memory_reservation":[true,false,false,false,false,false],"latency_sensitivity":[true,false,false,false,false,false],"number_numa_node":[1,1,1,1,1,1], "scripts":{"create":["","","","","",""],"config":["","","","","",""],"delete":["","","","","",""]},"git_upload":false,"nic1_name":["Mgmt","bank","Insurance","","",""],"nic2_name":["Mgmt","Retail","","","",""],"nic3_name":["","","","","",""], "nic4_name":["","","","","",""],"nic5_name":["","","","","",""],"nic_6_name":["","","","","",""],"Interfaces1_name":["E1000","VMXNET3","E1000","","",""],"Interfaces2_name":["VMXNET3","E1000","","","",""],"Interfaces3_name":["Select Type","","","","",""],"Interfaces4_name":["Select Type","","","","",""],"Interfaces5_name":["Select Type","","","","",""],"Interfaces6_name":["Select Type","","","","",""]}}'
-
    inputs = '{"params": {"Internal_Connection_Points": ["vm1_nic1_name"], "NetNameType": {"mgt": "EXTERNAL", "eth0": "INTERNAL"},"Interfaces1_name": "PCI-PASSTHROUGH", "Network_Type": {}, "nic1_cp": "vm1_nic1_name", "ram": "1024","vdu_internal_networks": ["eth0"], "nic1_name": "eth0", "flavorname": "", "image_id": "ubunt", "nic1_type": "INTERNAL", "memory_reservation": False, "numa_affinity": False, "scripts": {"create": ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]}, "number_numa_node": 1, "flavor": "2", "disk": "10", "cpu": "1", "latency_sensitivity": False}}'
    input_json = json.loads(inputs)
    convert_payload_to_json(input_json) 

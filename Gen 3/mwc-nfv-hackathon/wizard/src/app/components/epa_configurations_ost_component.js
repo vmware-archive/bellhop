@@ -1,8 +1,9 @@
 /*#########################################################################
-##
 # Copyright 2017-2018 VMware Inc.
 # This file is part of VNF-ONboarding
 # All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,10 +19,8 @@
 #
 # For those usages not covered by the Apache License, Version 2.0 please
 # contact:  osslegalrouting@vmware.com
- 
-##
- 
-##########################################################################*/
+
+###########################################################################*/
 
 const TOOLTIPS = require('../config/tooltips.json');
 
@@ -39,6 +38,7 @@ module.exports = {
 	this.NUMA_AFFINITY = false;
 	this.MEMORY_RESERVATION = false;
 	this.LATENCY_SENSITIVITY = false;
+	$scope.Isdisabled = true;
 	
 	this.MEMORY_RESERVATION_TOOLTIP = TOOLTIPS.MEMORY_RESERVATION_TOOLTIP;
 	this.LATENCY_SENSITIVITY_TOOLTIP = TOOLTIPS.LATENCY_SENSITIVITY_TOOLTIP;
@@ -53,22 +53,68 @@ module.exports = {
 	$scope.MemoryReservationSelected = config_epa.MemoryReservation;
 	$scope.LatencySensitivitySelected = config_epa.LatencySensitivity;
 	$scope.NumberNumaNodeSelected = config_epa.NumberNumaNode;
+        $scope.HugePagesSelected = config_epa.Huge_Pages;
 	
 	//$scope.NumaAffinitySelected = false;
 	//$scope.MemoryReservationSelected = false;
 	//$scope.LatencySensitivitySelected = false;
 	//$scope.NumberNumaNodeSelected = 1;
+	
 	$scope.SRIOVInterfacesSelected = [];
 	
-	const config_vnf = dataService.getVnfDefinition();
-	this.VIMType = config_vnf.VIMType;
-	this.OrchType = config_vnf.OrchType;
+		
+	 const config_vnf = dataService.getVnfDefinition();
+	 this.VIMType = config_vnf.VIMType;
+	 this.OrchType = config_vnf.OrchType;
+	 this.numberOfVMs = config_vnf.numberOfVMs;
+	 this.VMsIndices = config_vnf.VMsIndices;
+	 const vnfconfig = dataService.getVnfConfiguration();
+	 this.FlavorSelected = vnfconfig.Flavor;
 	
+	//alert(this.FlavorSelected);
+	console.log(this.FlavorSelected);
+	
+	this.isCUSTOM_FLAVOR = function(i) {
+        if(this.FlavorSelected[i]== "auto"){
+			//alert(i);
+            return true;
+        }
+        else{
+            return false;
+        }
+    };
 	
 	const config_nic = dataService.getNicDefintion();
 	$scope.NICs = remove_dups(config_nic.NICs);
 	
-		
+	
+	$scope.doCollapse = function(index){
+   
+	    var id ="expand-" + index;
+		var spanId = "arrow-"+index;
+		var x = document.getElementById(id);
+		if (x.style.display === "block") {
+				x.style.display = "none";
+				document.getElementById(spanId).innerHTML = '<clr-icon shape="caret" style="transform: rotate(270deg);"></clr-icon>';
+		} else {
+				x.style.display = "block";
+				document.getElementById(spanId).innerHTML = '<clr-icon shape="caret" style="transform: rotate(180deg);"></clr-icon>';
+		}
+	    
+		var vrows = document.getElementsByName("expand");
+	
+		for (i = 0; i <= vrows.length; i++) {
+			if (Number(i) != Number(index)) {
+				
+				vrows[i].style.display = "none";
+				innerId = "arrow-"+i;
+				document.getElementById(innerId).innerHTML = '<clr-icon shape="caret" style="transform: rotate(270deg);"></clr-icon>';
+							
+			}
+			
+		}
+	};
+	
    function  remove_dups(object){	   
 		var NICs = [];
 		for (i = 0; i < object.length ; i++) {
@@ -85,20 +131,31 @@ module.exports = {
 		var isValid = this.forms.epaDefinitionForm.$valid;
 		
 		if( isValid ) {
-			if(!$scope.NumaAffinitySelected)
-			{
-				$scope.NumberNumaNodeSelected = 0;
+                        
+			for (i = 0; i < this.numberOfVMs; i++) {	
+				if(this.FlavorSelected[i]!= "auto"){
+                        	//alert(i);
+		        		$scope.NumaAffinitySelected[i] ='false';
+		  			$scope.MemoryReservationSelected[i] = 'false';
+		 	 		$scope.LatencySensitivitySelected[i] ='false';
+       			 	}
+                        
+				if(!$scope.NumaAffinitySelected[i])
+				{
+					$scope.NumberNumaNodeSelected[i] = 0;
+				}
 			}
 			var config = {
 			  NumaAffinity: $scope.NumaAffinitySelected,
 			  MemoryReservation: $scope.MemoryReservationSelected,
 			  LatencySensitivity: $scope.LatencySensitivitySelected,
 			  NumberNumaNode:$scope.NumberNumaNodeSelected,
-			  SRIOVInterfaces:$scope.SRIOVInterfacesSelected
+			  SRIOVInterfaces:$scope.SRIOVInterfacesSelected,
+			  Huge_Pages : $scope.HugePagesSelected
 					  
 			};
 			dataService.setEPA( config);
-			
+			//console.log(config);
 		}
 		return isValid;
 		

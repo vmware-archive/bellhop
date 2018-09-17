@@ -1,8 +1,9 @@
-/*##########################################################################
-##
+/*#########################################################################
 # Copyright 2017-2018 VMware Inc.
 # This file is part of VNF-ONboarding
 # All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,9 +19,7 @@
 #
 # For those usages not covered by the Apache License, Version 2.0 please
 # contact:  osslegalrouting@vmware.com
- 
-##
- 
+
 ###########################################################################*/
 
 const TOOLTIPS = require('../config/tooltips.json');
@@ -48,9 +47,13 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 this.possibleNumbersOfNICs = [1,2,3,4,5,6,7,8,9,10];
          this.nicCnt = this.possibleNumbersOfNICs.length;
 	 this.VCDINTERFACES = ['Select Type','E1000'];
+	 this.VCD_OVF_INTERFACES = ['Select Type','Vmxnet3', 'E1000', 'VIRTIO','PCI-PASSTHROUGH','SR-IOV'];
 	 this.OPENSTACKINTERFACES = ['Select Type','VIRTIO','PCI-PASSTHROUGH','SR-IOV','E1000'];
+         this.OPENSTACK_OSM_INTERFACES = ['Select Type','VIRTIO','VMXNET3','PCI-PASSTHROUGH','SR-IOV','E1000'];
 	 this.VCD_CLOUDIFY_INTERFACES = ['Select Type','Default'];
 	 this.OPENSTACK_CLOUDIFY_INTERFACES = ['Select Type','normal','direct','macvtap'];
+	 this.OPENSTACK_HEAT_INTERFACES = ['Select Type','normal','direct','direct-physical', 'macvtap'];
+         this.OPENSTACKRIFTINTERFACES = ['Select Type','VIRTIO','VMXNET3','PCI-PASSTHROUGH','SR-IOV','E1000','RTL8139','PCNET','OM-MGMT'];
 	 
 	 
 	 const config_vnf = dataService.getVnfDefinition();
@@ -73,13 +76,16 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 
 	 const config = dataService.getNicDefintion();
 	 this.numberOfNICs = config.numberOfNICs;
-     this.NICs = config.NICs;
-     this.indices = config.NICsIndices;
-     this.Interfaces = config.Interfaces;
-     this.NICshow = [[]];
+	 this.NICs = config.NICs;
+	 this.Ip_adds = config.Ip_adds;
+	 this.indices = config.NICsIndices;
+	 this.Interfaces = config.Interfaces;
+	 this.NICshow = [[]];
 	 //this.NICshow[0][0] = true;
 	 this.Networks ={'Select Type':'Select Type'};
-	 this.Networks[this.mgmtNetwork] = this.mgmtNetwork;
+         if( this.mgmtNetwork){
+	 	this.Networks[this.mgmtNetwork] = this.mgmtNetwork;
+	 }
 	 for (let n = 0; n <this.netNetworks.length; n++){
 		 if(this.netNetworks[n].trim()){
 			 
@@ -114,7 +120,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	//const vm_config = dataService.getVnfSelectBlueprint();
 	
 	
-	$scope.doSomething = function(index){
+	$scope.doCollapse = function(index){
    
 	    var id ="expand-" + index;
 		var spanId = "arrow-"+index;
@@ -164,6 +170,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 			
 			}
 		}
+		VCD_OVF_INTERFACES
 	*/ 
 	 this.possibleInterfaces = [];
 	 
@@ -172,7 +179,10 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	    if (this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0') {
 			
 			this.possibleInterfaces = this.VCD_CLOUDIFY_INTERFACES; 
-		} else {
+		} else if (this.OrchType == 'Ovf') {
+			
+			this.possibleInterfaces = this.VCD_OVF_INTERFACES; 
+		}else {
 			
 			this.possibleInterfaces = this.VCDINTERFACES; 
 		}
@@ -182,7 +192,15 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		if (this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0') {
 			
 			this.possibleInterfaces = this.OPENSTACK_CLOUDIFY_INTERFACES; 
-		} else {
+		} else if(this.OrchType == 'Heat') {
+			this.possibleInterfaces = this.OPENSTACK_HEAT_INTERFACES;
+                }else if(this.OrchType == 'OSM 3.0') {
+                        this.possibleInterfaces = this.OPENSTACK_OSM_INTERFACES;
+		
+                }else if(this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1') {
+                      this.possibleInterfaces = this.OPENSTACKRIFTINTERFACES;
+ 		}
+                else {
 			
 			this.possibleInterfaces = this.OPENSTACKINTERFACES; 
 		}
@@ -193,7 +211,15 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 // console.log("possibleInterfaces");
 	 //console.log(this.possibleInterfaces);
 	 
-	 
+	this.isOS_Heat = function() {
+            if((this.OrchType == 'Heat' ) && (this.VIMType == 'OpenStack')){
+               return true;
+            }
+           else{
+              return false;
+           }
+         };
+ 
 	for (v = 0; v < this.numberOfVMs; v++) {
 		 for (i = 0; i < this.possibleNumbersOfNICs.length; i++) {
 			 if( this.Interfaces[v][i] == "" || this.Interfaces[v][i] == undefined ){
@@ -239,7 +265,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
        this.NICshow[this.indices[index]] = this.numberOfNICs  > index;
      }*/
 	
-	  if (this.OrchType == 'OSM 3.0' || this.OrchType == 'RIFT.ware 5.3'){	
+	  if (this.OrchType == 'OSM 3.0' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){	
 		this.NIC_PLACEHOLDER = ['Enter Mgmt NIC','Enter NIC name','Enter NIC name','Enter NIC name','Enter NIC name','Enter NIC name'];
 		
 	 } else{
@@ -247,7 +273,14 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 }
      
 	 this.INTERFACE_PLACEHOLDER = "Select Type";
-	 this.INTERFACE_TOOLTIP= TOOLTIPS.NIC_INTERFACE_TOOLTIP;
+         if((this.OrchType == 'Heat' ) && (this.VIMType == 'OpenStack')){
+
+              this.INTERFACE_TOOLTIP = TOOLTIPS.OS_NIC_INTERFACE_TOOLTIP;
+         }
+	 else
+         {
+	     this.INTERFACE_TOOLTIP= TOOLTIPS.NIC_INTERFACE_TOOLTIP;
+         }
 
      /*angular.element(document).ready(() => {
 	   //alert("jquery");
@@ -344,6 +377,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	      const config = {
 			numberOfNICs: this.numberOfNICs,
 		        NICs: this.NICs,
+		        Ip_adds: this.Ip_adds,
 			Interfaces: this.Interfaces,
 			NICsIndices: this.indices
 	      };

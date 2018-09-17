@@ -1,8 +1,9 @@
-/*############################################################################
-##
+/*#########################################################################
 # Copyright 2017-2018 VMware Inc.
 # This file is part of VNF-ONboarding
 # All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,14 +19,8 @@
 #
 # For those usages not covered by the Apache License, Version 2.0 please
 # contact:  osslegalrouting@vmware.com
- 
-##
- 
-############################################################################### */
 
-/**
- * Created by jakub on 1/19/17.
- */
+###########################################################################*/
 const TOOLTIPS = require('../config/tooltips.json');
 
 module.exports = {
@@ -65,8 +60,12 @@ module.exports = {
 	$scope.SRIOVInterfacesSelected = [];
 	
 	const config_vnf = dataService.getVnfDefinition();
-	this.VIMType = config_vnf.VIMType;
-	this.OrchType = config_vnf.OrchType;
+	 this.VIMType = config_vnf.VIMType;
+	 this.OrchType = config_vnf.OrchType;
+	 this.numberOfVMs = config_vnf.numberOfVMs;
+	 this.VMsIndices = config_vnf.VMsIndices;
+	 const vnfconfig = dataService.getVnfConfiguration();
+	 this.FlavorSelected = vnfconfig.Flavor;
 	
 	
 	const config_nic = dataService.getNicDefintion();
@@ -83,16 +82,60 @@ module.exports = {
 		return NICs;
 	}
 	
+	$scope.doCollapse = function(index){
+   
+	    var id ="expand-" + index;
+		var spanId = "arrow-"+index;
+		var x = document.getElementById(id);
+		if (x.style.display === "block") {
+				x.style.display = "none";
+				document.getElementById(spanId).innerHTML = '<clr-icon shape="caret" style="transform: rotate(270deg);"></clr-icon>';
+		} else {
+				x.style.display = "block";
+				document.getElementById(spanId).innerHTML = '<clr-icon shape="caret" style="transform: rotate(180deg);"></clr-icon>';
+		}
+	    
+		var vrows = document.getElementsByName("expand");
+	
+		for (i = 0; i <= vrows.length; i++) {
+			if (Number(i) != Number(index)) {
+				
+				vrows[i].style.display = "none";
+				innerId = "arrow-"+i;
+				document.getElementById(innerId).innerHTML = '<clr-icon shape="caret" style="transform: rotate(270deg);"></clr-icon>';
+							
+			}
+			
+		}
+	};
 	dataService.setSubmitCallback( function () {
 		
 		this.formSubmit = true;
 		var isValid = this.forms.epaDefinitionForm.$valid;
-		
-		if( isValid ) {
-			if(!$scope.NumaAffinitySelected)
-			{
-				$scope.NumberNumaNodeSelected = 0;
-			}
+                 this.validCnt = 0 ;
+                 for (i = 0; i < this.numberOfVMs; i++) {
+
+                  //alert(this.Image[i]);
+                     if($scope.NumaAffinitySelected[i]){
+
+                                if ((typeof $scope.NumberNumaNodeSelected[i] == 'undefined') || ($scope.NumberNumaNodeSelected[i] =="") ||  isNaN($scope.NumberNumaNodeSelected[i])){
+                                this.validCnt++;
+                         }
+
+                         }
+                  }
+                  if(this.validCnt){
+                          isValid = false;
+                  }
+
+
+                if( isValid ) {
+                      for (i = 0; i < this.numberOfVMs; i++) {
+                        if(!$scope.NumaAffinitySelected[i])
+                        {
+                                $scope.NumberNumaNodeSelected[i] = 0;
+                        }
+                      }
 			var config = {
 			  NumaAffinity: $scope.NumaAffinitySelected,
 			  MemoryReservation: $scope.MemoryReservationSelected,

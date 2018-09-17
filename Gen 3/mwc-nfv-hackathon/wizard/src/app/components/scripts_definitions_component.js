@@ -1,8 +1,9 @@
-/*###########################################################################
-##
+/*#########################################################################
 # Copyright 2017-2018 VMware Inc.
 # This file is part of VNF-ONboarding
 # All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,10 +19,9 @@
 #
 # For those usages not covered by the Apache License, Version 2.0 please
 # contact:  osslegalrouting@vmware.com
- 
-##
- 
-######################################################################### */
+
+###########################################################################*/
+
 const TOOLTIPS = require('../config/tooltips.json');
 
 module.exports = {
@@ -54,7 +54,7 @@ module.exports = {
 	 
 	 console.log(config_vnf);
 	
-	$scope.doSomething = function(index){
+	$scope.doCollapse = function(index){
    
 	    var id ="expand-" + index;
 		var spanId = "arrow-"+index;
@@ -87,7 +87,7 @@ module.exports = {
 	
 	for (i = 0; i <= this.scriptsInputsconfig.create.length -1; i++) {
 		//alert(1);
-		if (this.OrchType == 'OSM 3.0'){	
+		if (this.OrchType == 'OSM 3.0' || this.OrchType == 'Heat' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){	
 		 
 		 console.log(this.scriptsInputsconfig['create']);
 		this.scriptsInputs[i] = {
@@ -159,7 +159,7 @@ module.exports = {
 		for (i = 0; i <= this.scriptsInputsconfig.create.length -1; i++) {
 		//alert(1);
 			
-			if (this.OrchType == 'OSM 3.0'){
+			if (this.OrchType == 'OSM 3.0' || this.OrchType == 'Heat' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){
 				
 					create_arr.push(emptyToString(this.scriptsInputs[i]['create'].value))
 			}else{
@@ -170,7 +170,7 @@ module.exports = {
 				
 		}
 
-		if (this.OrchType == 'OSM 3.0'){
+		if (this.OrchType == 'OSM 3.0' || this.OrchType == 'Heat'){
 
 			config_final = {
 					create: create_arr			

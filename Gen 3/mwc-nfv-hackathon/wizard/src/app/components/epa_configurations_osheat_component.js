@@ -1,8 +1,9 @@
-/*##########################################################################
-##
+/*#########################################################################
 # Copyright 2017-2018 VMware Inc.
 # This file is part of VNF-ONboarding
 # All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,16 +19,13 @@
 #
 # For those usages not covered by the Apache License, Version 2.0 please
 # contact:  osslegalrouting@vmware.com
- 
-##
- 
-############################################################################*/
 
+###########################################################################*/
 
 const TOOLTIPS = require('../config/tooltips.json');
 
 module.exports = {
-  template: require('../templates/epa_configuration_os_cloudify.html'),
+  template: require('../templates/epa_configuration_os_heat.html'),
   controller: function ( dataService, $scope) {
     "ngInject";
 	
@@ -55,7 +53,7 @@ module.exports = {
 	$scope.MemoryReservationSelected = config_epa.MemoryReservation;
 	$scope.LatencySensitivitySelected = config_epa.LatencySensitivity;
 	$scope.NumberNumaNodeSelected = config_epa.NumberNumaNode;
-	
+        $scope.HugePagesSelected = config_epa.Huge_Pages;	
 	//$scope.NumaAffinitySelected = false;
 	//$scope.MemoryReservationSelected = false;
 	//$scope.LatencySensitivitySelected = false;
@@ -77,7 +75,7 @@ module.exports = {
 	
 	this.isCUSTOM_FLAVOR = function(i) {
         if(this.FlavorSelected[i]== "auto"){
-			//alert();
+			//alert(i);
             return true;
         }
         else{
@@ -89,7 +87,7 @@ module.exports = {
 	$scope.NICs = remove_dups(config_nic.NICs);
 	
 	
-	$scope.doSomething = function(index){
+	$scope.doCollapse = function(index){
    
 	    var id ="expand-" + index;
 		var spanId = "arrow-"+index;
@@ -132,16 +130,27 @@ module.exports = {
 		var isValid = this.forms.epaDefinitionForm.$valid;
 		
 		if( isValid ) {
-			if(!$scope.NumaAffinitySelected)
-			{
-				$scope.NumberNumaNodeSelected = 0;
+                        
+			for (i = 0; i < this.numberOfVMs; i++) {	
+				if(this.FlavorSelected[i]!= "auto"){
+                        	//alert(i);
+		        		$scope.NumaAffinitySelected[i] ='false';
+		  			$scope.MemoryReservationSelected[i] = 'false';
+		 	 		$scope.LatencySensitivitySelected[i] ='false';
+       			 	}
+                        
+				if(!$scope.NumaAffinitySelected[i])
+				{
+					$scope.NumberNumaNodeSelected[i] = 0;
+				}
 			}
 			var config = {
 			  NumaAffinity: $scope.NumaAffinitySelected,
 			  MemoryReservation: $scope.MemoryReservationSelected,
 			  LatencySensitivity: $scope.LatencySensitivitySelected,
 			  NumberNumaNode:$scope.NumberNumaNodeSelected,
-			  SRIOVInterfaces:$scope.SRIOVInterfacesSelected
+			  SRIOVInterfaces:$scope.SRIOVInterfacesSelected,
+                          Huge_Pages : $scope.HugePagesSelected
 					  
 			};
 			dataService.setEPA( config);

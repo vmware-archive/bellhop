@@ -1,0 +1,144 @@
+#########################################################################
+# Copyright 2017-2018 VMware Inc.
+# This file is part of VNF-ONboarding
+# All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+# For those usages not covered by the Apache License, Version 2.0 please
+# contact:  osslegalrouting@vmware.com
+
+###########################################################################
+vnfd:vnfd-catalog:
+    vnfd:vnfd:
+    -   vnfd:id: {{ vim_params.vnfd_name }}_vnfd_id
+        vnfd:name: {{ vim_params.vnfd_name }}_vnfd_name{% if vim_params.vnf_description %}
+        vnfd:description: {{ vim_params.vnf_description }} {% endif %}
+        vnfd:connection-point: {% for ext_net in vim_params.Nics_External %}
+        -   vnfd:name: {{ ext_net }}_cp
+            vnfd:type: VPORT{% endfor %}
+        vnfd:mgmt-interface:
+            vnfd:cp: {{ vim_params.mgmt_network_cp }}_cp{% if vim_params.Nics_Internal %}
+        vnfd:internal-vld: {% for int_net in vim_params.Nics_Internal %}
+        -   vnfd:id: internal_{{ loop.index }}_id
+            vnfd:name: internal_{{ loop.index }}_name
+            vnfd:type: {{ vim_params.NetEtherNetType.get(int_net) }}
+            vnfd:internal-connection-point: {% for cp in vim_params.Nics_Internal.get(int_net) %}
+            -   vnfd:vdu-ref: {{ vim_params.Nics_Internal_cp_vdu.get(cp) }}
+                vnfd:id-ref: {{ cp }}_internal_cp{% endfor %}{% endfor %}{% endif %}
+        vnfd:vdu: {% for vm in params %} {% set vmindex = loop.index0 %}
+        -   vnfd:id: {{ vim_params.vnfd_name }}_vdu_id_{{ loop.index }}
+            vnfd:name: {{ vim_params.vnfd_name }}_vdu_name_{{ loop.index }}
+            vnfd:image: {{ vm.image_id }}
+            vnfd:supplemental-boot-data:
+               vnfd:boot-data-drive: 'false'
+            vnfd:count: '1'
+            vnfd:vm-flavor:
+                vnfd:vcpu-count: '{{ vm. cpu }}'
+                vnfd:memory-mb: '{{ vm.ram }}'
+                vnfd:storage-gb: '{{ vm.disk }}' {% if vm.cloud_init_file %}
+            vnfd:cloud-init-file: {{ vm.cloud_init_file }} {% endif %}
+            vnfd:guest-epa: {% if vm.latency_sensitivity %}
+                vnfd:cpu-pinning-policy: DEDICATED{% else %}
+                vnfd:cpu-pinning-policy: ANY {% endif %}{% if vm.memory_reservation %}
+                vnfd:mempage-size: PREFER_LARGE{% else %}
+                vnfd:mempage-size: SMALL{% endif %}{% if vm.numa_affinity %}
+                vnfd:numa-node-policy:
+                    vnfd:node-cnt: {{ vm.number_numa_node }}{% endif %}
+            vnfd:interface:
+            -   vnfd:name: {{ vm.nic1_name }}_eth1
+                vnfd:position: '1'
+                vnfd:type: {{ vm.nic1_type }} {% if vm.Interfaces1_name %}
+                vnfd:virtual-interface:
+                    vnfd:type: {{ vm.Interfaces1_name }}{% endif %}{% if vm.nic1_type == "EXTERNAL" %}
+                vnfd:external-connection-point-ref: {{ vm.nic1_cp }}_cp{% elif vm.nic1_type == "INTERNAL" %}
+                vnfd:internal-connection-point-ref: {{ vm.nic1_cp }}_internal_cp{% endif %}{% if vm.nic2_name %}
+                vnfd:floating-ip-needed: 'false'
+            -   vnfd:name: {{ vm.nic2_name }}_eth2
+                vnfd:position: '2' {% endif %}{% if vm.nic2_type %}
+                vnfd:type: {{ vm.nic2_type }} {% endif %} {% if vm.Interfaces2_name %}
+                vnfd:virtual-interface:
+                    vnfd:type: {{ vm.Interfaces2_name }}{% endif %}{% if vm.nic2_type == "EXTERNAL"  %}
+                vnfd:external-connection-point-ref:  {{ vm.nic2_cp }}_cp{% elif vm.nic2_type == "INTERNAL" %}
+                vnfd:internal-connection-point-ref: {{ vm.nic2_cp }}_internal_cp{% endif %}{% if vm.nic3_name %}
+                vnfd:floating-ip-needed: 'false'
+            -   vnfd:name: {{ vm.nic3_name }}_eth3
+                vnfd:position: '3' {% endif %}{% if vm.nic3_type %}
+                vnfd:type: {{ vm.nic3_type }} {% endif %}{% if vm.Interfaces3_name %}
+                vnfd:virtual-interface:
+                    vnfd:type: {{ vm.Interfaces3_name }}{% endif %}{% if vm.nic3_type == "EXTERNAL"  %}
+                vnfd:external-connection-point-ref: {{ vm.nic3_cp }}_cp{% elif vm.nic3_type == "INTERNAL" %}
+                vnfd:internal-connection-point-ref: {{ vm.nic3_cp }}_internal_cp{% endif %}{% if vm.nic4_name %}
+                vnfd:floating-ip-needed: 'false'
+            -   vnfd:name: {{ vm.nic4_name }}_eth4
+                vnfd:position: '4' {% endif %}{% if vm.nic4_type %}
+                vnfd:type:  {{  vm.nic4_type }}{% endif %} {% if vm.Interfaces4_name %}
+                vnfd:virtual-interface:
+                    vnfd:type: {{ vm.Interfaces4_name }}{% endif %}{% if vm.nic4_type == "EXTERNAL"  %}
+                vnfd:external-connection-point-ref: {{ vm.nic4_cp }}_cp{% elif vm.nic4_type == "INTERNAL" %}
+                vnfd:internal-connection-point-ref: {{ vm.nic4_cp }}_internal_cp{% endif %}{% if vm.nic5_name %}
+                vnfd:floating-ip-needed: 'false'
+            -   vnfd:name: {{ vm.nic5_name }}_eth5
+                vnfd:position: '5' {% endif %}{% if vm.nic5_type %}
+                vnfd:type: {{ vm.nic5_type }} {% endif %} {% if vm.Interfaces5_name %}
+                vnfd:virtual-interface:
+                    vnfd:type: {{ vm.Interfaces5_name }}{% endif %}{% if vm.nic5_type == "EXTERNAL"  %}
+                vnfd:external-connection-point-ref: {{ vm.nic5_cp }}_cp{% elif vm.nic5_type == "INTERNAL" %}
+                vnfd:internal-connection-point-ref: {{ vm.nic5_cp }}_internal_cp{% endif %}{% if vm.nic6_name %}
+                vnfd:floating-ip-needed: 'false'
+            -   vnfd:name: {{ vm.nic6_name }}_eth6
+                vnfd:position: '6' {% endif %}{%if vm.nic6_type %}
+                vnfd:type: {{ vm.nic6_type }}{% endif %} {% if vm.Interfaces6_name %}
+                vnfd:virtual-interface:
+                    vnfd:type: {{ vm.Interfaces6_name }} {% endif %}{% if vm.nic6_type == "EXTERNAL"  %}
+                vnfd:external-connection-point-ref: {{ vm.nic6_cp }}_cp{% elif vm.nic6_type == "INTERNAL" %}
+                vnfd:internal-connection-point-ref: {{ vm.nic6_cp }}_internal_cp{% endif %}{% if vm.nic7_name %}
+                vnfd:floating-ip-needed: 'false'
+            -   vnfd:name: {{ vm.nic7_name }}_eth7
+                vnfd:position: '7' {% endif %}{% if vm.nic7_type %}
+                vnfd:type: {{ vm.nic7_type }}{% endif %}{% if vm.Interfaces7_name %}
+                vnfd:virtual-interface:
+                    vnfd:type: {{ vm.Interfaces7_name }}{% endif %}{% if vm.nic7_type == "EXTERNAL"  %}
+                vnfd:external-connection-point-ref: {{ vm.nic7_cp }}_cp{% elif vm.nic7_type == "INTERNAL" %}
+                vnfd:internal-connection-point-ref: {{ vm.nic7_cp }}_internal_cp{% endif %}{% if vm.nic8_name %}
+                vnfd:floating-ip-needed: 'false'
+            -   vnfd:name: {{ vm.nic8_name }}_eth8
+                vnfd:position: '8' {% endif %}{% if vm.nic8_type %}
+                vnfd:type: {{ vm.nic8_type }}{% endif %}{% if vm.Interfaces8_name %}
+                vnfd:virtual-interface:
+                    vnfd:type: {{ vm.Interfaces8_name }}{% endif %}{% if vm.nic8_type == "EXTERNAL"  %}
+                vnfd:external-connection-point-ref: {{ vm.nic8_cp }}_cp{% elif vm.nic8_type == "INTERNAL" %}
+                vnfd:internal-connection-point-ref: {{ vm.nic8_cp }}_internal_cp{% endif %}{% if vm.nic9_name %}
+                vnfd:floating-ip-needed: 'false'
+            -   vnfd:name: {{ vm.nic9_name }}_eth9
+                vnfd:position: '9' {% endif %}{% if vm.nic9_type %}
+                vnfd:type: {{ vm.nic9_type }}{% endif %}{% if vm.Interfaces9_name %}
+                vnfd:virtual-interface:
+                    vnfd:type: {{ vm.Interfaces9_name }}{% endif %}{% if vm.nic9_type == "EXTERNAL"  %}
+                vnfd:external-connection-point-ref: {{ vm.nic9_cp }}_cp{% elif vm.nic9_type == "INTERNAL" %}
+                vnfd:internal-connection-point-ref: {{ vm.nic9_cp }}_internal_cp{% endif %}{% if vm.nic10_name %}
+                vnfd:floating-ip-needed: 'false'
+            -   vnfd:name: {{ vm.nic10_name }}_eth10
+                vnfd:position: '10' {% endif %}{% if vm.nic10_type %}
+                vnfd:type: {{ vm.nic10_type }}{% endif %}{% if vm.Interfaces10_name %}
+                vnfd:virtual-interface:
+                    vnfd:type: {{ vm.Interfaces10_name }}{% endif %}{% if vm.nic10_type == "EXTERNAL"  %}
+                vnfd:external-connection-point-ref: {{ vm.nic10_cp }}_cp{% elif vm.nic10_type == "INTERNAL" %}
+                vnfd:internal-connection-point-ref: {{ vm.nic10_cp }}_internal_cp {% endif %}{% if vim_params.Nics_Internal %}
+            vnfd:internal-connection-point:{% for ICP in vm.Internal_Connection_Points %}
+            -   vnfd:id: {{ ICP }}_internal_cp
+                vnfd:name: {{ ICP }}_internal_cp
+                vnfd:type: VPORT {% endfor %}{% endif %}{% endfor %}
+        vnfd:service-function-chain: 'UNAWARE'

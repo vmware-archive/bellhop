@@ -1,8 +1,9 @@
-################################################################################
-##
+#########################################################################
 # Copyright 2017-2018 VMware Inc.
 # This file is part of VNF-ONboarding
 # All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,11 +19,8 @@
 #
 # For those usages not covered by the Apache License, Version 2.0 please
 # contact:  osslegalrouting@vmware.com
- 
-##
- 
-#################################################################################
 
+###########################################################################
 
 tosca_definitions_version: cloudify_dsl_1_3
 # {{ vim_params.vnf_description }}
@@ -63,7 +61,149 @@ inputs:{% for vm in params %}
   network9_name{{loop.index}}:
     default: {{vm.nic9_name}}{% endif %}{% if vm.nic10_name %}
   network10_name{{loop.index}}:
-    default: {{vm.nic10_name}}{% endif %}{% endfor %}
+    default: {{vm.nic10_name}}{% endif %}{% if vm.nic1_name in vim_params['NeworOldNetwork'] %}
+  edge_gate_way1{{loop.index}}:
+    default: {{ vim_params.EdgeGatway.get(vm.nic1_name) }}
+  gateway_ip1{{loop.index}}:
+    default: {{ vim_params.GatwayIP.get(vm.nic1_name) }}
+  netmask1{{loop.index}}:
+    default: {{ vim_params.netmask.get(vm.nic1_name) }}
+  static_ip_range1{{loop.index}}:
+    default: {{ vim_params.static_ip_start.get(vm.nic1_name) }}-{{ vim_params.static_ip_end.get(vm.nic1_name) }}
+  dns1{{loop.index}}:
+    default: [ '{{ vim_params.primary_dns.get(vm.nic1_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic1_name) }}' ]
+  dns_suffix1{{loop.index}}:
+    default: {{ vim_params.dns_suffix.get(vm.nic1_name) }}
+  dhcp_range1{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic1_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic1_name) }}{% endif %}{% if vm.nic2_name in vim_params['NeworOldNetwork'] %}
+  edge_gate_way2{{loop.index}}:
+    default: {{ vim_params.EdgeGatway.get(vm.nic2_name) }}
+  gateway_ip2{{loop.index}}:
+    default: {{ vim_params.GatwayIP.get(vm.nic2_name) }}
+  netmask2{{loop.index}}:
+    default: {{ vim_params.netmask.get(vm.nic2_name) }}
+  static_ip_range2{{loop.index}}:
+    default: {{ vim_params.static_ip_start.get(vm.nic2_name) }}-{{ vim_params.static_ip_end.get(vm.nic2_name) }}
+  dns2{{loop.index}}:
+    default: [ '{{ vim_params.primary_dns.get(vm.nic2_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic2_name) }}' ]
+  dns_suffix2{{loop.index}}:
+    default: {{ vim_params.dns_suffix.get(vm.nic2_name) }}
+  dhcp_range2{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic2_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic2_name) }}{% endif %}{% if vm.nic3_name in vim_params['NeworOldNetwork'] %}
+  edge_gate_way3{{loop.index}}:
+    default: {{ vim_params.EdgeGatway.get(vm.nic3_name) }}
+  gateway_ip3{{loop.index}}:
+    default: {{ vim_params.GatwayIP.get(vm.nic3_name) }}
+  netmask3{{loop.index}}:
+    default: {{ vim_params.netmask.get(vm.nic3_name) }}
+  static_ip_range3{{loop.index}}:
+    default: {{ vim_params.static_ip_start.get(vm.nic3_name) }}-{{ vim_params.static_ip_end.get(vm.nic3_name) }}
+  dns3{{loop.index}}:
+    default: [ '{{ vim_params.primary_dns.get(vm.nic3_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic3_name) }}' ]
+  dns_suffix3{{loop.index}}:
+    default: {{ vim_params.dns_suffix.get(vm.nic3_name) }}
+  dhcp_range3{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic3_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic3_name) }}{% endif %}{% if vm.nic4_name in vim_params['NeworOldNetwork'] %}
+  edge_gate_way4{{loop.index}}:
+    default: {{ vim_params.EdgeGatway.get(vm.nic4_name) }}
+  gateway_ip4{{loop.index}}:
+    default: {{ vim_params.GatwayIP.get(vm.nic4_name) }}
+  netmask4{{loop.index}}:
+    default: {{ vim_params.netmask.get(vm.nic4_name) }}
+  static_ip_range4{{loop.index}}:
+    default: {{ vim_params.static_ip_start.get(vm.nic4_name) }}-{{ vim_params.static_ip_end.get(vm.nic4_name) }}
+  static_ip_end4{{loop.index}}:
+    default: {{ vim_params.static_ip_end.get(vm.nic4_name) }}
+  dns4{{loop.index}}:
+    default: [ '{{ vim_params.primary_dns.get(vm.nic4_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic4_name) }}' ]
+  dns_suffix4{{loop.index}}:
+    default: {{ vim_params.dns_suffix.get(vm.nic4_name) }}
+  dhcp_range4{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic4_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic4_name) }}{% endif %}{% if vm.nic5_name in vim_params['NeworOldNetwork'] %}
+  edge_gate_way5{{loop.index}}:
+    default: {{ vim_params.EdgeGatway.get(vm.nic5_name) }}
+  gateway_ip5{{loop.index}}:
+    default: {{ vim_params.GatwayIP.get(vm.nic5_name) }}
+  netmask5{{loop.index}}:
+    default: {{ vim_params.netmask.get(vm.nic5_name) }}
+  static_ip_range5{{loop.index}}:
+    default: {{ vim_params.static_ip_start.get(vm.nic5_name) }}-{{ vim_params.static_ip_end.get(vm.nic5_name) }}
+  dns5{{loop.index}}:
+    default: [ '{{ vim_params.primary_dns.get(vm.nic5_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic5_name) }}' ]
+  dns_suffix5{{loop.index}}:
+    default: {{ vim_params.dns_suffix.get(vm.nic5_name) }}
+  dhcp_start5{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic5_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic5_name) }}{% endif %}{% if vm.nic6_name in vim_params['NeworOldNetwork'] %}
+  edge_gate_way6{{loop.index}}:
+    default: {{ vim_params.EdgeGatway.get(vm.nic6_name) }}
+  gateway_ip6{{loop.index}}:
+    default: {{ vim_params.GatwayIP.get(vm.nic6_name) }}
+  netmask6{{loop.index}}:
+    default: {{ vim_params.netmask.get(vm.nic6_name) }}
+  static_ip_range6{{loop.index}}:
+    default: {{ vim_params.static_ip_start.get(vm.nic6_name) }}- {{ vim_params.static_ip_end.get(vm.nic6_name) }}
+  dns6{{loop.index}}:
+    default: [ '{{ vim_params.primary_dns.get(vm.nic6_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic6_name) }}' ]
+  dns_suffix6{{loop.index}}:
+    default: {{ vim_params.dns_suffix.get(vm.nic6_name) }}
+  dhcp_start6{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic6_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic6_name) }}{% endif %}{% if vm.nic7_name in vim_params['NeworOldNetwork'] %}
+  edge_gate_way7{{loop.index}}:
+    default: {{ vim_params.EdgeGatway.get(vm.nic7_name) }}
+  gateway_ip7{{loop.index}}:
+    default: {{ vim_params.GatwayIP.get(vm.nic7_name) }}
+  netmask7{{loop.index}}:
+    default: {{ vim_params.netmask.get(vm.nic7_name) }}
+  static_ip_range7{{loop.index}}:
+    default: {{ vim_params.static_ip_start.get(vm.nic7_name) }}-{{ vim_params.static_ip_end.get(vm.nic7_name) }}
+  dns7{{loop.index}}:
+    default: [ '{{ vim_params.primary_dns.get(vm.nic7_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic7_name) }}' ]
+  dns_suffix7{{loop.index}}:
+    default: {{ vim_params.dns_suffix.get(vm.nic7_name) }}
+  dhcp_start7{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic7_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic7_name) }}{% endif %}{% if vm.nic8_name in vim_params['NeworOldNetwork'] %}
+  edge_gate_way8{{loop.index}}:
+    default: {{ vim_params.EdgeGatway.get(vm.nic8_name) }}
+  gateway_ip8{{loop.index}}:
+    default: {{ vim_params.GatwayIP.get(vm.nic8_name) }}
+  netmask8{{loop.index}}:
+    default: {{ vim_params.netmask.get(vm.nic8_name) }}
+  static_ip_range8{{loop.index}}:
+    default: {{ vim_params.static_ip_start.get(vm.nic8_name) }}-{{ vim_params.static_ip_end.get(vm.nic8_name) }}
+  dns8{{loop.index}}:
+    default: [ '{{ vim_params.primary_dns.get(vm.nic8_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic8_name) }}' ]
+  dns_suffix8{{loop.index}}:
+    default: {{ vim_params.dns_suffix.get(vm.nic8_name) }}
+  dhcp_start8{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic8_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic8_name) }}{% endif %}{% if vm.nic9_name in vim_params['NeworOldNetwork'] %}
+  edge_gate_way9{{loop.index}}:
+    default: {{ vim_params.EdgeGatway.get(vm.nic9_name) }}
+  gateway_ip9{{loop.index}}:
+    default: {{ vim_params.GatwayIP.get(vm.nic9_name) }}
+  netmask9{{loop.index}}:
+    default: {{ vim_params.netmask.get(vm.nic9_name) }}
+  static_ip_range9{{loop.index}}:
+    default: {{ vim_params.static_ip_start.get(vm.nic9_name) }}-{{ vim_params.static_ip_end.get(vm.nic9_name) }}
+  dns9{{loop.index}}:
+    default: [ '{{ vim_params.primary_dns.get(vm.nic9_name) }}' , ' {{ vim_params.secondary_dns.get(vm.nic9_name) }}' ]
+  dns_suffix9{{loop.index}}:
+    default: {{ vim_params.dns_suffix.get(vm.nic9_name) }}
+  dhcp_start9{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic9_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic9_name) }}{% endif %}{% if vm.nic10_name in vim_params['NeworOldNetwork'] %}
+  edge_gate_way10{{loop.index}}:
+    default: {{ vim_params.EdgeGatway.get(vm.nic10_name) }}
+  gateway_ip10{{loop.index}}:
+    default: {{ vim_params.GatwayIP.get(vm.nic10_name) }}
+  netmask10{{loop.index}}:
+    default: {{ vim_params.netmask.get(vm.nic10_name) }}
+  static_ip_range10{{loop.index}}:
+    default: {{ vim_params.static_ip_start.get(vm.nic10_name) }}-{{ vim_params.static_ip_end.get(vm.nic10_name) }}
+  dns10{{loop.index}}:
+    default: [ '{{ vim_params.primary_dns.get(vm.nic10_name) }}' , '{{ vim_params.secondary_dns.get(vm.nic10_name) }}' ]
+  dns_suffix10{{loop.index}}:
+    default: {{ vim_params.dns_suffix.get(vm.nic10_name) }}
+  dhcp_start10{{loop.index}}:
+    default: {{ vim_params.dhcp_start_ip.get(vm.nic10_name) }}-{{ vim_params.dhcp_end_ip.get(vm.nic10_name) }}{% endif %}{% endfor %}
   vcloud_config:
     default: {}
 
@@ -125,7 +265,7 @@ node_templates:
             script_path: scripts/{{ vm.scripts.delete[loop.index0] }}{% endif %}
     relationships:
       - type: cloudify.relationships.contained_in
-        target: {{ vim_params.vnfd_name }}_host{{loop.index}}{% endif %}
+        target: {{ vim_params.vnfd_name }}_host{{loop.index}} {% endif %}{% if vm.nic1_name %}
   network1_port{{loop.index}}:
     type: cloudify.vcloud.nodes.Port
     properties:
@@ -137,174 +277,352 @@ node_templates:
       vcloud_config: { get_input: vcloud_config }
     relationships:
       - target: network1{{loop.index}}
-        type: cloudify.vcloud.port_connected_to_network
-
+        type: cloudify.vcloud.port_connected_to_network {% if vm.nic1_name in vim_params['NeworOldNetwork'] %}
+  network1{{loop.index}}:
+    type: cloudify.vcloud.nodes.Network
+    properties:
+      use_external_resource: false
+      resource_id: { get_input: network1_name{{loop.index}} }
+      vcloud_config: { get_input: vcloud_config }
+      network:
+        edge_gateway: { get_input: edge_gate_way1{{loop.index}} }
+        name: { get_input: network1_name{{loop.index}} }
+        static_range: { get_input: static_ip_range1{{loop.index}} }
+        netmask: { get_input: netmask1{{loop.index}} }
+        gateway_ip: { get_input: gateway_ip1{{loop.index}} }
+        dns: { get_input: dns1{{loop.index}} }
+        dns_suffix: { get_input: dns_suffix1{{loop.index }} }
+        dhcp:
+            dhcp_range: { get_input: dhcp_range1{{loop.index}} }
+            default_lease: 3600
+            max_lease: 7200 {% else %}
   network1{{loop.index}}:
     type: cloudify.vcloud.nodes.Network
     properties:
       use_external_resource: true
       resource_id: { get_input: network1_name{{loop.index}} }
-      vcloud_config: { get_input: vcloud_config }{% if vm.nic2_name %}
-
+      vcloud_config: { get_input: vcloud_config }{% endif %}{% endif %}{% if vm.nic2_name %}
   network2_port{{loop.index}}:
     type: cloudify.vcloud.nodes.Port
     properties:
       port:
         network: { get_input: network2_name{{loop.index}} }
         binding:vnic_type: normal
+        ip_allocation_mode: dhcp
+        primary_interface: true
       vcloud_config: { get_input: vcloud_config }
     relationships:
       - target: network2{{loop.index}}
-        type: cloudify.vcloud.port_connected_to_network
-
+        type: cloudify.vcloud.port_connected_to_network {% if vm.nic2_name in vim_params['NeworOldNetwork'] %}
+  network2{{loop.index}}:
+    type: cloudify.vcloud.nodes.Network
+    properties:
+      use_external_resource: false
+      resource_id: { get_input: network2_name{{loop.index}} }
+      vcloud_config: { get_input: vcloud_config }
+      network:
+        edge_gateway: { get_input: edge_gate_way2{{loop.index}} }
+        name: { get_input: network2_name{{loop.index}} }
+        static_range: { get_input: static_ip_range2{{loop.index}} }
+        netmask: { get_input: netmask2{{loop.index}} }
+        gateway_ip: { get_input: gateway_ip2{{loop.index}} }
+        dns: { get_input: dns2{{loop.index}} }
+        dns_suffix: { get_input: dns_suffix2{{loop.index}} }
+        dhcp:
+            dhcp_range: { get_input: dhcp_range2{{loop.index}} }
+            default_lease: 3600
+            max_lease: 7200 {% else %}
   network2{{loop.index}}:
     type: cloudify.vcloud.nodes.Network
     properties:
       use_external_resource: true
       resource_id: { get_input: network2_name{{loop.index}} }
-      vcloud_config: { get_input: vcloud_config }{% endif %}{% if vm.nic3_name %}
-
+      vcloud_config: { get_input: vcloud_config }{% endif %}{% endif %}{% if vm.nic3_name %}
   network3_port{{loop.index}}:
     type: cloudify.vcloud.nodes.Port
     properties:
       port:
         network: { get_input: network3_name{{loop.index}} }
         binding:vnic_type: normal
+        ip_allocation_mode: dhcp
+        primary_interface: true
       vcloud_config: { get_input: vcloud_config }
     relationships:
       - target: network3{{loop.index}}
-        type: cloudify.vcloud.port_connected_to_network
-
+        type: cloudify.vcloud.port_connected_to_network {% if vm.nic3_name in vim_params['NeworOldNetwork'] %}
+  network3{{loop.index}}:
+    type: cloudify.vcloud.nodes.Network
+    properties:
+      use_external_resource: false
+      resource_id: { get_input: network3_name{{loop.index}} }
+      vcloud_config: { get_input: vcloud_config }
+      network:
+        edge_gateway: { get_input: edge_gate_way3{{loop.index}} }
+        name: { get_input: network3_name{{loop.index}} }
+        static_range: { get_input: static_ip_range3{{loop.index}} }
+        netmask: { get_input: netmask3{{loop.index}} }
+        gateway_ip: { get_input: gateway_ip3{{loop.index}} }
+        dns: { get_input: dns3{{loop.index}} }
+        dns_suffix: { get_input: dns_suffix3{{loop.index }} }
+        dhcp:
+            dhcp_range: { get_input: dhcp_range3{{loop.index}} }
+            default_lease: 3600
+            max_lease: 7200 {% else %}
   network3{{loop.index}}:
     type: cloudify.vcloud.nodes.Network
     properties:
       use_external_resource: true
       resource_id: { get_input: network3_name{{loop.index}} }
-      vcloud_config: { get_input: vcloud_config }{% endif %}{% if vm.nic4_name %}
-
+      vcloud_config: { get_input: vcloud_config }{% endif %}{% endif %}{% if vm.nic4_name %}
   network4_port{{loop.index}}:
     type: cloudify.vcloud.nodes.Port
     properties:
       port:
         network: { get_input: network4_name{{loop.index}} }
         binding:vnic_type: normal
+        ip_allocation_mode: dhcp
+        primary_interface: true
       vcloud_config: { get_input: vcloud_config }
     relationships:
       - target: network4{{loop.index}}
-        type: cloudify.vcloud.port_connected_to_network
-
+        type: cloudify.vcloud.port_connected_to_network {% if vm.nic4_name in vim_params['NeworOldNetwork'] %}
+  network4{{loop.index}}:
+    type: cloudify.vcloud.nodes.Network
+    properties:
+      use_external_resource: false
+      resource_id: { get_input: network4_name{{loop.index}} }
+      vcloud_config: { get_input: vcloud_config }
+      network:
+        edge_gateway: { get_input: edge_gate_way4{{loop.index}} }
+        name: { get_input: network4_name{{loop.index}} }
+        static_range: { get_input: static_ip_range4{{loop.index}} }
+        netmask: { get_input: netmask4{{loop.index}} }
+        gateway_ip: { get_input: gateway_ip4{{loop.index}} }
+        dns: { get_input: dns4{{loop.index}} }
+        dns_suffix: { get_input: dns_suffix4{{loop.index }} }
+        dhcp:
+            dhcp_range: { get_input: dhcp_range4{{loop.index}} }
+            default_lease: 3600
+            max_lease: 7200 {% else %}
   network4{{loop.index}}:
     type: cloudify.vcloud.nodes.Network
     properties:
       use_external_resource: true
       resource_id: { get_input: network4_name{{loop.index}} }
-      vcloud_config: { get_input: vcloud_config } {% endif %}{% if vm.nic5_name %}
-
+      vcloud_config: { get_input: vcloud_config } {% endif %}{% endif %}{% if vm.nic5_name %}
   network5_port{{loop.index}}:
     type: cloudify.vcloud.nodes.Port
     properties:
       port:
         network: { get_input: network5_name{{loop.index}} }
         binding:vnic_type: normal
+        ip_allocation_mode: dhcp
+        primary_interface: true
       vcloud_config: { get_input: vcloud_config }
     relationships:
       - target: network5{{loop.index}}
-        type: cloudify.vcloud.port_connected_to_network
-
+        type: cloudify.vcloud.port_connected_to_network {% if vm.nic5_name in vim_params['NeworOldNetwork'] %}
+  network5{{loop.index}}:
+    type: cloudify.vcloud.nodes.Network
+    properties:
+      use_external_resource: false
+      resource_id: { get_input: network5_name{{loop.index}} }
+      vcloud_config: { get_input: vcloud_config }
+      network:
+        edge_gateway: { get_input: edge_gate_way5{{loop.index}} }
+        name: { get_input: network5_name{{loop.index}} }
+        static_range: { get_input: static_ip_range5{{loop.index}} }
+        netmask: { get_input: netmask5{{loop.index}} }
+        gateway_ip: { get_input: gateway_ip5{{loop.index}} }
+        dns: { get_input: dns5{{loop.index}} }
+        dns_suffix: { get_input: dns_suffix5{{loop.index }} }
+        dhcp:
+            dhcp_range: { get_input: dhcp_range5{{loop.index}} }
+            default_lease: 3600
+            max_lease: 7200 {% else %}
   network5{{loop.index}}:
     type: cloudify.vcloud.nodes.Network
     properties:
       use_external_resource: true
       resource_id: { get_input: network5_name{{loop.index}} }
-      vcloud_config: { get_input: vcloud_config }{% endif %}{% if vm.nic6_name %}
- 
+      vcloud_config: { get_input: vcloud_config }{% endif %}{% endif %}{% if vm.nic6_name %}
   network6_port{{loop.index}}:
     type: cloudify.vcloud.nodes.Port
     properties:
       port:
         network: { get_input: network6_name{{loop.index}} }
         binding:vnic_type: normal
+        ip_allocation_mode: dhcp
+        primary_interface: true
       vcloud_config: { get_input: vcloud_config }
     relationships:
       - target: network6{{loop.index}}
-        type: cloudify.vcloud.port_connected_to_network
-
+        type: cloudify.vcloud.port_connected_to_network {% if vm.nic6_name in vim_params['NeworOldNetwork'] %}
+  network6{{loop.index}}:
+    type: cloudify.vcloud.nodes.Network
+    properties:
+      use_external_resource: false
+      resource_id: { get_input: network6_name{{loop.index}} }
+      vcloud_config: { get_input: vcloud_config }
+      network:
+        edge_gateway: { get_input: edge_gate_way6{{loop.index}} }
+        name: { get_input: network6_name{{loop.index}} }
+        static_range: { get_input: static_ip_range6{{loop.index}} }
+        netmask: { get_input: netmask6{{loop.index}} }
+        gateway_ip: { get_input: gateway_ip6{{loop.index}} }
+        dns: { get_input: dns6{{loop.index}} }
+        dns_suffix: { get_input: dns_suffix6{{loop.index }} }
+        dhcp:
+            dhcp_range: { get_input: dhcp_range6{{loop.index}} }
+            default_lease: 3600
+            max_lease: 7200 {% else %}
   network6{{loop.index}}:
     type: cloudify.vcloud.nodes.Network
     properties:
       use_external_resource: true
       resource_id: { get_input: network6_name{{loop.index}} }
-      vcloud_config: { get_input: vcloud_config }{% endif %}{% if vm.nic7_name %}
-
+      vcloud_config: { get_input: vcloud_config }{% endif %}{% endif %}{% if vm.nic7_name %}
   network7_port{{loop.index}}:
     type: cloudify.vcloud.nodes.Port
     properties:
       port:
         network: { get_input: network7_name{{loop.index}} }
         binding:vnic_type: normal
+        ip_allocation_mode: dhcp
+        primary_interface: true
       vcloud_config: { get_input: vcloud_config }
     relationships:
       - target: network7{{loop.index}}
-        type: cloudify.vcloud.port_connected_to_network
-
+        type: cloudify.vcloud.port_connected_to_network {% if vm.nic7_name in vim_params['NeworOldNetwork'] %}
+  network7{{loop.index}}:
+    type: cloudify.vcloud.nodes.Network
+    properties:
+      use_external_resource: false
+      resource_id: { get_input: network7_name{{loop.index}} }
+      vcloud_config: { get_input: vcloud_config }
+      network:
+        edge_gateway: { get_input: edge_gate_way7{{loop.index}} }
+        name: { get_input: network7_name{{loop.index}} }
+        static_range: { get_input: static_ip_range7{{loop.index}} }
+        netmask: { get_input: netmask7{{loop.index}} }
+        gateway_ip: { get_input: gateway_ip7{{loop.index}} }
+        dns: { get_input: dns7{{loop.index}} }
+        dns_suffix: { get_input: dns_suffix7{{loop.index }} }
+        dhcp:
+            dhcp_range: { get_input: dhcp_range7{{loop.index}} }
+            default_lease: 3600
+            max_lease: 7200 {% else %}
   network7{{loop.index}}:
     type: cloudify.vcloud.nodes.Network
     properties:
       use_external_resource: true
       resource_id: { get_input: network7_name{{loop.index}} }
-      vcloud_config: { get_input: vcloud_config }{% endif %}{% if vm.nic8_name %}
- 
+      vcloud_config: { get_input: vcloud_config }{% endif %}{% endif %}{% if vm.nic8_name %}
   network8_port{{loop.index}}:
     type: cloudify.vcloud.nodes.Port
     properties:
       port:
         network: { get_input: network8_name{{loop.index}} }
         binding:vnic_type: normal
+        ip_allocation_mode: dhcp
+        primary_interface: true
       vcloud_config: { get_input: vcloud_config }
     relationships:
       - target: network8{{loop.index}}
-        type: cloudify.vcloud.port_connected_to_network
-
+        type: cloudify.vcloud.port_connected_to_network {% if vm.nic8_name in vim_params['NeworOldNetwork'] %}
+  network8{{loop.index}}:
+    type: cloudify.vcloud.nodes.Network
+    properties:
+      use_external_resource: false
+      resource_id: { get_input: network8_name{{loop.index}} }
+      vcloud_config: { get_input: vcloud_config }
+      network:
+        edge_gateway: { get_input: edge_gate_way8{{loop.index}} }
+        name: { get_input: network8_name{{loop.index}} }
+        static_range: { get_input: static_ip_range8{{loop.index}} }
+        netmask: { get_input: netmask8{{loop.index}} }
+        gateway_ip: { get_input: gateway_ip8{{loop.index}} }
+        dns: { get_input: dns8{{loop.index}} }
+        dns_suffix: { get_input: dns_suffix8{{loop.index }} }
+        dhcp:
+            dhcp_range: { get_input: dhcp_range8{{loop.index}} }
+            default_lease: 3600
+            max_lease: 7200 {% else %}
   network8{{loop.index}}:
     type: cloudify.vcloud.nodes.Network
     properties:
       use_external_resource: true
       resource_id: { get_input: network8_name{{loop.index}} }
-      vcloud_config: { get_input: vcloud_config }{% endif %}{% if vm.nic9_name %}
- 
+      vcloud_config: { get_input: vcloud_config }{% endif %}{% endif %}{% if vm.nic9_name %}
   network9_port{{loop.index}}:
     type: cloudify.vcloud.nodes.Port
     properties:
       port:
         network: { get_input: network9_name{{loop.index}} }
         binding:vnic_type: normal
+        ip_allocation_mode: dhcp
+        primary_interface: true
       vcloud_config: { get_input: vcloud_config }
     relationships:
       - target: network9{{loop.index}}
-        type: cloudify.vcloud.port_connected_to_network
-
+        type: cloudify.vcloud.port_connected_to_network {% if vm.nic9_name in vim_params['NeworOldNetwork'] %}
+  network9{{loop.index}}:
+    type: cloudify.vcloud.nodes.Network
+    properties:
+      use_external_resource: false
+      resource_id: { get_input: network9_name{{loop.index}} }
+      vcloud_config: { get_input: vcloud_config }
+      network:
+        edge_gateway: { get_input: edge_gate_way9{{loop.index}} }
+        name: { get_input: network9_name{{loop.index}} }
+        static_range: { get_input: static_ip_range9{{loop.index}} }
+        netmask: { get_input: netmask9{{loop.index}} }
+        gateway_ip: { get_input: gateway_ip9{{loop.index}} }
+        dns: { get_input: dns9{{loop.index}} }
+        dns_suffix: { get_input: dns_suffix9{{loop.index }} }
+        dhcp:
+            dhcp_range: { get_input: dhcp_range9{{loop.index}} }
+            default_lease: 3600
+            max_lease: 7200 {% else %}
   network9{{loop.index}}:
     type: cloudify.vcloud.nodes.Network
     properties:
       use_external_resource: true
       resource_id: { get_input: network9_name{{loop.index}} }
-      vcloud_config: { get_input: vcloud_config }{% endif %}{% if vm.nic10_name %}
- 
+      vcloud_config: { get_input: vcloud_config }{% endif %}{% endif %}{% if vm.nic10_name %}
   network10_port{{loop.index}}:
     type: cloudify.vcloud.nodes.Port
     properties:
       port:
         network: { get_input: network10_name{{loop.index}} }
         binding:vnic_type: normal
+        ip_allocation_mode: dhcp
+        primary_interface: true
       vcloud_config: { get_input: vcloud_config }
     relationships:
       - target: network10{{loop.index}}
-        type: cloudify.vcloud.port_connected_to_network
-
+        type: cloudify.vcloud.port_connected_to_network {% if vm.nic10_name in vim_params['NeworOldNetwork'] %}
+  network10{{loop.index}}:
+    type: cloudify.vcloud.nodes.Network
+    properties:
+      use_external_resource: false
+      resource_id: { get_input: network10_name{{loop.index}} }
+      vcloud_config: { get_input: vcloud_config }
+      network:
+        edge_gateway: { get_input: edge_gate_way10{{loop.index}} }
+        name: { get_input: network10_name{{loop.index}} }
+        static_range: { get_input: static_ip_range10{{loop.index}} }
+        netmask: { get_input: netmask10{{loop.index}} }
+        gateway_ip: { get_input: gateway_ip10{{loop.index}} }
+        dns: { get_input: dns10{{loop.index}} }
+        dns_suffix: { get_input: dns_suffix10{{loop.index }} }
+        dhcp:
+            dhcp_range: { get_input: dhcp_range10{{loop.index}} }
+            max_lease: 7200 {% else %}
   network10{{loop.index}}:
     type: cloudify.vcloud.nodes.Network
     properties:
       use_external_resource: true
       resource_id: { get_input: network10_name{{loop.index}} }
-      vcloud_config: { get_input: vcloud_config }{% endif %}{% endfor %}
+      vcloud_config: { get_input: vcloud_config }{% endif %}{% endif %}{% endfor %}
  

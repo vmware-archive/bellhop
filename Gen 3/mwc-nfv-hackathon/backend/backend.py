@@ -1,8 +1,9 @@
-##########################################################################
-##
+#########################################################################
 # Copyright 2017-2018 VMware Inc.
 # This file is part of VNF-ONboarding
 # All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,10 +19,8 @@
 #
 # For those usages not covered by the Apache License, Version 2.0 please
 # contact:  osslegalrouting@vmware.com
- 
-##
- 
-############################################################################
+
+###########################################################################
 
 from flask import Flask, render_template, send_from_directory
 from flask import request
@@ -71,16 +70,19 @@ def login_page():
 @app.route('/signup', methods=['GET', 'POST'])
 
 def signup():
-  sendMail = False
+  #sendMail = True
   pprint.pprint("received signup request")
   print("Request Data:%s",request.data)
   credentials = json.loads(request.data)
   pprint.pprint(credentials)
   status = db_user_signup(credentials['username'],credentials['password'],credentials['emailaddress'])
   print(status)
-  if(status == "True" and sendMail == True ):
+  #if(status == "True" and sendMail == True ):
+  if(status == "True" ):
       mail_text = draft_mail_text("User Registration",credentials['username'],credentials['password'])
       print "signup:",mail_text
+      #sendMail([credentials['emailaddress']],"VNF Onboarding User Registration",mail_text) 
+      print "signup:",credentials['emailaddress']
       sendMail([credentials['emailaddress']],"VNF Onboarding User Registration",mail_text) 
   return status
 
@@ -149,7 +151,7 @@ def upload():
 @app.route('/forgetpassword', methods=['GET', 'POST'])
 
 def forgetpassword():
-   sendMail = False
+   #sendMail = False
    print "Received forgetpassword request",request.data
    inputs = inputs = request.get_json()
    print "Forgetpassword",inputs

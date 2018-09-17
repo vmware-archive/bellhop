@@ -1,8 +1,9 @@
-/*##########################################################################
-##
+/*#########################################################################
 # Copyright 2017-2018 VMware Inc.
 # This file is part of VNF-ONboarding
 # All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
@@ -18,11 +19,8 @@
 #
 # For those usages not covered by the Apache License, Version 2.0 please
 # contact:  osslegalrouting@vmware.com
- 
-##
- 
-############################################################################*/
 
+###########################################################################*/
 
 const TOOLTIPS = require('../config/tooltips.json');
 
@@ -55,7 +53,7 @@ module.exports = {
 	$scope.MemoryReservationSelected = config_epa.MemoryReservation;
 	$scope.LatencySensitivitySelected = config_epa.LatencySensitivity;
 	$scope.NumberNumaNodeSelected = config_epa.NumberNumaNode;
-	
+        $scope.HugePagesSelected = config_epa.Huge_Pages;	
 	//$scope.NumaAffinitySelected = false;
 	//$scope.MemoryReservationSelected = false;
 	//$scope.LatencySensitivitySelected = false;
@@ -89,7 +87,7 @@ module.exports = {
 	$scope.NICs = remove_dups(config_nic.NICs);
 	
 	
-	$scope.doSomething = function(index){
+	$scope.doCollapse = function(index){
    
 	    var id ="expand-" + index;
 		var spanId = "arrow-"+index;
@@ -151,7 +149,8 @@ module.exports = {
 			  MemoryReservation: $scope.MemoryReservationSelected,
 			  LatencySensitivity: $scope.LatencySensitivitySelected,
 			  NumberNumaNode:$scope.NumberNumaNodeSelected,
-			  SRIOVInterfaces:$scope.SRIOVInterfacesSelected
+			  SRIOVInterfaces:$scope.SRIOVInterfacesSelected,
+			  Huge_Pages : $scope.HugePagesSelected
 					  
 			};
 			dataService.setEPA( config);
