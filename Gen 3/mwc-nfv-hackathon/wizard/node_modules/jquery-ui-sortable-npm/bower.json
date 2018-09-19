@@ -1,0 +1,24 @@
+{
+  "name": "jquery-ui.sortable",
+  "version": "1.11.4",
+  "homepage": "https://github.com/xemlock/jquery-ui-sortable",
+  "authors": [
+    "xemlock <xemlock@gmail.com>"
+  ],
+  "description": "Minimal standalone build of jQuery UI Sortable",
+  "main": "./jquery-ui-sortable.js",
+  "keywords": [
+    "jQuery",
+    "UI",
+    "Sortable"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "jquery": ">=1.6.0"
+  }
+}
