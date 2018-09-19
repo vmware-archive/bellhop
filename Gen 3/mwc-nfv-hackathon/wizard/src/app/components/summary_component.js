@@ -133,6 +133,7 @@ module.exports = {
       'NetworkInterface6_name' : 'Enabled Network Interface 6',
       'NetworkInterface5_name' : 'Enabled Network Interface 5',
       'NetworkInterface6_name' : 'Enabled Network Interface 6',
+     
       'Create Network1': 'Create Network 1',
       'Create Network2': 'Create Network 2',
       'Create Network3': 'Create Network 3',
@@ -548,7 +549,30 @@ module.exports = {
       'Parent_OrgVdc_Network17': 'Parent OrgVdcNetwork 17',
       'Parent_OrgVdc_Network18': 'Parent OrgVdcNetwork 18',
       'Parent_OrgVdc_Network19': 'Parent OrgVdcNetwork 19',
-      'Parent_OrgVdc_Network20': 'Parent OrgVdcNetwork 20'
+      'Parent_OrgVdc_Network20': 'Parent OrgVdcNetwork 20',
+
+      'Create Network1': 'Create Network 1',
+      'Create Network2': 'Create Network 2',
+      'Create Network3': 'Create Network 3',
+      'Create Network4': 'Create Network 4',
+      'Create Network5': 'Create Network 5',
+      'Create Network6': 'Create Network 6',
+      'Create Network7': 'Create Network 7',
+      'Create Network8': 'Create Network 8',
+      'Create Network9': 'Create Network 9',
+      'Create Network10': 'Create Network 10',
+      'Create Network11': 'Create Network 11',
+      'Create Network12': 'Create Network 12',
+      'Create Network13': 'Create Network 13',
+      'Create Network14': 'Create Network 14',
+      'Create Network15': 'Create Network 15',
+      'Create Network16': 'Create Network 16',
+      'Create Network17': 'Create Network 17',
+      'Create Network18': 'Create Network 18',
+      'Create Network19': 'Create Network 19',
+      'Create Network20': 'Create Network 20',
+      
+      'create_mgmt_network': 'Create Mgmt Network'     
     };
       }
 };
