@@ -34,14 +34,14 @@ vnfd:vnfd-catalog:
             short-name: {{ ext_net }}_cp
             type: VPORT {% endfor %}
         mgmt-interface:
-            cp: {{ vim_params.mgmt_network_cp }}_cp
+            cp: {{ vim_params.mgmt_network_cp }}_cp{% if vim_params.Nics_Internal %}
         internal-vld: {% for int_net in vim_params.Nics_Internal %}
         -   id: internal_{{ loop.index }}
             name: internal_{{ loop.index }}
             short-name: internal_{{ loop.index }}
             type: {{ vim_params.NetEtherNetType.get(int_net) }}
             internal-connection-point: {% for cp in vim_params.Nics_Internal.get(int_net) %}
-            -   id-ref: {{ cp }}_internal_cp {% endfor %}{% endfor %}
+            -   id-ref: {{ cp }}_internal_cp {% endfor %}{% endfor %}{% endif %}
         vdu: {% for vm in params %} {% set vmindex = loop.index0 %}
         -   id: {{ vim_params.vnfd_name }}_vdu_id_{{ loop.index }}
             name: {{ vim_params.vnfd_name }}_vdu_name_{{ loop.index }}
@@ -129,8 +129,8 @@ vnfd:vnfd-catalog:
                 virtual-interface:
                     type: {{ vm.Interfaces10_name }}{% endif %}{% if vm.nic10_type == "EXTERNAL"  %}
                 external-connection-point-ref: {{ vm.nic10_cp }}_cp{% elif vm.nic10_type == "INTERNAL" %}
-                internal-connection-point-ref: {{ vm.nic10_cp }}_internal_cp {% endif %}
+                internal-connection-point-ref: {{ vm.nic10_cp }}_internal_cp {% endif %}{% if vim_params.Nics_Internal %}
             internal-connection-point:{% for ICP in vm.Internal_Connection_Points %}
             -   id: {{ ICP }}_internal_cp
                 name: {{ ICP }}_internal_cp
-                type: VPORT {% endfor %}{% endfor %}
+                type: VPORT {% endfor %}{% endif %}{% endfor %}
