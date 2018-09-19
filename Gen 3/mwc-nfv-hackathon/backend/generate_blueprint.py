@@ -353,7 +353,7 @@ def populate_distinct_networks(inputs):
 	vmname = 'vm' + str(vmnum + 1) 
         vmdata['cpu'] = str(vmdata['cpu'])
         vmdata['ram'] = str(vmdata['ram'])
-        vmdata['disk'] = str(vmdata['disk'])
+    #    vmdata['disk'] = str(vmdata['disk'])
         vmdata['NetNameType'] = inputs['vim_params']['NetNameType']
         vmdata['Network_Type'] = inputs['vim_params']['Network_Type']
         vmdata['Internal_Connection_Points'] = []
@@ -577,6 +577,7 @@ def get_hash(fname, algo):
 
 
 def copy_scripts_for_riftware(params, workdir):
+    #print("scripts dict :",params['scripts'])
 
     upload_dir = os.path.join('/tmp/uploads',params['username'])
     upload_scripts_dir = os.path.join(upload_dir,params['session_key'])
@@ -949,7 +950,7 @@ def create_blueprint_package(inputs):
         orch_name= get_orch_types(inputs['params'])
         env_name= get_env_types(inputs['params'])
         vnf_name= get_vnf_types(inputs['params'])
-        if get_orch_types(inputs['params']) == 'Cloudify 3.4' or get_orch_types(inputs['params']) == 'Cloudify 4.0' or get_orch_types(inputs['params']) == 'Cloudify 4.3' : 
+        if get_orch_types(inputs['params']) == 'Cloudify 3.4' or get_orch_types(inputs['params']) == 'Cloudify 4.2' or get_orch_types(inputs['params']) == 'Cloudify 4.3' : 
             generate_cloudify_blueprint(inputs['params'], workdir, name)
             if get_flavor_type(inputs['params']) == 'auto':
                  generate_flavor_blueprint(inputs, inputs['params'], workdir, name)
@@ -1026,7 +1027,7 @@ def create_multivdu_blueprint_package(inputs):
        env_name= get_env_types(inputs)
        vnf_name= get_vnf_types(inputs)
 
-       if get_orch_types(inputs) == 'Cloudify 3.4' or get_orch_types(inputs) == 'Cloudify 4.0' or get_orch_types(inputs) == 'Cloudify 4.3' :
+       if get_orch_types(inputs) == 'Cloudify 3.4' or get_orch_types(inputs) == 'Cloudify 4.2' or get_orch_types(inputs) == 'Cloudify 4.3' :
           populate_distinct_cloudify_networks(inputs)
           generate_cloudify_blueprint(inputs, workdir, name)
           for vm in inputs['params']:

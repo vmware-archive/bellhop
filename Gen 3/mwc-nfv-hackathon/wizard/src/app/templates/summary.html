@@ -49,7 +49,7 @@
 		
 		<div class="panel" name="expand" id="expand-{{$index}}">
 		  <div class="form-group long "
-			 ng-if="value && param != 'scripts' && param != 'git_upload'"
+			 ng-if="value && param != 'scripts' && param != 'git_upload' && param != 'numberOfDisks' && param != 'UnitNumer' && param != 'BusNumer' && param != 'BusType' && param != 'disk' && param != 'VMDK'"
 			 ng-repeat="(param, value) in $ctrl.inputs.params[i]">
 
 		  <label for="{{ param }}">
@@ -60,7 +60,34 @@
 			<input type="text" disabled ng-model="$ctrl.inputs.params[i][param]"/>
 		  </div>
 		</div>
+		<div class="form-group"
+			 ng-if="$ctrl.inputs.params[i].numberOfDisks"
+			 >
 
+		  <label for="{{ script }}">
+			Number Of Disks
+		  </label>
+		  
+
+		  <div id="{{ script }}">
+			<input type="text" disabled ng-model="$ctrl.inputs.params[i]['numberOfDisks']"/>
+		  </div>
+		</div>
+		
+		<div class="form-group"
+			 ng-if="$ctrl.inputs.params[i].BusType[i]"
+			 ng-repeat="BusType in $ctrl.inputs.params[i].BusType[i]">
+
+		  <label for="{{ script }}">
+			BusType -{{$index}}
+		  </label>
+		  
+
+		  <div id="{{ script }}">
+			<input type="text" disabled ng-model="{{BusType}}"/>
+		  </div>
+		</div>
+		
 		<div class="form-group"
 			 ng-if="$ctrl.inputs.params[i].scripts[script][i]"
 			 ng-repeat="script in ['create', 'config', 'delete']">

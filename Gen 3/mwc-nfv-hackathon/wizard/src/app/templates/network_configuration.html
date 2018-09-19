@@ -135,7 +135,7 @@
                                       <span> </span>
                                 </div>
 
-				<div class="col-xs-12" style="margin: 5px;">
+				<div class="col-xs-12" style="margin: 5px;" ng-show="ParentNetworkTypeSelected[$ctrl.indices[ $index ]]!='Direct'">
 			 	      <input type="text" name="{{Subnet}}" 
 					
 	           		        ng-model="$ctrl.Edge_Gateway[ $ctrl.indices[ $index ]]" 
@@ -154,7 +154,7 @@
         	                        </span>
                 	              </div>-->
 				</div>	
-				<div class="col-xs-10" style="margin: 5px;">
+				<div class="col-xs-10" style="margin: 5px;" ng-show="ParentNetworkTypeSelected[$ctrl.indices[ $index ]]!='Direct'">
                                       <input type="text" name="{{Subnet}}"
                                         
                                         ng-model="$ctrl.Static_Start[ $ctrl.indices[ $index ]]"

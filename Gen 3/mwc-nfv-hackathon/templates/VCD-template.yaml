@@ -38,8 +38,8 @@ inputs:{% for vm in params %}
     default: {{ vm.ram }}
   cpu{{loop.index}}:
     default: {{ vm.cpu }}
-  disk{{loop.index}}:
-    default: {{ vm.disk }}
+  disk{{loop.index}}: {% for x in range( vm.numberOfDisks ) %}
+    default: {{ vm.disk[loop.index0] }}{% endfor %}
   catalog:
     default: {{ vm.image_id }}
   network1_name{{loop.index}}:

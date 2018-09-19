@@ -176,7 +176,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 
 	 if (this.VIMType == 'vCloud Director'){	
 	 
-	    if (this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0') {
+	    if (this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.2') {
 			
 			this.possibleInterfaces = this.VCD_CLOUDIFY_INTERFACES; 
 		} else if (this.OrchType == 'Ovf') {
@@ -189,7 +189,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		
 	 } else{
 		 
-		if (this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0') {
+		if (this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.2') {
 			
 			this.possibleInterfaces = this.OPENSTACK_CLOUDIFY_INTERFACES; 
 		} else if(this.OrchType == 'Heat') {

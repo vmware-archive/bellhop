@@ -21,6 +21,10 @@
 # contact:  osslegalrouting@vmware.com
 
 ###########################################################################*/
+
+/**
+ * Created by jakub on 1/19/17.
+ */
 const TOOLTIPS = require('../config/tooltips.json');
 
 module.exports = {
@@ -51,7 +55,7 @@ module.exports = {
 	$scope.MemoryReservationSelected = config_epa.MemoryReservation;
 	$scope.LatencySensitivitySelected = config_epa.LatencySensitivity;
 	$scope.NumberNumaNodeSelected = config_epa.NumberNumaNode;
-	
+$scope.HugePagesSelected = config_epa.Huge_Pages;	
 	//$scope.NumaAffinitySelected = false;
 	//$scope.MemoryReservationSelected = false;
 	//$scope.LatencySensitivitySelected = false;

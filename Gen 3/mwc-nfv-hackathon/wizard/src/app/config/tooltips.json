@@ -21,7 +21,7 @@
   "DOWNLOAD_TOOLTIP": "Click button to download the generated VNF package",
   "NIC_INTERFACE_TOOLTIP": "VMXNET3 is only available in VMware vCD or VIO environments, and VIRTIO is only for KVM environments.",
   "OS_NIC_INTERFACE_TOOLTIP": "'macvtap' is not supported on VIO environments",
-  "MEMORY_RESERVATION_TOOLTIP" :"Select this to enable large memory pages",
+  "MEMORY_RESERVATION_TOOLTIP" :"Select this to enable large memory pages. If network interface is SR-IOV, memory reservation is 100%",
   "LATENCY_SENSITIVITY_TOOLTIP" :"Select this if this VNF is Latency Sensitive",
   "NUMA_AFFINITY_TOOLTIP" : "Select this if this VNF is Numa Aware",
   "NUMBER_NUMA_NODES_TOOLTIP" : "Select the number of Numa nodes",

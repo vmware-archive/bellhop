@@ -139,8 +139,8 @@ resources:{% for vm in params %} {% set vmindex = loop.index %}
         type: OS::Nova::Flavor
         properties:
            name:  {{ vm.flavorname }}
-           ram:  {{ vm.ram }}
-           disk: {{ vm.disk }}
+           ram:  {{ vm.ram }}{% for x in range( vm.numberOfDisks ) %}
+           disk: {{ vm.disk[loop.index0] }}{% endfor %}
            vcpus: {{ vm.cpu }}
            extra_specs: { {% if vm.latency_sensitivity %} cpu_policy: dedicated {% endif %} {% if vm.memory_reservation %}, mem_page_size: Large {% endif %} {% if vm.numa_affinity %} ,numa_nodes: {{ vm.number_numa_node }} {% endif %} } {% endif %} {% endfor %}       
     # New Networks to be created

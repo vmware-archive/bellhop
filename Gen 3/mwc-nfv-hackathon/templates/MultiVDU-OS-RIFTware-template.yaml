@@ -47,8 +47,8 @@ vnfd:vnfd-catalog:
             vnfd:count: '1'
             vnfd:vm-flavor:
                 vnfd:vcpu-count: '{{ vm. cpu }}'
-                vnfd:memory-mb: '{{ vm.ram }}'
-                vnfd:storage-gb: '{{ vm.disk }}' {% if vm.cloud_init_file %}
+                vnfd:memory-mb: '{{ vm.ram }}'{% for x in range( vm.numberOfDisks ) %}
+                vnfd:storage-gb: '{{ vm.disk[loop.index0] }}' {% endfor %}{% if vm.cloud_init_file %}
             vnfd:cloud-init-file: {{ vm.cloud_init_file }} {% endif %}
             vnfd:guest-epa: {% if vm.latency_sensitivity %}
                 vnfd:cpu-pinning-policy: DEDICATED{% else %}
