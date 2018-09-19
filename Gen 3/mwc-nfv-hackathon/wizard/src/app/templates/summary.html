@@ -74,19 +74,88 @@
 		  </div>
 		</div>
 		
-		<div class="form-group"
-			 ng-if="$ctrl.inputs.params[i].BusType[i]"
-			 ng-repeat="BusType in $ctrl.inputs.params[i].BusType[i]">
+		<div  class="form-group" 
+			ng-repeat="Disk in $ctrl.inputs.params[i].disk track by $index " 
+			ng-if = "$index < $ctrl.inputs.params[i]['numberOfDisks']" >
+				<!--<div class="form-group"   >-->
 
-		  <label for="{{ script }}">
-			BusType -{{$index}}
-		  </label>
-		  
+					<label for="{{ Disk }}">
+						Disk -{{$index}}
+					  </label>
+					  
 
-		  <div id="{{ script }}">
-			<input type="text" disabled ng-model="{{BusType}}"/>
-		  </div>
+					  <div id="{{ Disk }}" >
+						<input type="text" disabled ng-model="Disk"/>
+				  </div>
+				<!--</div>-->
 		</div>
+		
+		<div  class="form-group" 
+			ng-repeat="VMDK in $ctrl.inputs.params[i].VMDK track by $index " 
+			ng-if = "$index < $ctrl.inputs.params[i]['numberOfDisks']" >
+				<!--<div class="form-group"   >-->
+
+					<label for="{{ Disk }}">
+						VMDK -{{$index}}
+					  </label>
+					  
+
+					  <div id="{{ Disk }}" >
+						<input type="text" disabled ng-model="VMDK"/>
+				  </div>
+				<!--</div>-->
+		</div>
+		<!--<span>{{$ctrl.inputs.params[i].BusType}}</span>-->
+		
+		<div  class="form-group" 
+			ng-repeat="BusType in $ctrl.inputs.params[i].BusType track by $index " 
+			ng-if = "BusType !== 'Select Bus Type'" >
+				<!--<div class="form-group"   >-->
+
+					<label for="{{ BustType }}">
+						BusType -{{$index}}
+					  </label>
+					  
+
+					  <div id="{{ script }}" >
+						<input type="text" disabled ng-model="BusType"/>
+				  </div>
+				<!--</div>-->
+		</div>
+		
+		<div  class="form-group" 
+			ng-repeat="BusNumer in $ctrl.inputs.params[i].BusNumer track by $index "
+			ng-if = "BusNumer !== 'Bus No.'" >
+				<!--<div class="form-group"   >-->
+
+					<label for="{{ BustType }}" >
+						BusNumer -{{$index}}
+					  </label>
+					  
+
+					  <div id="{{ script }}" >
+						<input type="text" disabled ng-model="BusNumer"/>
+				  </div>
+				<!--</div>-->
+		</div>
+		
+		<div  class="form-group" 
+			ng-repeat="UnitNumer in $ctrl.inputs.params[i].UnitNumer track by $index " 
+			ng-if = "UnitNumer !== 'Unit No.'" >
+				<!--<div class="form-group"   >-->
+
+					<label for="{{ BustType }}" >
+						UnitNumer -{{$index}}
+					  </label>
+					  
+
+					  <div id="{{ script }}" >
+						<input type="text" disabled ng-model="UnitNumer"/>
+				  </div>
+				<!--</div>-->
+		</div>
+		
+		
 		
 		<div class="form-group"
 			 ng-if="$ctrl.inputs.params[i].scripts[script][i]"

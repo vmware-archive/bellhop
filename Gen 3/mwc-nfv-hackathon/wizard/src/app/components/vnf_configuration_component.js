@@ -625,8 +625,8 @@ module.exports = {
 			UnitNumer : this.UnitNumerSelected,
 			BusNumer :this.BusNumerSelected,
 			numberOfDisks : this.NumDisk,
-			ImageIndices : this.indices
-			
+			ImageIndices : this.indices,
+			DiskIndices : this.DiskIndices			
 			
 		};
 		//console.log(config);
