@@ -138,7 +138,7 @@
 		</div>	
 		
 		<div ng-repeat="nd in $ctrl.DiskIndices track by $index" >
-				<div ng-class="$ctrl.isOSM_or_VCD_Class($index) " ng-show="($ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index)) && ($ctrl.Diskshow[i][$index])">			
+				<div ng-class="$ctrl.isOSM_or_VCD_Class(i) " ng-show="($ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR(i)) && ($ctrl.Diskshow[i][$index])">			
 					<label class="required" for="Disk">Disk {{$index}}</label>
 					<input type="text"  ng-model="$ctrl.Disk[i][$index]" id="Disk" 
 						placeholder="Enter Disk Size" size="10" required />
