@@ -91,7 +91,7 @@ module.exports = {
       'create': 'Create Script url',
       'delete': 'Delete Script url',
       'mgmt_network':'Management Network',
-      'SubnetCidr':'Management Subnet Cidr',
+      'subnet_cidr':'Management Subnet Cidr',
       'mgmt_network_ethernet_type' : 'Mgmt Network Ethernet Type',
       'Network1_name': 'Network 1',
       'Network2_name': 'Network 2',
