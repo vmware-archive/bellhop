@@ -49,7 +49,8 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 this.VCDINTERFACES = ['Select Type','E1000'];
 	 this.VCD_OVF_INTERFACES = ['Select Type','Vmxnet3', 'E1000', 'VIRTIO','PCI-PASSTHROUGH','SR-IOV'];
 	 this.OPENSTACKINTERFACES = ['Select Type','VIRTIO','PCI-PASSTHROUGH','SR-IOV','E1000'];
-         this.OPENSTACK_OSM_INTERFACES = ['Select Type','VIRTIO','VMXNET3','PCI-PASSTHROUGH','SR-IOV','E1000'];
+         this.OPENSTACK_OSM_INTERFACES = ['Select Type','E1000','VMXNET3','PCI-PASSTHROUGH','SR-IOV','VIRTIO'];
+         this.VCD_OSM_INTERFACES = ['Select Type','E1000','VMXNET3','PCI-PASSTHROUGH','SR-IOV','VIRTIO'];
 	 this.VCD_CLOUDIFY_INTERFACES = ['Select Type','Default'];
 	 this.OPENSTACK_CLOUDIFY_INTERFACES = ['Select Type','normal','direct','macvtap'];
 	 this.OPENSTACK_HEAT_INTERFACES = ['Select Type','normal','direct','direct-physical', 'macvtap'];
@@ -182,7 +183,10 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		} else if (this.OrchType == 'Ovf') {
 			
 			this.possibleInterfaces = this.VCD_OVF_INTERFACES; 
-		}else {
+		}else if (this.OrchType == 'OSM 3.0') {
+
+                        this.possibleInterfaces = this.VCD_OSM_INTERFACES;
+                }else {
 			
 			this.possibleInterfaces = this.VCDINTERFACES; 
 		}
