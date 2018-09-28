@@ -51,11 +51,11 @@ module.exports = {
           else if ($scope.emailid != ""  && $scope.username == ""){
 	     credentials = {'emailaddress' : $scope.emailid };
              signupService.generateNewPassword(credentials,function(serviceResponse) {
-             if(serviceResponse == "True"){
+             if(serviceResponse["Status"] == "Success"){
 	         $scope.passwordChangeSuccess = true
                  document.getElementById("passwordChangeSuccessMessage").innerHTML = serviceResponse["Message"]
               }
-              else if (serviceResponse == "False"){
+              else if (serviceResponse["Status"] == "Error"){
                   $scope.passwordChangeError = true;
                   document.getElementById("passwordChangeErrorMessage").innerHTML = serviceResponse["Message"];
               }

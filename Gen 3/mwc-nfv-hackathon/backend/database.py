@@ -333,6 +333,7 @@ def generate_and_updatepassword(credentials,default_password=True):
        randompassword = password_gen()
        hashedpassword = sha256.hash(randompassword)
     elif default_password == True:
+       print "setting password to default"
        hashedpassword = sha256.hash("password@123")
     print "generate_and_updatepassword",hashedpassword
     db_table = get_config_param('database.ini','Details','table')
@@ -365,7 +366,6 @@ def generate_and_updatepassword(credentials,default_password=True):
 
 def db_connect():
     vnf_params = db_config('database.ini','vnf_onboarding')
-    print('Connecting to the PostgreSQL database...')
     dbconnect_status = None
     conn = None
     # connect to the PostgreSQL server
@@ -378,6 +378,8 @@ def db_connect():
     finally:
         if dbconnect_status is not None:
            return dbconnect_status
+        else:
+           print "connection to database succeeded"
     return conn
 
 def password_gen():
