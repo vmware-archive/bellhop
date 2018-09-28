@@ -57,7 +57,7 @@
 		     </div>
 		</div>
 
--->		<div class="form-group">
+-->		<div class="form-group" ng-show="!$ctrl.isOVF()">
 		     <label class="required" for="Image">Image</label>
 		     <input type="text" ng-model="$ctrl.Image[$index]" data-index="{{ $ctrl.indices[ $index ] }}" id="Image" placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="20"  required/>
 		     <div class="col-xs-2">
@@ -67,6 +67,36 @@
 	     	     </span>
 		     </div>
 		</div>
+
+                
+                <div class="form-group" ng-show="$ctrl.isOVF()">
+                     <label class="required" for="Image">Operating System</label>
+                     <div class="select  ">
+
+		        <select ng-required="true" id="Osfamily" ng-model="$ctrl.OsfamilySelected[i]" >
+			  <option ng-repeat="Osfamily in $ctrl.OsfamilyList" value="{{Osfamily}}">{{Osfamily}}</option>
+			</select>
+
+		     </div>
+	        </div>
+                <div class="form-group" ng-show="$ctrl.isOVF()">
+                     <label class="required" for="Image">Operating System Version</label>
+		     <div class="select ">
+		     	<select ng-model="$ctrl.OSVersionSelected[$index]" id="OSVersion">
+
+		     	   <option ng-repeat="OSVersion in $ctrl.OSVersionList[$index]" value="{{OSVersion}}">{{OSVersion}}</option>
+		     	</select>
+
+		     </div>
+
+                     <div class="col-xs-2">
+                     <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-bottom-left">
+                        <clr-icon shape="info-circle" size="24"></clr-icon>
+                        <span class="tooltip-content">{{$ctrl.IMAGE_TOOLTIP}}</span>
+                     </span>
+                     </div>
+                </div>
+
 							
 		<div ng-class="$ctrl.isOSM_VCDClass($index)" ng-show="!$ctrl.isDISK_RAM_CPU()">
 			<label for="Flavor">Flavor</label>

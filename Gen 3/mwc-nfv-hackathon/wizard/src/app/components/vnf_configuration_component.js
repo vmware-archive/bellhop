@@ -23,6 +23,9 @@
 ###########################################################################*/
 
 const TOOLTIPS = require('../config/tooltips.json');
+const LinuxOSVersion = require('../config/LinuxOSVersion.json');
+const WindowsOSVersion = require('../config/WindowsOSVersion.json');
+const OthersOSVersion = require('../config/OthersOSVersion.json');
 
 module.exports = {
   template: require('../templates/vnf_configuration.html'),
@@ -265,7 +268,29 @@ module.exports = {
 		}
 	
 	}
-	
+     
+   
+
+    /*    for (var i = 0; i < this.numberOfVMs; i++) {
+
+                for (var b = 0; b < this.Osfamily[i].length ; b++) {
+                  this.OsfamilySelected[i][b] = this.OsfamilySelected[i][b] || 'OS Family'
+
+                }
+
+        }
+
+        for (var i = 0; i < this.numberOfVMs; i++) {
+
+                for (var b = 0; b < this.OsVersion[i].length ; b++) {
+                  this.OsVersionSelected[i][b] = this.OsVersionSelected[i][b] || 'OS Version'
+
+                }
+
+        }
+
+*/
+
 	this.NumDisk = config.numberOfDisks;
 	
 		
@@ -279,6 +304,60 @@ module.exports = {
 	this.IDE_UnitNumer   = dataService.getIDE_UnitNumeber();
 	
 	
+	
+	
+	// OS Family
+	this.OsfamilyList = dataService.getOsfamilyList();
+	this.Osfamily = config.Osfamily;
+	this.OsfamilySelected = this.Osfamily;
+	for (let os = 0; os <this.Osfamily.length; os++){
+			     
+		this.OsfamilySelected[os] = this.Osfamily[os] || this.OsfamilyList[0];	  
+	}
+	// OS versions
+	
+	this.LinuxOsVersionList = dataService.getLinuxOsVersionList();
+	this.WindowsOsVersionList  = dataService.getWindowsOsVersionList();
+	this.OtherOsVersionList  = dataService.getOtherOsVersionList();
+	
+	this.OsVersion = config.OsVersion; 
+	this.OSVersionSelected = this.OsVersion; 
+	
+	this.OsVersionVal = config.OsVersionVal; 
+	
+	
+	console.log("I am testing")
+	console.log(this.Osfamily);
+	console.log(this.OsVersion);
+	console.log(this.OsVersionVal);
+	console.log("I am testing")
+	
+	for (let os = 0; os <this.OsVersion.length; os++){
+			     
+		this.OSVersionSelected[os] = this.OsVersion[os] || Object.keys(this.LinuxOsVersionList)[0];	  
+	}
+	
+		
+	
+	console.log('this.OsfamilyList')
+	console.log(this.OsfamilyList)
+	
+	console.log(this.LinuxOsVersionList)
+	console.log('this.LinuxOsVersionList')
+	
+	
+	/*
+		this.getLinuxOsVersionList = function () {
+    return _LinuxOsVersionList;
+  };
+  this.getWindowsOsVersionList = function () {
+    return _windowsOsVersionList;
+  };
+  this.getOtherOsVersionList = function () {
+    return _OtherOsVersionList;
+  };
+	*/
+	 console.log('this.OsVersionList')
 		
 	/*for (i = 0; i < this.numberOfVMs; i++) {
 		
@@ -313,6 +392,9 @@ module.exports = {
 		}
 	}
 	*/
+	
+	
+	
 	this.BusNumerList = new Array(this.numberOfVMs);
 	this.UnitNumerList = new Array(this.numberOfVMs);
 	for (i = 0; i < this.numberOfVMs; i++) {
@@ -324,8 +406,39 @@ module.exports = {
 	console.log(this.UnitNumerSelected);
 	console.log(this.BusNumerSelected);
 	console.log("end");
+	
+	this.OSVersionList = new Array(20);
 	 $scope.$watch(() => {
+		//this.OSVersionSelected[0] = "linux"
+		//OS 
+		for (i = 0; i < this.numberOfVMs; i++) {
+			if(this.OsfamilySelected[i] =='Linux'){
+				this.OSVersionList[i] = Object.keys(this.LinuxOsVersionList);
+				this.OSVersionSelected[i] = this.OsVersion[i] || this.OSVersionList[i][0];
+				this.OsVersionVal[i] = this.LinuxOsVersionList[this.OSVersionSelected[i]]
+			}else if(this.OsfamilySelected[i] =='Windows'){
+				this.OSVersionList[i] = Object.keys(this.WindowsOsVersionList);
+				this.OSVersionSelected[i] = this.OsVersion[i] ||  this.OSVersionList[i][0];
+				this.OsVersionVal[i] = this.WindowsOsVersionList[this.OSVersionSelected[i]]
+			}else if(this.OsfamilySelected[i] =='Others'){
+				this.OSVersionList[i] = Object.keys(this.OtherOsVersionList);
+				this.OSVersionSelected[i] = this.OsVersion[i] ||  this.OSVersionList[i][0];
+				this.OsVersionVal[i] = this.OtherOsVersionList[this.OSVersionSelected[i]]
+			}			
+		}	
 		
+		 console.log('this.OSVersionList1');
+		 //console.log(this.OSVersionList[0]);
+		 //console.log(this.OSVersionList);
+		//console.log(this.OSVersionSelected);
+		//console.log(this.LinuxOsVersionList);
+		
+		  //console.log(this.LinuxOsVersionList[this.OSVersionSelected[0]]);
+		 // console.log(this.OSVersionSelected)
+		  //console.log(this.OsVersionVal)
+		
+		 //console.log(this.OSVersionList);
+		//console.log(this.OSVersionSelected);
 		for (i = 0; i < this.numberOfVMs; i++) {
 				this.Diskshow[i] = [];
 			for (j = 0; j < this.NumDisk[i]; j++) {
@@ -497,21 +610,24 @@ module.exports = {
 	
 		
     dataService.setSubmitCallback( function () {
+	// console.log('this.OSVersionList');	
+	// console.log(this.OSVersionSelected);
       this.formSubmit = true;
 
       var isValid = this.forms.vnfDefinitionForm.$valid;
 	  //alert(isValid)
-	  isValid = true;
+	 // isValid = true;
 	  
 	  this.validCnt = 0 ;
 	  for (i = 0; i < this.numberOfVMs; i++) {
 		  
 		  //alert(this.Image[i]);
-		  if( (typeof this.Image[i] == 'undefined') || (this.Image[i] =="")){
+		  if(this.OrchTypeSelected != 'Ovf'){
+			 if( (typeof this.Image[i] == 'undefined') || (this.Image[i] =="")){
 			  
 			  this.validCnt++;
-		  }
-			  
+		  	}
+		  }	  
 		 /* }else if ((typeof this.Disk[i] == 'undefined') || (this.Disk[i] =="") || (this.Disk[i] == 0)|| isNaN(this.Disk[i]))
                   {
                       this.validCnt++;
@@ -547,6 +663,15 @@ module.exports = {
 						this.validCnt++
 						
 					}
+//else if((typeof this.OsfamilySelected[i][d] == 'undefined') || (this.OsfamilySelected[i][d] =="") || this.OsfamilySelected[i][d] === 'OS Family'){
+
+  //                                              this.validCnt++
+
+                                       /* }else if((typeof this.OsVersionSelected[i][d] == 'undefined') || (this.OsVersionSelected[i][d] =="") || (this.OsVersionSelected[i][d] ==='OS Version')){
+
+                                                this.validCnt++
+
+                                        }*/
 					
 				
 			}
@@ -583,7 +708,7 @@ module.exports = {
 	  console.log(this.validCnt);
 	  
 	  console.log("M ahe");
-	 // isValid = true;
+	  isValid = true;
       if( isValid ) {
 		  
 		  
@@ -604,10 +729,24 @@ module.exports = {
 				this.flavorname[fl] = "";
 			}
 		}
+		
+		for (let os = 0; os <this.Osfamily.length; os++){
+			if(os >= this.numberOfVMs ){
+				 this.OsfamilySelected[os] = "";
+				this.OSVersionSelected[os] = "";
+				this.OsVersionVal[os] = "";
+			}
+		}
+
 
 		for (i = 0; i < this.numberOfVMs; i++) {		
 		     if(this.vCPUSelected[i] == 'None'){ 
 			this.vCPUSelected[i] = 1;
+		      }
+                      if(this.OrchTypeSelected != 'Ovf'){
+                          this.OsfamilySelected[i] = "";
+                          this.OSVersionSelected[i] = "";
+                          this.OsVersionVal[i] = "";
 		      }
 	
 		}	
@@ -624,9 +763,14 @@ module.exports = {
 			BusType : this.BusTypeSelected,
 			UnitNumer : this.UnitNumerSelected,
 			BusNumer :this.BusNumerSelected,
+			Osfamily : this.OsfamilySelected,
+			OsVersion :this.OsVersionSelected,
 			numberOfDisks : this.NumDisk,
 			ImageIndices : this.indices,
-			DiskIndices : this.DiskIndices			
+			DiskIndices : this.DiskIndices,
+			Osfamily : this.OsfamilySelected,
+			OsVersion : this.OSVersionSelected,
+			OsVersionVal : this.OsVersionVal
 			
 		};
 		//console.log(config);

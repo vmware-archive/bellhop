@@ -31,7 +31,7 @@
     <section class="form-block">
       
 	   <div class="form-group long "
-			 ng-if="value && param != 'scripts' && param != 'git_upload' && param != 'Create Network1' && param != 'Create Network2' && param != 'Create Network3'  && param != 'Create Network4' && param != 'Create Network5' && param != 'Create Network6' && param != 'Create Network7' && param != 'Create Network8' && param != 'Create Network9' && param != 'Create Network10' && param != 'Create Network11' && param != 'Create Network12' && param != 'Create Network13' && param != 'Create Network14' && param != 'Create Network15' && param != 'Create Network16' && param != 'Create Network17' && param != 'Create Network18' && param != 'Create Network19' && param != 'Create Network20'"
+			 ng-if="value && param != 'scripts' && param != 'git_upload' && param != 'Create Network1' && param != 'Create Network2' && param != 'Create Network3'  && param != 'Create Network4' && param != 'Create Network5' && param != 'Create Network6' && param != 'Create Network7' && param != 'Create Network8' && param != 'Create Network9' && param != 'Create Network10' && param != 'Create Network11' && param != 'Create Network12' && param != 'Create Network13' && param != 'Create Network14' && param != 'Create Network15' && param != 'Create Network16' && param != 'Create Network17' && param != 'Create Network18' && param != 'Create Network19' && param != 'Create Network20' "
 			 ng-repeat="(param, value) in $ctrl.inputs.vim_params">
 
 		  <label for="{{ param }}">
@@ -49,7 +49,7 @@
 		
 		<div class="panel" name="expand" id="expand-{{$index}}">
 		  <div class="form-group long "
-			 ng-if="value && param != 'scripts' && param != 'git_upload' && param != 'numberOfDisks' && param != 'UnitNumer' && param != 'BusNumer' && param != 'BusType' && param != 'disk' && param != 'VMDK'"
+			 ng-if="value && param != 'scripts' && param != 'git_upload' && param != 'numberOfDisks' && param != 'UnitNumer' && param != 'BusNumer' && param != 'BusType' && param != 'disk' && param != 'VMDK' && param != 'OsVersionVal' "
 			 ng-repeat="(param, value) in $ctrl.inputs.params[i]">
 
 		  <label for="{{ param }}">
@@ -155,7 +155,38 @@
 				<!--</div>-->
 		</div>
 		
-		
+	         <!--div  class="form-group"
+                        ng-repeat="Osfamily in $ctrl.inputs.params[i].Osfamily track by $index "
+                        ng-if = "Osfamily !== 'Select OS family'" -->
+                                <!--<div class="form-group"   >-->
+
+                                        <!--label for="{{ Osfamily }}">
+                                                Osfamily -{{$index}}
+                                          </label>
+
+
+                                          <div id="{{ script }}" >
+                                                <input type="text" disabled ng-model="Osfamily"/>
+                                  </div-->
+                                <!--</div>-->
+                <!--/div-->
+
+                <!--div  class="form-group"
+                        ng-repeat="OsVersion in $ctrl.inputs.params[i].BusNumer track by $index "
+                        ng-if = "OsVersion !== 'OS Version'" -->
+                                <!--<div class="form-group"   >-->
+
+                                        <!--label for="{{ OsVersion }}" >
+                                                OsVersion -{{$index}}
+                                          </label>
+
+
+                                          <div id="{{ script }}" >
+                                                <input type="text" disabled ng-model="OsVersion"/>
+                                  </div-->
+                                <!--</div>-->
+                <!--/div-->
+	
 		
 		<div class="form-group"
 			 ng-if="$ctrl.inputs.params[i].scripts[script][i]"

@@ -25,6 +25,9 @@
 
 const TOOLTIPS = require('../config/tooltips.json');
 const FLAVORS = require('../config/flavors.json');
+const LinuxOSVersion = require('../config/LinuxOSVersion.json');
+const WindowsOSVersion = require('../config/WindowsOSVersion.json');
+const OthersOSVersion = require('../config/OthersOSVersion.json');
 const OS_NETWORKS = require('../config/openstack_networks.json');
 const VCD_NETWORKS = require('../config/vcd_networks.json');
 const VNF_TYPES = require('../config/vnf_types.json');
@@ -58,6 +61,11 @@ module.exports = function ($http) {
   const _MAX_SATA_UnitNumber = ['Unit No.',0, 1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29];
   const _IDE_UnitNumeber = ['Unit No.', 0, 1];
   
+  const _OsfamilyList = ['Linux', 'Windows','Others'];
+  const _LinuxOsVersionList = LinuxOSVersion;
+  const _WindowsOsVersionList = WindowsOSVersion;
+  const _OthersOsVersionList = OthersOSVersion;
+
   this.populateVMData = function(numberOfVMs) {
    
 	for (let i = 0; i < numberOfVMs; i++){
@@ -86,11 +94,14 @@ module.exports = function ($http) {
       vCPU: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
       RAM: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
       
-	  Huge_pages: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
+      Huge_pages: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
       Image: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
+      Osfamily: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
+      OsVersion: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
+      OsVersionVal: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
       Flavor: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
       flavorname: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
-	  DiskIndices: [0, 1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,
+      DiskIndices: [0, 1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,
  			31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,
 			61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,
                         91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,
@@ -569,7 +580,7 @@ module.exports = function ($http) {
 				   '', '', '', '', '','','', '', '', '', '','','', '', '', '','', '', '', '',
 				   '', '', '', '', '','','', '', '', '', '','','', '', '', '','', '', '', '',
 				   '', '', '', '', '','','', '', '', '', '','','', '', '', '','', '', '', '',
-				   '', '', '', '', '','','', '', '', '', '','','', '', '', '','', '', '', '',
+				   '','', '', '', '','','', '', '', '', '','','', '', '', '','', '', '', '',
 				   '', '', '', '', '','','', '', '', '', '','','', '', '', '','', '', '', '',
 				   '', '', '', '', '','','', '', '', '', '','','', '', '', '','', '', '', '',
 				   '', '', '', '', '','','', '', '', '', '','','', '', '', '','', '', '', '',
@@ -2145,7 +2156,19 @@ module.exports = function ($http) {
   this.getBusTypeList = function () {
     return _BusTypeList;
   };
-   
+  
+   this.getOsfamilyList = function () {
+    return _OsfamilyList;
+  };
+   this.getLinuxOsVersionList = function () {
+    return _LinuxOsVersionList;
+  };
+  this.getWindowsOsVersionList = function () {
+    return _WindowsOsVersionList;
+  };
+  this.getOtherOsVersionList = function () {
+    return _OthersOsVersionList;
+  };
   this.getSCSI_SATA_BusNumber = function () {
     return _SCSI_SATA_BusNumber;
   }; 
@@ -2388,6 +2411,9 @@ module.exports = function ($http) {
 			//VMDK: _vnfConfiguration.VMDK[v],
 			UnitNumer: _vnfConfiguration.UnitNumer[v],
 			BusNumer: _vnfConfiguration.BusNumer[v],
+                        Osfamily: _vnfConfiguration.Osfamily[v],
+                        OsVersion: _vnfConfiguration.OsVersion[v],
+                        OsVersionVal: _vnfConfiguration.OsVersionVal[v],
 			BusType: _vnfConfiguration.BusType[v],
 			numberOfDisks: _vnfConfiguration.numberOfDisks[v],
 			ram: _vnfConfiguration.RAM[v] * 1024,

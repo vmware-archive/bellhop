@@ -75,6 +75,8 @@ module.exports = {
       'vnf_name': 'VNF Name',
       'vnfd_name': 'VNF Name',
       'image_id': 'Image',
+      'Osfamily': 'OS Family',
+      'OsVersion': 'OS Version',
       'vnf_description': 'VNF Description',
       'flavor': 'Flavor ID',
       'flavorname': 'Flavor Name',
@@ -91,7 +93,7 @@ module.exports = {
       'create': 'Create Script url',
       'delete': 'Delete Script url',
       'mgmt_network':'Management Network',
-      'subnet_cidr':'Management Subnet Cidr',
+      'SubnetCidr':'Management Subnet Cidr',
       'mgmt_network_ethernet_type' : 'Mgmt Network Ethernet Type',
       'Network1_name': 'Network 1',
       'Network2_name': 'Network 2',
@@ -454,7 +456,7 @@ module.exports = {
       'ParentNetwork19_type' : 'ParentNetwork Type 19',
       'ParentNetwork20_type' : 'ParentNetwork Type 20',       
 
-       'Parent_Network1' : 'Parent Network  1',
+      'Parent_Network1' : 'Parent Network  1',
       'Parent_Network2' : 'Parent Network  2',
       'Parent_Network3' : 'Parent Network  3',
       'Parent_Network4' : 'Parent Network  4',
@@ -509,7 +511,7 @@ module.exports = {
       'Interfaces6_name' : 'Enabled Interface 6',
 	  
 	  
-	  'Connect_OrgVdcNetwork1': 'Connect OrgVdcNetwork 1',
+      'Connect_OrgVdcNetwork1': 'Connect OrgVdcNetwork 1',
       'Connect_OrgVdcNetwork2': 'Connect OrgVdcNetwork 2',
       'Connect_OrgVdcNetwork3': 'Connect OrgVdcNetwork 3',
       'Connect_OrgVdcNetwork4': 'Connect OrgVdcNetwork 4',
