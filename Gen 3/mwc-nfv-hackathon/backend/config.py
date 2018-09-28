@@ -54,8 +54,6 @@ def get_config_param(filename,section,param_name):
     # read config file
     parser.read(filename)
 
-    # get section, default to postgresql
-    db = {}
     if parser.has_section(section):
        print(section)
        params = parser.items(section)
@@ -63,8 +61,13 @@ def get_config_param(filename,section,param_name):
        for param in params:
          print(param)
          if param[0] == param_name:
-           print(param[1])
+           print "get_config_param:",param[0],param[1]
+           if not param[1]:
+             return False
            return param[1]
+       return False
+    else:
+      return False
 
 if __name__ == '__main__':
     db_config()

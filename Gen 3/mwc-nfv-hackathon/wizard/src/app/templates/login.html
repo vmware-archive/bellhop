@@ -29,16 +29,42 @@
                 VNF Onboarding 
                 <h5 class="hint">Use your Company ID to sign in or create one now</h5>
             </label>
-            <div class="login-group">
+            <div class="alert alert-danger" ng-show="errorVisible">
+	    <div class="alert-items">
+	    <div class="alert-item static">
+	    <div class="alert-icon-wrapper">
+	    <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+            </div>
+            <span class="alert-text" id="loginerror" > Email address in not valid. Please Enter valid E-mail address. </span>
+
+	    </div>
+    	    </div>
+            </div>
+	   <div class="error active" ng-show="emptyCredentialsErrorVisible">
+		    Please enter valid user name and password
+	   </div>
+
+           <div class="login-group">
                 <input class="username" type="text" id="login_username" placeholder="Username" ng-model="username">
                 <input class="password" type="password" id="login_password" placeholder="Password" ng-model="password">
               
-                <div class="error active" ng-show="errorVisible">
+               <!-- <div class="error active" ng-show="errorVisible">
                     Invalid user name or password
-                </div>
+                </div> 
+                <div class="alert alert-danger" ng-show="errorVisible">
+		<div class="alert-items">
+		<div class="alert-item static">
+		<div class="alert-icon-wrapper">
+	        <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+		</div>
+			<span class="alert-text" id="loginerror" > Email address in not valid. Please Enter valid E-mail address. </span>
+
+		</div>
+		</div>
+		</div>
                 <div class="error active" ng-show="emptyCredentialsErrorVisible">
                     Please enter valid user name and password
-                </div>
+                </div> -->
                 <button type="submit" class="btn btn-primary">Login</button>
                 <div><a ui-sref="signup" class="signup">Sign up </a>
                 |  <a ui-sref="forgotpassword" class="signup">Forgot Password</a> 

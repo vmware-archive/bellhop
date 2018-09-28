@@ -39,7 +39,7 @@ module.exports = {
       if ($scope.username != '' && $scope.password != '') {
         
         authService.login($scope.username, $scope.password, function (serviceResponse) {          
-          if (serviceResponse == "true") {
+          if (serviceResponse["Status"] == "Success") {
             authService.loginObj.isAuthenticated = true;           
             authService.loginObj.username = $scope.username; 
             dataService.setusername($scope.username);
@@ -51,6 +51,7 @@ module.exports = {
             $scope.clearCredentials();                       
             $scope.errorVisible = true;
             $scope.emptyCredentialsErrorVisible = false;
+            document.getElementById("loginerror").innerHTML = serviceResponse["Message"];
           }
         });
       } else {

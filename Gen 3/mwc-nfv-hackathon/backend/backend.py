@@ -38,10 +38,12 @@ from logging.handlers import RotatingFileHandler
 #from froala_editor import FlaskAdapter
 from werkzeug import secure_filename
 from sendemail import sendMail,draft_mail_text
+from config import db_config, get_config_param
 
 import os
 import json
 import database
+import statuscatalog
 import pprint
 from flask import jsonify
 
@@ -61,30 +63,36 @@ def login_page():
      return "false"
   credentials = json.loads(request.data)
   #if credentials['username'] == "admin" and credentials['password'] == "admin" :
-  if db_check_credentials(credentials['username'] ,credentials['password']):
+  if db_check_credentials(credentials['username'] ,credentials['password']) == False:
         print(credentials['username'] ,credentials['password'],credentials['session_key']) 
         print ("Found UP")
-        return "true" 
-  return "false"
+        return jsonify({"Status":"Error","Message":"User does not exist in the database"})
+  elif  db_check_credentials(credentials['username'] ,credentials['password']) == "Incorrect Password":
+        return jsonify({"Status":"Error","Message":"Password provided is incorrect" })
+  return jsonify({"Status":"Success","Message":"user is authenticated"})
 
 @app.route('/signup', methods=['GET', 'POST'])
 
 def signup():
-  #sendMail = True
   pprint.pprint("received signup request")
   print("Request Data:%s",request.data)
   credentials = json.loads(request.data)
   pprint.pprint(credentials)
   status = db_user_signup(credentials['username'],credentials['password'],credentials['emailaddress'])
   print(status)
-  #if(status == "True" and sendMail == True ):
   if(status == "True" ):
+      if get_config_param('database.ini','Email','enablesendemail') == False :
+         print "Email Functionality Disabled"
+         return jsonify({"Status": "Success", "Message":"User Registration Succeeded.Email Functionality is Disabled.User can login with new credentials"})
       mail_text = draft_mail_text("User Registration",credentials['username'],credentials['password'])
       print "signup:",mail_text
-      #sendMail([credentials['emailaddress']],"VNF Onboarding User Registration",mail_text) 
-      print "signup:",credentials['emailaddress']
-      sendMail([credentials['emailaddress']],"VNF Onboarding User Registration",mail_text) 
-  return status
+      if sendMail([credentials['emailaddress']],"VNF Onboarding User Registration",mail_text) == False:
+         return jsonify({"Status":"Error","Message":"User Registration Succeeded.Email Delivery Failed.User can login with new credentials"}) 
+      return jsonify({"Status" :"Success","Message" : "User Registration Successful.Email containing credentials has been sent to the user." })
+  elif status == "Connection Failed":
+     return jsonify({"Status":"Error", "Message": "User Registration Failed.Failure to connect to database"})
+  else:
+      return jsonify({"Status":"Error","Message":"User Registration Failed. Username or Email-id already exists"})
 
 @app.route('/generate', methods=['GET', 'POST'])
 
@@ -151,24 +159,33 @@ def upload():
 @app.route('/forgetpassword', methods=['GET', 'POST'])
 
 def forgetpassword():
-   #sendMail = False
    print "Received forgetpassword request",request.data
    inputs = inputs = request.get_json()
    print "Forgetpassword",inputs
-   #inputs['password'] = ""
-   status = db_generate_newpassword(inputs)
+   status = db_generate_newpassword(inputs,False)
+   print "status=", status
    if status == 1:
       print "forgetpassword:user does not exist", status
-      return "False"
-   elif status == 0 and sendMail == True:
+      return jsonify({"Status":"Error","Message":"Cannot generate password. User does not exist"})
+   elif status == "Connection Failed":
+      return jsonify({"Status":"Error", "Message": "Cannot generate passwod.Failure to connect to database"})      
+   elif status == 0:
+      if get_config_param('database.ini','Email','enablesendemail') == False :
+         print "Email Functionality Disabled"
+         status = db_generate_newpassword(inputs)
+         if status == 0:
+            return jsonify({"Status": "Error", "Message":"Generated new password.Email Functionality is Disabled.So Password is set to default i.e. password@123"})
       mail_text = ""
       if inputs['username']:
          print "after updating password",inputs
          mail_text = draft_mail_text("Forget Password",inputs['username'],inputs['password'])
       print "forget password:",mail_text
-      sendMail([inputs['emailaddress']],"VNF Onboarding New Password",mail_text)
-   print "forgetpassword:new password set",status
-   return "True"
+      if sendMail([inputs['emailaddress']],"VNF Onboarding New Password",mail_text) == False:
+         status = db_generate_newpassword(inputs)
+         if status == 0:  
+           return jsonify({"Status":"Error","Message":"New Password set for user.Email Delivery Failed.So Password is set to default i.e. password@123"})
+      return jsonify({"Status":"Success","Message":"New Password generated for user. Email containing credentials has been sent to the user"})
+
 
 
    

@@ -37,13 +37,13 @@ module.exports = {
              if($scope.emailid == ""  && $scope.username != "") {
                 credentials = {'username' : $scope.username };          
                 signupService.generateNewPassword(credentials,function(serviceResponse) {
-                if(serviceResponse == "True"){
+                if(serviceResponse["Status"] == "Success"){
                     $scope.passwordChangeSuccess = true 
-                    document.getElementById("passwordChangeSuccessMessage").innerHTML = "New password sent to user's mail id. Please login with new password";
+                    document.getElementById("passwordChangeSuccessMessage").innerHTML = serviceResponse["Message"];
                 }
-                else if (serviceResponse == "False"){
+                else if (serviceResponse["Status"] == "Error"){
                     $scope.passwordChangeError = true;
-                    document.getElementById("passwordChangeErrorMessage").innerHTML = "There is No user with provided username in our database" ;
+                    document.getElementById("passwordChangeErrorMessage").innerHTML = serviceResponse["Message"] ;
                 }
 
            });
@@ -53,11 +53,11 @@ module.exports = {
              signupService.generateNewPassword(credentials,function(serviceResponse) {
              if(serviceResponse == "True"){
 	         $scope.passwordChangeSuccess = true
-                 document.getElementById("passwordChangeSuccessMessage").innerHTML = "New password sent to user's mail id. Please login with new password"
+                 document.getElementById("passwordChangeSuccessMessage").innerHTML = serviceResponse["Message"]
               }
               else if (serviceResponse == "False"){
                   $scope.passwordChangeError = true;
-                  document.getElementById("passwordChangeErrorMessage").innerHTML = "There is No user with provided EmailId in our database";
+                  document.getElementById("passwordChangeErrorMessage").innerHTML = serviceResponse["Message"];
               }
 
            }); 
