@@ -78,7 +78,8 @@ def db_check_credentials(username,password):
         #   print "db_check_credentials:User {} is Authenticated".format(username)
         #   return True
         if rec[0] == username:
-           if password == rec[1] or sha256.verify(password,rec[1]) == True :
+           #if password == rec[1] or sha256.verify(password,rec[1]) == True :
+           if sha256.verify(password,rec[1]) == True :
               print "db_check_credentials:User {} is Authenticated".format(username)
               return True
            else:
@@ -332,7 +333,7 @@ def generate_and_updatepassword(credentials,default_password=True):
        randompassword = password_gen()
        hashedpassword = sha256.hash(randompassword)
     elif default_password == True:
-       hashedpassword = "password@123"
+       hashedpassword = sha256.hash("password@123")
     print "generate_and_updatepassword",hashedpassword
     db_table = get_config_param('database.ini','Details','table')
     conn = db_connect()
