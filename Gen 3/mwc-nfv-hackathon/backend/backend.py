@@ -43,7 +43,6 @@ from config import db_config, get_config_param
 import os
 import json
 import database
-import statuscatalog
 import pprint
 from flask import jsonify
 
