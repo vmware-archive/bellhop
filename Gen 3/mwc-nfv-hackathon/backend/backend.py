@@ -68,6 +68,8 @@ def login_page():
         return jsonify({"Status":"Error","Message":"User does not exist in the database"})
   elif  db_check_credentials(credentials['username'] ,credentials['password']) == "Incorrect Password":
         return jsonify({"Status":"Error","Message":"Password provided is incorrect" })
+  elif  db_check_credentials(credentials['username'] ,credentials['password']) == "Connection Failed":
+        return jsonify({"Status":"Error","Message":"Login failed.Failure to connect to database" })
   return jsonify({"Status":"Success","Message":"user is authenticated"})
 
 @app.route('/signup', methods=['GET', 'POST'])
