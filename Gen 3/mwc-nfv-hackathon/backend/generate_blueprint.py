@@ -64,6 +64,10 @@ TEMPLATES = {'OpenStack': 'OS-template.yaml',
              'MultiVDU-vCloud Director-OSM-NSD' : 'MultiVDU-VCD-OSM-NSD-template.yaml',
              'MultiVDU-OpenStack-OSM' : 'MultiVDU-OS-OSM-template.yaml' ,
              'MultiVDU-OpenStack-OSM-NSD' : 'MultiVDU-OS-OSM-NSD-template.yaml',
+             'MultiVDU-vCloud Director-OSM4' : 'MultiVDU-VCD-OSM4-template.yaml' ,
+             'MultiVDU-vCloud Director-OSM4-NSD' : 'MultiVDU-VCD-OSM4-NSD-template.yaml',
+             'MultiVDU-OpenStack-OSM4' : 'MultiVDU-OS-OSM4-template.yaml' ,
+             'MultiVDU-OpenStack-OSM4-NSD' : 'MultiVDU-OS-OSM4-NSD-template.yaml',
 	     'MultiVDU-OS-HEAT' : 'MultiVDU-OS-HEAT-template.yaml',
              'MultiVDU-OpenStack-RIFTware' : 'MultiVDU-OS-RIFTware-template.yaml',
              'MultiVDU-OpenStack-Riftware-NSD' : 'MultiVDU-OS-RIFTware-NSD-template.yaml'}	
@@ -245,6 +249,37 @@ def create_osm_vnfd_package(inputs, name, workdir):
     shutil.rmtree(vnfd_dir)
     return vnfd_tar
 
+def create_osm4_vnfd_package(inputs, name, workdir):
+    vnfd_dir = os.path.join(workdir, name + '_vnfd')
+    os.mkdir(vnfd_dir)
+    charms_dir = os.path.join(vnfd_dir, 'charms')
+    os.mkdir(charms_dir)
+    cloud_init_dir = os.path.join(vnfd_dir, 'cloud_init')
+    os.mkdir(cloud_init_dir)
+    icons_dir = os.path.join(vnfd_dir, 'icons')
+    os.mkdir(icons_dir)
+    images_dir = os.path.join(vnfd_dir, 'images')
+    os.mkdir(images_dir)
+    add_scripts_osm(inputs, vnfd_dir)
+    populate_distinct_networks(inputs)
+    generate_standard_osm4_blueprint(inputs, vnfd_dir, name)
+    checksum = GetHashofDirs(vnfd_dir)
+    checksums_file = os.path.join(vnfd_dir, 'checksums.txt')
+    with open(checksums_file, 'w') as f:
+        f.write(checksum)
+    i = datetime.now()
+    readme="Descriptor created by OSM 4.0 descriptor package generated. \nCreated on " + i.strftime('%Y/%m/%d %H:%M:%S')
+    readme_file = os.path.join(vnfd_dir, 'README.txt')
+    with open(readme_file, 'w') as f:
+        f.write(readme)
+    vnfd_tar=shutil.make_archive(
+        os.path.abspath(vnfd_dir),
+        'gztar',
+        os.path.dirname(vnfd_dir),
+        name + '_vnfd')
+
+    shutil.rmtree(vnfd_dir)
+    return vnfd_tar
 
 def create_osm_nsd_package(inputs, name, workdir):
     nsd_dir = os.path.join(workdir, name + '_nsd')
@@ -276,6 +311,35 @@ def create_osm_nsd_package(inputs, name, workdir):
     shutil.rmtree(nsd_dir)
     return nsd_tar
 
+def create_osm4_nsd_package(inputs, name, workdir):
+    nsd_dir = os.path.join(workdir, name + '_nsd')
+    os.mkdir(nsd_dir)
+    ns_config_dir = os.path.join(nsd_dir, 'ns_config')
+    os.mkdir(ns_config_dir)
+    vnf_config_dir = os.path.join(nsd_dir, 'vnf_config')
+    os.mkdir(vnf_config_dir)
+    icons_dir = os.path.join(nsd_dir, 'icons')
+    os.mkdir(icons_dir)
+    scripts_dir = os.path.join(nsd_dir, 'scripts')
+    os.mkdir(scripts_dir)
+    #add_scripts(inputs, nsd_dir)
+    generate_standard_osm4_nsd_blueprint(inputs, nsd_dir, name)
+    checksum = GetHashofDirs(nsd_dir)
+    checksums_file = os.path.join(nsd_dir, 'checksums.txt')
+    with open(checksums_file, 'w') as f:
+        f.write(checksum)
+    i = datetime.now()
+    readme="Descriptor created by OSM 4.0 descriptor package generated. \nCreated on " + i.strftime('%Y/%m/%d %H:%M:%S')
+    readme_file = os.path.join(nsd_dir, 'README.txt')
+    with open(readme_file, 'w') as f:
+        f.write(readme)
+    nsd_tar=shutil.make_archive(
+        os.path.abspath(nsd_dir),
+        'gztar',
+        os.path.dirname(nsd_dir),
+        name + '_nsd')
+    shutil.rmtree(nsd_dir)
+    return nsd_tar
 
 def populate_distinct_networks(inputs):
     unique_networks = []
@@ -800,6 +864,21 @@ def generate_standard_osm_nsd_blueprint(params, workdir, name):
     with open(out_file, 'w') as f:
         f.write(out)
 
+def generate_standard_osm4_blueprint(params, workdir, name):
+    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['MultiVDU-' + params['vim_params']['env_type'] + '-OSM4' ]))
+    out = template.render(params)
+    out_file = os.path.join(workdir, name + '-vnfd.yaml')
+    with open(out_file, 'w') as f:
+        f.write(out)
+
+def generate_standard_osm4_nsd_blueprint(params, workdir, name):
+    template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['MultiVDU-' + params['vim_params']['env_type'] + '-OSM4-NSD']))
+    out = template.render(params)
+    out_file = os.path.join(workdir, name + '-nsd.yaml')
+    with open(out_file, 'w') as f:
+        f.write(out)
+
+
 def generate_standard_riftio_blueprint(params, workdir, name):
     template = get_template(os.path.join(TEMPLATES_DIR, TEMPLATES['MultiVDU-' + params['vim_params']['env_type'] + '-RIFTware']))
     out = template.render(params)
@@ -1016,7 +1095,7 @@ def create_multivdu_blueprint_package(inputs):
     try:
        create_work_dir(workdir)
        #if get_orch_types(inputs['params']) not in ['OSM 3.0', 'RIFT.ware 5.3', 'NONE']:
-       if get_orch_types(inputs) not in ['OSM 3.0', 'RIFT.ware 5.3','RIFT.ware 6.1', 'HEAT', 'Ovf']:
+       if get_orch_types(inputs) not in ['OSM 3.0', 'OSM 4.0', 'RIFT.ware 5.3','RIFT.ware 6.1', 'HEAT', 'Ovf']:
           add_scripts(inputs, workdir)
           copy_README(inputs, workdir)
        print "The input parameter is ", get_orch_types(inputs)
@@ -1045,6 +1124,15 @@ def create_multivdu_blueprint_package(inputs):
        elif get_orch_types(inputs) == 'OSM 3.0':
            vnfd_package=create_osm_vnfd_package(inputs, name, workdir)
            nsd_package=create_osm_nsd_package(inputs, name, workdir)
+           output_file = create_package(name, workdir)
+           print "The git flag outside ", get_git_flag(inputs)
+           if get_git_flag(inputs) == True:
+               print "The git flag inside ", get_git_flag(inputs)
+               Process=subprocess.call(['./git_upload.sh', output_file, workdir, commit_comment, orch_name, env_name, vnf_name])
+           return output_file, workdir
+       elif get_orch_types(inputs) == 'OSM 4.0':
+           vnfd_package=create_osm4_vnfd_package(inputs, name, workdir)
+           nsd_package=create_osm4_nsd_package(inputs, name, workdir)
            output_file = create_package(name, workdir)
            print "The git flag outside ", get_git_flag(inputs)
            if get_git_flag(inputs) == True:

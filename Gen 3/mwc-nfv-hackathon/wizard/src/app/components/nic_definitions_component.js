@@ -183,7 +183,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		} else if (this.OrchType == 'Ovf') {
 			
 			this.possibleInterfaces = this.VCD_OVF_INTERFACES; 
-		}else if (this.OrchType == 'OSM 3.0') {
+		}else if (this.OrchType == 'OSM 3.0' || this.OrchType == 'OSM 4.0') {
 
                         this.possibleInterfaces = this.VCD_OSM_INTERFACES;
                 }else {
@@ -198,7 +198,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 			this.possibleInterfaces = this.OPENSTACK_CLOUDIFY_INTERFACES; 
 		} else if(this.OrchType == 'Heat') {
 			this.possibleInterfaces = this.OPENSTACK_HEAT_INTERFACES;
-                }else if(this.OrchType == 'OSM 3.0') {
+                }else if(this.OrchType == 'OSM 3.0' || this.OrchType == 'OSM 4.0') {
                         this.possibleInterfaces = this.OPENSTACK_OSM_INTERFACES;
 		
                 }else if(this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1') {
@@ -269,7 +269,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
        this.NICshow[this.indices[index]] = this.numberOfNICs  > index;
      }*/
 	
-	  if (this.OrchType == 'OSM 3.0' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){	
+	  if (this.OrchType == 'OSM 3.0' || this.OrchType == 'OSM 4.0' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){	
 		this.NIC_PLACEHOLDER = ['Enter Mgmt NIC','Enter NIC name','Enter NIC name','Enter NIC name','Enter NIC name','Enter NIC name'];
 		
 	 } else{

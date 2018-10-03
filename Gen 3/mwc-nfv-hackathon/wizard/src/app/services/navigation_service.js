@@ -214,7 +214,7 @@ module.exports = function (dataService, $state) {
 		   
 		   path = this.epas[1].href;
 		   
-	   }else if (this.VIMType === 'vCloud Director' && this.OrchType === 'OSM 3.0') {
+	   }else if (this.VIMType === 'vCloud Director' && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
 		   
 		   path = this.epas[2].href;
 		   
@@ -240,7 +240,7 @@ module.exports = function (dataService, $state) {
 		   
 		   path = this.epas[7].href;
 		   
-	   }else if (this.VIMType === 'OpenStack' && this.OrchType === 'OSM 3.0') {
+	   }else if (this.VIMType === 'OpenStack' && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
 		   
 		   path = this.epas[8].href;
 		   
