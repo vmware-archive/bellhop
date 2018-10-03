@@ -23,6 +23,9 @@
 ###########################################################################*/
 
 const TOOLTIPS = require('../config/tooltips.json');
+const LinuxOSVersion = require('../config/LinuxOSVersion.json');
+const WindowsOSVersion = require('../config/WindowsOSVersion.json');
+const OthersOSVersion = require('../config/OthersOSVersion.json');
 
 module.exports = {
   template: require('../templates/vnf_configuration.html'),
@@ -51,7 +54,36 @@ module.exports = {
     this.FLAVOR_TOOLTIP = TOOLTIPS.FLAVOR_TOOLTIP;
     this.FLAVOR_NAME_TOOLTIP = TOOLTIPS.FLAVOR_NAME_TOOLTIP;
     this.VMDK_TOOLTIP = TOOLTIPS.VMDK_TOOLTIP;
-	 
+	
+	/*this.BusType = ['IDE','LSI Logic Parallel(SCSI)','LSI Logic SAS(SCSI)','BusLogic Parallel(SCSI)','Paravirtual','SATA'];
+	this.SCSI_BusNumber = [0,1,2,3];
+	this.SATA_BusNumber = [0,1,2,3];
+	this.IDE_BUSNumeber = [0,1];
+	
+	this.MAX_SCSI_UnitNumber = 16;
+	this.MAX_SATA_UnitNumber = 30;
+	this.SCSI_UnitNumber = []
+	this.SATA_UnitNumber = []
+	this.IDE_UnitNumeber = 1;
+	
+	this.NumDisk = new Array(16);
+	for (i = 0; i < this.numberOfVMs; i++) {
+		this.NumDisk[i] = 1;
+	}
+	
+	//for (i = 0; i < this.numberOfVMs; i++) {	
+		for (var u = 0; u < this.MAX_SCSI_UnitNumber; u++) {
+			this.SCSI_UnitNumber [u] = u;
+		}
+	//}
+	
+	//for (i = 0; i < this.numberOfVMs; i++) {	
+		for (var u = 0; u < this.MAX_SATA_UnitNumber; u++) {
+			this.SATA_UnitNumber [u] = u;
+		}
+	//}
+	
+	 */
 
 	//vnf VMs
 	
@@ -108,6 +140,7 @@ module.exports = {
 	 //Image array
 	this.Image = config.Image;
 	this.indices = config.ImageIndices;
+	this.DiskIndices = config.DiskIndices;
 	
 	//Availability_zone	
 	/*this.Availability_zone = config.Availability_zone
@@ -115,18 +148,7 @@ module.exports = {
 			     
 		this.Availability_zone[d] = this.Availability_zone[d] || '';
 	}*/
-	//Disk
-	this.Disk = config.Disk
-	for (let d = 0; d <this.Disk.length; d++){
-			     
-		this.Disk[d] = this.Disk[d] || '10';
-	}
 	
-    // VMDK 
-	this.VMDK = config.VMDK
-    for (let d = 0; d <this.VMDK.length; d++){
-        this.VMDK[d] = this.VMDK[d];
-    }
 	
 	//Huge pages
 	this.Huge_pages = config.Huge_pages
@@ -145,7 +167,7 @@ module.exports = {
 	this.vCPUSelected = this.vCPU;
 	for (let c = 0; c <this.vCPU.length; c++){
 			     
-		this.vCPUSelected[c] = this.vCPU[c] || '1';	  
+		this.vCPUSelected[c] = this.vCPU[c] || 1;	  
 	}
     
     
@@ -174,11 +196,296 @@ module.exports = {
 	}
    
     this.flavorname = config.flavorname;
+	
+	
+	//number of disk dispaly 
+	
+	//Disk
+	this.Disk = config.Disk
+	for (i = 0; i < this.numberOfVMs; i++) {
+		for (let d = 0; d <this.Disk[i].length; d++){
+					 
+			this.Disk[i][d] = this.Disk[i][d] || 16;
+		}
+	}
+    // VMDK 
+	this.VMDK = config.VMDK
+    /*for (i = 0; i < this.numberOfVMs; i++) {
+		for (let d = 0; d <this.VMDK.length; d++){
+        this.VMDK[i][d] = this.VMDK[i][d];
+		}
+    }*/
+	
+	this.Diskshow = new Array(this.DiskIndices);
+	for (var i = 0; i < this.DiskIndices; i++) {
+		this.Diskshow [i] = new Array(this.DiskIndices);
+	}
+	
+	
+	/*this.NICs = config.NICs;
+	this.NetworkSelected = this.NICs;
+	for (var i = 0; i < this.numberOfVMs; i++) {
+		for (let n = 0; n <this.NICs.length; n++){
+					 
+			this.NetworkSelected[i][n] = this.NICs[i][n] || this.Networks[Object.keys(this.Networks)[0]];	  
+		}
+	}*/
+	
+	this.BusType = config.BusType;
 
+	this.BusTypeSelected = this.BusType;
+	
+	
+	this.UnitNumer = config.UnitNumer;
+	this.UnitNumerSelected = this.UnitNumer;
+	
+	this.BusNumer = config.BusNumer;
+	this.BusNumerSelected = this.BusNumer;
+	
+	for (var i = 0; i < this.numberOfVMs; i++) {
+			
+		for (var b = 0; b < this.BusType[i].length ; b++) {
+		  this.BusTypeSelected[i][b] = this.BusTypeSelected[i][b] || "Select Bus Type"
+	
+		}
+	
+	}
+	
+	for (var i = 0; i < this.numberOfVMs; i++) {
+			
+		for (var b = 0; b < this.BusNumer[i].length ; b++) {
+		  this.BusNumerSelected[i][b] = this.BusNumerSelected[i][b] || 'Bus No.'
+	
+		}
+	
+	}
+	
+	for (var i = 0; i < this.numberOfVMs; i++) {
+			
+		for (var b = 0; b < this.UnitNumer[i].length ; b++) {
+		  this.UnitNumerSelected[i][b] = this.UnitNumerSelected[i][b] || 'Unit No.'
+	
+		}
+	
+	}
+     
+   
+
+    /*    for (var i = 0; i < this.numberOfVMs; i++) {
+
+                for (var b = 0; b < this.Osfamily[i].length ; b++) {
+                  this.OsfamilySelected[i][b] = this.OsfamilySelected[i][b] || 'OS Family'
+
+                }
+
+        }
+
+        for (var i = 0; i < this.numberOfVMs; i++) {
+
+                for (var b = 0; b < this.OsVersion[i].length ; b++) {
+                  this.OsVersionSelected[i][b] = this.OsVersionSelected[i][b] || 'OS Version'
+
+                }
+
+        }
+
+*/
+
+	this.NumDisk = config.numberOfDisks;
+	
+		
+	this.BusTypeList = dataService.getBusTypeList();
+	this.SCSI_BusNumber = dataService.getSCSI_SATA_BusNumber();
+	this.SATA_BusNumber = dataService.getSCSI_SATA_BusNumber();
+	this.IDE_BUSNumeber = dataService.getIDE_BusNumeber();
+	
+	this.SCSI_UnitNumber = dataService.getSCSI_UnitNumber();
+	this.SATA_UnitNumber = dataService.getSATA_UnitNumber();
+	this.IDE_UnitNumer   = dataService.getIDE_UnitNumeber();
+	
+	
+	
+	
+	// OS Family
+	this.OsfamilyList = dataService.getOsfamilyList();
+	this.Osfamily = config.Osfamily;
+	this.OsfamilySelected = this.Osfamily;
+	for (let os = 0; os <this.Osfamily.length; os++){
+			     
+		this.OsfamilySelected[os] = this.Osfamily[os] || this.OsfamilyList[0];	  
+	}
+	// OS versions
+	
+	this.LinuxOsVersionList = dataService.getLinuxOsVersionList();
+	this.WindowsOsVersionList  = dataService.getWindowsOsVersionList();
+	this.OtherOsVersionList  = dataService.getOtherOsVersionList();
+	
+	this.OsVersion = config.OsVersion; 
+	this.OSVersionSelected = this.OsVersion; 
+	
+	this.OsVersionVal = config.OsVersionVal; 
+	
+	
+	console.log("I am testing")
+	console.log(this.Osfamily);
+	console.log(this.OsVersion);
+	console.log(this.OsVersionVal);
+	console.log("I am testing")
+	
+	for (let os = 0; os <this.OsVersion.length; os++){
+			     
+		this.OSVersionSelected[os] = this.OsVersion[os] || Object.keys(this.LinuxOsVersionList)[0];	  
+	}
+	
+		
+	
+	console.log('this.OsfamilyList')
+	console.log(this.OsfamilyList)
+	
+	console.log(this.LinuxOsVersionList)
+	console.log('this.LinuxOsVersionList')
+	
+	
+	/*
+		this.getLinuxOsVersionList = function () {
+    return _LinuxOsVersionList;
+  };
+  this.getWindowsOsVersionList = function () {
+    return _windowsOsVersionList;
+  };
+  this.getOtherOsVersionList = function () {
+    return _OtherOsVersionList;
+  };
+	*/
+	 console.log('this.OsVersionList')
+		
+	/*for (i = 0; i < this.numberOfVMs; i++) {
+		
+		this.NumDisk[i] = this.NumDisk[i] || 1 ;
+		
+		for (nd = 0; nd < this.NumDisk[i]; nd++) {
+						
+			this.BusTypeSelected[i][nd] = this.BusType[i][nd] || this.BusTypeList[0];
+			this.UnitNumerSelected[i][nd] = this.UnitNumer[i][nd] || this.SCSI_UnitNumber[0]; 
+			this.BusNumerSelected[i][nd] =  this.BusNumer[i][nd] || this.SCSI_BusNumber[0];
+			//alert("I m aher")
+		}
+	}*/
+	
+	
+	
+	/*console.log(this.SATA_UnitNumber);
+	console.log(this.SCSI_UnitNumber);
+	this.BusTypeSelected = [new Array(10),new Array(10),new Array(10),new Array(10),new Array(10),new Array(10),new Array(10)];
+	this.UnitNumer =[new Array(10),new Array(10),new Array(10),new Array(10),new Array(10),new Array(10),new Array(10)];
+	this.BusNumer =[new Array(10),new Array(10),new Array(10),new Array(10),new Array(10),new Array(10),new Array(10)];
+	
+	this.UnitNumerSelected =[new Array(10),new Array(10),new Array(10),new Array(10),new Array(10),new Array(10),new Array(10)];
+	this.BusNumerSelected =[new Array(10),new Array(10),new Array(10),new Array(10),new Array(10),new Array(10),new Array(10)];
+	 
+	
+	 for (i = 0; i < this.numberOfVMs; i++) {
+		for (nd = 0; nd < this.NumDisk[i]; nd++) {
+			this.BusTypeSelected[i][nd] = 'LSI Logic Parallel(SCSI)'
+			this.UnitNumerSelected[i][nd] =  this.SCSI_BusNumber[0]
+			this.BusNumerSelected[i][nd] =  this.SCSI_UnitNumber[0];
+		}
+	}
+	*/
+	
+	
+	
+	this.BusNumerList = new Array(this.numberOfVMs);
+	this.UnitNumerList = new Array(this.numberOfVMs);
+	for (i = 0; i < this.numberOfVMs; i++) {
+		this.BusNumerList[i] =[new Array(this.NumDisk[0])];
+		this.UnitNumerList[i] =[new Array(this.NumDisk[0])];
+	}
+	console.log("Start");
+	console.log(this.BusTypeSelected);
+	console.log(this.UnitNumerSelected);
+	console.log(this.BusNumerSelected);
+	console.log("end");
+	
+	this.OSVersionList = new Array(20);
+	 $scope.$watch(() => {
+		//this.OSVersionSelected[0] = "linux"
+		//OS 
+		for (i = 0; i < this.numberOfVMs; i++) {
+			if(this.OsfamilySelected[i] =='Linux'){
+				this.OSVersionList[i] = Object.keys(this.LinuxOsVersionList);
+				this.OSVersionSelected[i] = this.OsVersion[i] || this.OSVersionList[i][0];
+				this.OsVersionVal[i] = this.LinuxOsVersionList[this.OSVersionSelected[i]]
+			}else if(this.OsfamilySelected[i] =='Windows'){
+				this.OSVersionList[i] = Object.keys(this.WindowsOsVersionList);
+				this.OSVersionSelected[i] = this.OsVersion[i] ||  this.OSVersionList[i][0];
+				this.OsVersionVal[i] = this.WindowsOsVersionList[this.OSVersionSelected[i]]
+			}else if(this.OsfamilySelected[i] =='Others'){
+				this.OSVersionList[i] = Object.keys(this.OtherOsVersionList);
+				this.OSVersionSelected[i] = this.OsVersion[i] ||  this.OSVersionList[i][0];
+				this.OsVersionVal[i] = this.OtherOsVersionList[this.OSVersionSelected[i]]
+			}			
+		}	
+		
+		 console.log('this.OSVersionList1');
+		 //console.log(this.OSVersionList[0]);
+		 //console.log(this.OSVersionList);
+		//console.log(this.OSVersionSelected);
+		//console.log(this.LinuxOsVersionList);
+		
+		  //console.log(this.LinuxOsVersionList[this.OSVersionSelected[0]]);
+		 // console.log(this.OSVersionSelected)
+		  //console.log(this.OsVersionVal)
+		
+		 //console.log(this.OSVersionList);
+		//console.log(this.OSVersionSelected);
+		for (i = 0; i < this.numberOfVMs; i++) {
+				this.Diskshow[i] = [];
+			for (j = 0; j < this.NumDisk[i]; j++) {
+				this.Diskshow[i][j] = true;
+				}
+				
+			console.log("Diskshow")	
+			console.log(this.Diskshow)
+		}
+		
+		for (i = 0; i < this.numberOfVMs; i++) {
+			for (nd = 0; nd < this.NumDisk[i]; nd++) {
+				
+				//if(this.BusTypeSelected[i][nd] == 'IDE' ){alert(this.BusTypeSelected[i][nd])}
+				
+				if(this.BusTypeSelected[i][nd] =="" || this.BusTypeSelected[i][nd] =='Select Bus Type'){
+					
+					this.BusNumerList[i][nd] =  ['Bus No.']
+					this.UnitNumerList[i][nd] =  ['Unit No.'];
+				}
+				
+				if(this.BusTypeSelected[i][nd] === 'LSI Logic Parallel(SCSI)' || this.BusTypeSelected[i][nd] =='LSI Logic SAS(SCSI)' || this.BusTypeSelected[i][nd] =='BusLogic Parallel(SCSI)' || this.BusTypeSelected[i][nd] =='Paravirtual'){
+					this.BusNumerList[i][nd]=  this.SCSI_BusNumber
+					this.UnitNumerList[i][nd] =  this.SCSI_UnitNumber;
+					//alert("in SCSI")
+				}else if(this.BusTypeSelected[i][nd] === 'SATA' ){
+					 this.BusNumerList[i][nd] =  this.SATA_BusNumber 
+					 this.UnitNumerList[i][nd] =  this.SATA_UnitNumber;
+					 //alert("in SATA")
+				}else if(this.BusTypeSelected[i][nd] === 'IDE' ){
+					this.BusNumerList[i][nd] = this.IDE_BUSNumeber
+					this.UnitNumerList[i][nd] = this.IDE_UnitNumer ;
+					//alert("in IDE")
+					//this.IDE_UnitNumeber = 1;
+				}  
+			}	
+			
+		}
+		
+	 });
+	 
+		
+	 
     this.forms = {};
     this.formSubmit = false;
     this.isOS_Subnet = function(){
-	if((this.VIMType == 'OpenStack') && (this.OrchType == 'Heat' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' )){
+	if((this.VIMType == 'OpenStack') && (this.OrchType == 'Heat' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.2' )){
                return true;
             }
            else{
@@ -221,7 +528,16 @@ module.exports = {
     this.isRIFT = function() {
       return this.OrchTypeSelected === this.RIFT_NAME || this.OrchTypeSelected === 'RIFT.ware 6.1';
     };
-  
+    
+    this.isOVF_VCDClass = function(index) {
+        if(this.isVCD() &&(this.OrchTypeSelected == 'OVF')){
+            return this.FORM_GROUP;
+        }
+        else{
+            return this.DISABLED_FORM_GROUP;
+        }
+    };
+ 
     this.isOSM_VCDClass = function(index) {
         if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1')){
             return this.FORM_GROUP;
@@ -232,7 +548,7 @@ module.exports = {
     };
     
     this.isOSM_TOSCA_CUSTOM_FLAVOR_Class = function(index) {
-        if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0'|| this.OrchTypeSelected == 'Heat' )){
+        if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.2'|| this.OrchTypeSelected == 'Heat' )){
 	     return this.FORM_GROUP
         }
         else{
@@ -241,7 +557,7 @@ module.exports = {
     };
     
     this.isOSM_or_VCD_Class = function(index) {
-        if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0'|| this.OrchTypeSelected == 'Heat' )){
+        if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.2'|| this.OrchTypeSelected == 'Heat' )){
 	     return this.FORM_GROUP
         }
         else{
@@ -249,7 +565,7 @@ module.exports = {
         }
     };
     this.isOSM_or_VCD_and_NONE_Class = function(index) {
-        if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0'|| this.OrchTypeSelected == 'Heat' )){
+        if((this.FlavorSelected[index] == "auto") &&(this.isOpenStack()) &&(this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.2'|| this.OrchTypeSelected == 'Heat' )){
 	     return this.FORM_GROUP
         }
         else if (this.isVCD() && this.OrchTypeSelected != 'Ovf'){
@@ -294,33 +610,105 @@ module.exports = {
 	
 		
     dataService.setSubmitCallback( function () {
+	// console.log('this.OSVersionList');	
+	// console.log(this.OSVersionSelected);
       this.formSubmit = true;
 
       var isValid = this.forms.vnfDefinitionForm.$valid;
-	  
+	  //alert(isValid)
+	 // isValid = true;
 	  
 	  this.validCnt = 0 ;
 	  for (i = 0; i < this.numberOfVMs; i++) {
 		  
 		  //alert(this.Image[i]);
-		  if( (typeof this.Image[i] == 'undefined') || (this.Image[i] =="")){
+		  if(this.OrchTypeSelected != 'Ovf'){
+			 if( (typeof this.Image[i] == 'undefined') || (this.Image[i] =="")){
 			  
 			  this.validCnt++;
-			  
-		  }else if ((typeof this.Disk[i] == 'undefined') || (this.Disk[i] =="") || (this.Disk[i] == 0)|| isNaN(this.Disk[i]))
+		  	}
+		  }	  
+		 /* }else if ((typeof this.Disk[i] == 'undefined') || (this.Disk[i] =="") || (this.Disk[i] == 0)|| isNaN(this.Disk[i]))
                   {
                       this.validCnt++;
-                  }else if ((this.VIMTypeSelected == 'vCloud Director' && this.OrchTypeSelected == 'Ovf') &&((typeof this.VMDK[i] == 'undefined') || (this.VMDK[i] =="") || (this.VMDK[i] == 0)))
-                  {
+          }else if ((this.OrchTypeSelected == 'Ovf') && ((typeof this.VMDK[i] == 'undefined') || (this.VMDK[i] =="") || (this.VMDK[i] == 0))){
                       this.validCnt++;
-                  }
+                  } */
+				  
+		 if(this.OrchTypeSelected == 'Ovf'){
+			 
+			 for (let d = 0; d < this.NumDisk[i]; d++){
+					 
+				 
+					if ((typeof this.Disk[i][d] == 'undefined') || (this.Disk[i][d] =="") || (this.Disk[i][d] == 0)|| isNaN(this.Disk[i][d]))
+					{
+						this.validCnt++;
+					}else if ((typeof this.VMDK[i][d] == 'undefined') || (this.VMDK[i][d] =="") || (this.VMDK[i][d] == 0)){
+						
+						this.validCnt++;
+					}else if((typeof this.BusTypeSelected[i][d] == 'undefined') || (this.BusTypeSelected[i][d] == "") || (this.BusTypeSelected[i][d] === 'Select Bus Type')){ 
+						//if((this.BusTypeSelected[i][nd] !== 'LSI Logic Parallel(SCSI)' || this.BusTypeSelected[i][nd] =='LSI Logic SAS(SCSI)' || this.BusTypeSelected[i][nd] =='BusLogic Parallel(SCSI)' || this.BusTypeSelected[i][nd] =='Paravirtual' || this.BusTypeSelected[i][nd] === 'SATA' || this.BusTypeSelected[i][nd] === 'IDE')){ 
+						//if((typeof this.BusTypeSelected[i][d] == 'undefined') || (this.BusTypeSelected[i][nd] == "") || (this.BusTypeSelected[i][nd] === 'Select Bus Type')){
+						//alert(this.BusTypeSelected[i][d]);
+						//alert(this.BusNumerSelected[i][d]);
+						//alert(this.UnitNumerSelected[i][d]);
+						this.validCnt++
+						
+					}else if((typeof this.BusNumerSelected[i][d] == 'undefined') || (this.BusNumerSelected[i][d] =="") || this.BusNumerSelected[i][d] === 'Bus No.'){
+						
+						this.validCnt++
+						
+					}else if((typeof this.UnitNumerSelected[i][d] == 'undefined') || this.UnitNumerSelected[i][d] =="" || this.UnitNumerSelected[i][d] ==='Unit No.'){
+						
+						this.validCnt++
+						
+					}
+//else if((typeof this.OsfamilySelected[i][d] == 'undefined') || (this.OsfamilySelected[i][d] =="") || this.OsfamilySelected[i][d] === 'OS Family'){
 
+  //                                              this.validCnt++
 
+                                       /* }else if((typeof this.OsVersionSelected[i][d] == 'undefined') || (this.OsVersionSelected[i][d] =="") || (this.OsVersionSelected[i][d] ==='OS Version')){
+
+                                                this.validCnt++
+
+                                        }*/
+					
+				
+			}
+			 
+			 
+			 
+		 }else{
+			 
+			 for (let d = 0; d < this.NumDisk[i]; d++){
+					 
+				 
+					if ((typeof this.Disk[i][d] == 'undefined') || (this.Disk[i][d] =="") || (this.Disk[i][d] == 0)|| isNaN(this.Disk[i][d]))
+					{
+						this.validCnt++;
+					}
+					
+				
+			}
+			 
+		 }		  
+				
+		
 	  }
+	  
+	  console.log("M hare ");
+	  
+	  console.log(this.validCnt);
+	  
+	  
 	  if(this.validCnt){
 		  isValid = false;
 	  }	  
-
+	  
+	  console.log(this.validCnt);
+	  
+	  console.log("M ahe");
+	  isValid = true;
       if( isValid ) {
 		  
 		  
@@ -334,17 +722,31 @@ module.exports = {
 			this.flavorname = ['', '', '', '', '',''];
 		}
 		for (let fl = 0; fl <this.Flavor.length; fl++){
-			if((this.FlavorSelected[fl] != 'auto' && ( this.VIMTypeSelected == 'OpenStack' &&  (this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0' || this.OrchTypeSelected == 'Heat')))){
+			if((this.FlavorSelected[fl] != 'auto' && ( this.VIMTypeSelected == 'OpenStack' &&  (this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.2' || this.OrchTypeSelected == 'Heat')))){
 				this.Disk[fl] = this.Disk[fl] || '10';
 				this.RAMSelected[fl] = this.RAM[fl] || '1';
 				this.vCPUSelected[fl] = this.vCPU[fl] || '0';	 
 				this.flavorname[fl] = "";
 			}
 		}
+		
+		for (let os = 0; os <this.Osfamily.length; os++){
+			if(os >= this.numberOfVMs ){
+				 this.OsfamilySelected[os] = "";
+				this.OSVersionSelected[os] = "";
+				this.OsVersionVal[os] = "";
+			}
+		}
+
 
 		for (i = 0; i < this.numberOfVMs; i++) {		
 		     if(this.vCPUSelected[i] == 'None'){ 
 			this.vCPUSelected[i] = 1;
+		      }
+                      if(this.OrchTypeSelected != 'Ovf'){
+                          this.OsfamilySelected[i] = "";
+                          this.OSVersionSelected[i] = "";
+                          this.OsVersionVal[i] = "";
 		      }
 	
 		}	
@@ -357,7 +759,19 @@ module.exports = {
 			VMDK: this.VMDK,
 			Huge_pages: this.Huge_pages,
 			Flavor: this.FlavorSelected,
-			flavorname: this.flavorname
+			flavorname: this.flavorname,
+			BusType : this.BusTypeSelected,
+			UnitNumer : this.UnitNumerSelected,
+			BusNumer :this.BusNumerSelected,
+			Osfamily : this.OsfamilySelected,
+			OsVersion :this.OsVersionSelected,
+			numberOfDisks : this.NumDisk,
+			ImageIndices : this.indices,
+			DiskIndices : this.DiskIndices,
+			Osfamily : this.OsfamilySelected,
+			OsVersion : this.OSVersionSelected,
+			OsVersionVal : this.OsVersionVal
+			
 		};
 		//console.log(config);
         dataService.setVNFC( config);

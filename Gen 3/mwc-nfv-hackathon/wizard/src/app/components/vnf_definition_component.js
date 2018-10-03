@@ -59,7 +59,7 @@ module.exports = {
 	
 	
 	
-    this.OrchType = ['OSM 3.0','Cloudify 3.4','Cloudify 4.0','TOSCA 1.1','Heat', 'RIFT.ware 5.3','RIFT.ware 6.1'];
+    this.OrchType = ['OSM 3.0','Cloudify 3.4','Cloudify 4.2','TOSCA 1.1','Heat', 'RIFT.ware 5.3','RIFT.ware 6.1'];
     this.OrchTypeSelected = config.OrchType;
     this.OrchTypeSelected = config.OrchType;
 

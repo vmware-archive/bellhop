@@ -40,10 +40,18 @@ def db_check_credentials(username,password):
     # read connection parameters
     params = db_config('database.ini','vnf_onboarding')
     db_table = get_config_param('database.ini','Details','table')
+    usercheck_status = None
  
     # connect to the PostgreSQL server
     print('Connecting to the PostgreSQL database...')
-    conn = psycopg2.connect(**params)	
+    try:
+       conn = psycopg2.connect(**params)	
+    except:
+       print "Failure to connect to postgres database"
+       usercheck_status = "Connection Failed"
+    finally:
+       if usercheck_status is not None:
+          return usercheck_status
  
  
     # conn.cursor will return a cursor object, you can use this cursor to perform queries
@@ -64,11 +72,18 @@ def db_check_credentials(username,password):
      
     for rec in records:
         print rec
-        db_password = sha256.verify(password,rec[1])
-        print "Verified password",db_password,rec[1]
-        if rec[0] ==  username and db_password == True:
-           print "db_check_credentials:User {} is Authenticated".format(username)
-           return True
+        #db_password = sha256.verify(password,rec[1])
+        #print "Verified password",db_password,rec[1]
+        #if rec[0] ==  username and db_password == True:
+        #   print "db_check_credentials:User {} is Authenticated".format(username)
+        #   return True
+        if rec[0] == username:
+           #if password == rec[1] or sha256.verify(password,rec[1]) == True :
+           if sha256.verify(password,rec[1]) == True :
+              print "db_check_credentials:User {} is Authenticated".format(username)
+              return True
+           else:
+              return "Incorrect Password"
     print "Did not find user",username
     cursor.close()
     return False 
@@ -81,18 +96,24 @@ def db_user_signup(username,password,emailid):
     # read connection parameters
     params = db_config()
     pprint.pprint(params)
-    #pprint.pprint(params['users_database'])
-    #dbname = params['users_database']
-
-    # connect to the PostgreSQL server
-    print('Connecting to the PostgreSQL database...')
-    conn = psycopg2.connect(**params)
-    #conn = psycopg2.connect(params['dbname'],params['user'],params['password'],params['host'])
+    usersignup_status = None
+ 
+    try: 
+       # connect to the PostgreSQL server
+       print('Connecting to the PostgreSQL database...')
+       conn = psycopg2.connect(**params)
+       #conn = psycopg2.connect(params['dbname'],params['user'],params['password'],params['host'])
   
-    #Needed for Create DB op 
-    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-    # conn.cursor will return a cursor object, you can use this cursor to perform queries
-    cursor = conn.cursor()
+       #Needed for Create DB op 
+       conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+       # conn.cursor will return a cursor object, you can use this cursor to perform queries
+       cursor = conn.cursor()
+    except:
+      print "Failure to connect to postgres database"
+      usersignup_status = "Connection Failed"
+    finally:
+      if usersignup_status is not None:
+         return usersignup_status
     vnf_params = db_config('database.ini','vnf_onboarding')
     vnf_dbname = vnf_params['dbname']
     #cursor.execute("SELECT datname FROM pg_catalog.pg_database WHERE datname = 'vnf_onboarding_tool_db'")
@@ -186,21 +207,23 @@ def insert_data(username,password,emailid):
 
 
 
-def db_generate_newpassword(credentials):
+def db_generate_newpassword(credentials,default_password=True):
     print "db_generate_newpassword:Received",credentials 
     if 'username' in credentials.keys():
       print "db_generate_newpassword: Received Username"
       if check_if_userexists(credentials) == True:
          print "db_generate_newpassword: generate new passwd for user {}".format(credentials['username'])
-         generate_and_updatepassword(credentials)
+         generate_and_updatepassword(credentials,default_password)
          return int(0)
+      elif check_if_userexists(credentials) == "Connection Failed":
+         return "Connection Failed"
       else:
          return int(1)
     elif 'emailaddress'in credentials.keys():
        print "db_generate_newpassword: Received emailaddress {}".format(credentials['emailaddress'])
        if check_if_userexists(credentials) == True:
           print "db_generate_newpassword: generate new passwd for user with mailid {}".format(credentials['emailaddress'])
-          generate_and_updatepassword(credentials)
+          generate_and_updatepassword(credentials,default_password)
           return int(0)
        else:
           return int(1)
@@ -261,6 +284,8 @@ def check_if_userexists(credentials):
     userExists = False
     db_table = get_config_param('database.ini','Details','table')
     conn = db_connect()
+    if conn == "Connection Failed":
+       return conn
     cursor = conn.cursor()
     check_user_query = ""
     if 'username' in credentials.keys():
@@ -300,13 +325,21 @@ def check_if_userexists(credentials):
     conn.close()
     return userExists
 
-def generate_and_updatepassword(credentials):
+def generate_and_updatepassword(credentials,default_password=True):
     update_query = ""
-    randompassword = password_gen()
-    hashedpassword = sha256.hash(randompassword)
-    print "generate_and_updatepassword",randompassword
+    randompassword = ""
+    hashedpassword = ""
+    if default_password == False:
+       randompassword = password_gen()
+       hashedpassword = sha256.hash(randompassword)
+    elif default_password == True:
+       print "setting password to default"
+       hashedpassword = sha256.hash("password@123")
+    print "generate_and_updatepassword",hashedpassword
     db_table = get_config_param('database.ini','Details','table')
     conn = db_connect()
+    if conn == "Connection Failed":
+       return conn
     conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     cursor = conn.cursor()
     if 'username' in credentials.keys():
@@ -333,8 +366,20 @@ def generate_and_updatepassword(credentials):
 
 def db_connect():
     vnf_params = db_config('database.ini','vnf_onboarding')
+    dbconnect_status = None
+    conn = None
+    # connect to the PostgreSQL server
     print('Connecting to the PostgreSQL database...')
-    conn = psycopg2.connect(**vnf_params)
+    try:
+       conn = psycopg2.connect(**vnf_params)
+    except:
+        print "Failure to connect to postgres database"
+        dbconnect_status = "Connection Failed"
+    finally:
+        if dbconnect_status is not None:
+           return dbconnect_status
+        else:
+           print "connection to database succeeded"
     return conn
 
 def password_gen():

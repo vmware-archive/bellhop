@@ -68,7 +68,7 @@ then
    mkdir $blueprint_folder 
    mkdir $blueprint_folder/OSM
    cd $blueprint_folder/OSM
-elif [ "$4" = "Cloudify 3.4" ] || [ "$4" = "Cloudify 4.0" ]
+elif [ "$4" = "Cloudify 3.4" ] || [ "$4" = "Cloudify 4.2" ]
 then
    mkdir $blueprint_folder 
    mkdir $blueprint_folder/Cloudify

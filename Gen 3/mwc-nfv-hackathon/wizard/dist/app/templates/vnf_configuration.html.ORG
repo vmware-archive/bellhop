@@ -1,0 +1,185 @@
+<!-- #########################################################################
+# Copyright 2017-2018 VMware Inc.
+# This file is part of VNF-ONboarding
+# All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+#
+# For those usages not covered by the Apache License, Version 2.0 please
+# contact:  osslegalrouting@vmware.com
+
+########################################################################### -->
+
+<div>
+  <div class="row">
+    <label class="text-light col-xs-12">VNF Configuration</label>
+  </div>
+  <form name="$ctrl.forms.vnfDefinitionForm"
+        ng-class="$ctrl.formSubmit == true ? $ctrl.FORM_SUBMIT_CLASS : $ctrl.NO_CLASS">
+    <section class="form-block">
+	<div class="alert alert-danger" ng-show="$ctrl.validCnt >= 1">
+	   <div class="alert-items">
+	   	<div class="alert-item static">
+			<div class="alert-icon-wrapper">
+				<clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+		        </div>
+			<span class="alert-text">One or more mandatory parameter(s) are blank or not having valid value</span>
+	        </div>
+	</div>
+	</div>
+	
+	 <div  ng-repeat="i in $ctrl.VMsIndices | limitTo : $ctrl.numberOfVMs"> 
+	  
+		<button class="accordion" ng-click="doCollapse(i);"> <span id="arrow-{{$index}}"><clr-icon  shape="caret" style="transform: rotate(270deg);"></clr-icon></span> VM {{i+1}}</button>
+		
+		<div class="panel" name="expand" id="expand-{{$index}}">
+							
+<!--		<div class="form-group" ng-show="$ctrl.isOS_Heat()">
+		     <label for="Image">Availability Zone</label>
+		     <input type="text" ng-model="$ctrl.Availability_zone[$index]" data-index="{{ $ctrl.indices[ $index ] }}" id="availability_zone" placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="20" />
+		     <div class="col-xs-2">
+		     <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-bottom-left">
+		     	<clr-icon shape="info-circle" size="24"></clr-icon>
+		     	<span class="tooltip-content">{{$ctrl.IMAGE_TOOLTIP}}</span>
+	     	     </span>
+		     </div>
+		</div>
+
+-->		<div class="form-group">
+		     <label class="required" for="Image">Image</label>
+		     <input type="text" ng-model="$ctrl.Image[$index]" data-index="{{ $ctrl.indices[ $index ] }}" id="Image" placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="20"  required/>
+		     <div class="col-xs-2">
+		     <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-bottom-left">
+		     	<clr-icon shape="info-circle" size="24"></clr-icon>
+		     	<span class="tooltip-content">{{$ctrl.IMAGE_TOOLTIP}}</span>
+	     	     </span>
+		     </div>
+		</div>
+							
+		<div ng-class="$ctrl.isOSM_VCDClass($index)" ng-show="!$ctrl.isDISK_RAM_CPU()">
+			<label for="Flavor">Flavor</label>
+			<div class="select select_length">
+			     <select ng-disabled="$ctrl.isOSM()" ng-model="$ctrl.FlavorSelected[$index]" id="Flavor" 						  ng-options="value as key for (key , value) in $ctrl.Flavors">
+			     </select>
+			</div>
+			<div class="col-xs-2">
+			     <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
+			           <clr-icon shape="info-circle" size="24"></clr-icon>
+				   <span class="tooltip-content">{{$ctrl.FLAVOR_TOOLTIP}}</span>
+			      </span>
+			</div>
+	         </div>
+
+		 <div ng-class="$ctrl.isOSM_TOSCA_CUSTOM_FLAVOR_Class($index)"  ng-show="$ctrl.isCUSTOM_FLAVOR($index) && !$ctrl.isOSM()">
+		      <label for="flavorname">Flavor Name</label>
+		      <input type="text"  ng-model="$ctrl.flavorname[$index]" 
+					  data-index="{{ $ctrl.indices[ $index ] }}" id="flavorname" 
+					  placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="20" />
+	              <div class="col-xs-2">
+		           <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
+			         <clr-icon shape="info-circle" size="24"></clr-icon>
+				 <span class="tooltip-content">{{$ctrl.FLAVOR_NAME_TOOLTIP}}</span>
+		           </span>
+	              </div>
+		</div>
+							
+		<div ng-class="$ctrl.isOSM_or_VCD_Class($index)" ng-show="$ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index)">
+                     <label for="CPU">CPU</label>
+                     <input type="number" ng-model="$ctrl.vCPUSelected[$index]" data-index="{{ $ctrl.indices[ $index ] }}" id="Image" placeholder="Select CPU" size="20" min="1" max="128" step="1"  value="1" />
+        </div>
+
+
+		<div ng-class="$ctrl.isOSM_or_VCD_Class($index)" ng-show="$ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index)">
+		     <label for="RAM">RAM</label>
+		     <div class="select select_length">
+		          <select ng-required="true" id="RAM" ng-model="$ctrl.RAMSelected[$index]" 
+			         >
+				  <option ng-repeat="RAM in $ctrl.RAMs" value="{{RAM}}">{{RAM}} GB </option>
+		          </select>
+	             </div>
+		</div>
+							  
+		<!--<div ng-class="$ctrl.isOSM_or_VCD_and_NONE_Class($index)" ng-show="(!$ctrl.isOVF()) && ($ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index))">
+			<label class="required" for="Disk">Disk</label>
+			<input type="text"  ng-model="$ctrl.Disk[i][$index]" id="Disk" 
+				placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="20" required/>
+				<span>GB</span>
+		</div>
+             
+                <div ng-class="$ctrl.isOSM_or_VCD_and_NONE_Class($index)" ng-show="$ctrl.isOVF()">
+                        <label class="required" for="VMDK">VMDK File Name</label>
+                        <input type="text"  ng-model="$ctrl.VMDK[$index]" id="VMDK"
+                                placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="20" />
+                    <div class="col-xs-2">
+                           <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
+                                 <clr-icon shape="info-circle" size="24"></clr-icon>
+                                 <span class="tooltip-content">{{ $ctrl.VMDK_TOOLTIP }}</span>
+                           </span>
+                    </div>
+                </div>
+		-->
+
+		<div ng-class="$ctrl.isOSM_or_VCD_and_NONE_Class($index)" ng-show=" $ctrl.isOVF() && ($ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index))">
+		     <label for="DISK">Number of Disk(s)</label>
+		     <input type="number" ng-model="$ctrl.NumDisk[$index]" data-index="{{ $ctrl.indices[ $index ] }}" id="NumDisk" placeholder="" size="20" min="1" max="285" step="1"  value="1" />
+		  
+		</div>	
+		
+		<div ng-repeat="nd in $ctrl.DiskIndices track by $index" >
+				<div ng-class="$ctrl.isOSM_or_VCD_Class($index) " ng-show="($ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index)) && ($ctrl.Diskshow[i][$index])">			
+					<label class="required" for="Disk">Disk {{$index}}</label>
+					<input type="text"  ng-model="$ctrl.Disk[i][$index]" id="Disk" 
+						placeholder="Enter Disk Size" size="10" required />
+						<span>GB</span>
+					<input type="text"  ng-model="$ctrl.VMDK[i][$index]" id="VMDK"
+										placeholder="VMDK File Name" size="20"   ng-show="$ctrl.isOVF()" required />
+					
+				</div>
+				<div ng-class="$ctrl.isOSM_or_VCD_Class($index)" ng-show="$ctrl.isOVF() && ($ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index)) && ($ctrl.Diskshow[i][$index])">
+					 <div class="select  ">
+						  
+						  <select ng-required="true" id="Bus" ng-model="$ctrl.BusTypeSelected[i][$index]" >
+						  <option ng-repeat="Bus in $ctrl.BusTypeList" value="{{Bus}}">{{Bus}}</option>
+						  </select>
+						  
+					</div>
+					 <div class="select select_length_bu">
+					 
+						  <select ng-required="true" id="BusNum" ng-model="$ctrl.BusNumerSelected[i][$index]" >
+						  <option ng-repeat="BusNum in $ctrl.BusNumerList[i][$index]" value="{{BusNum}}">{{BusNum}}</option>
+						  </select>
+					</div>
+					 <div class="select select_length_bu">
+					  
+						  <select ng-required="true" id="UnitNum" ng-model="$ctrl.UnitNumerSelected[i][$index]" >
+						  <option ng-repeat="UnitNum in $ctrl.UnitNumerList[i][$index]" value="{{UnitNum}}">{{UnitNum}}</option>
+						  </select>
+					</div>
+				</div>
+				
+        </div>
+				
+					
+					  
+		
+
+
+	       
+	</div>
+	</div>
+		
+  </section>
+  </form>
+</div>

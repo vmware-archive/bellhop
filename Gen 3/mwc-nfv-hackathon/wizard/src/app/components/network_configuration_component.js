@@ -161,7 +161,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
          };
 
          this.isMgmtNwt = function(){
-		if(this.OrchType == 'Heat' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' || this.OrchType == 'Ovf'){
+		if(this.OrchType == 'Heat' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.2' || this.OrchType == 'Ovf'){
 			return false;
 		}
 		else{
@@ -170,7 +170,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	}
 	 this.isOS_Subnet = function(){
               if((this.VIMType == 'OpenStack') &&
-                        (this.OrchType == 'Heat' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' )){
+                        (this.OrchType == 'Heat' || this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.2' )){
                  return true;
               }
               else{
@@ -179,7 +179,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
           }
      
          this.isOS_Cloudify = function() {
-            if((this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0') && (this.VIMType == 'OpenStack')){
+            if((this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.2') && (this.VIMType == 'OpenStack')){
                return true;
             }
            else{
@@ -187,7 +187,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
            } 
          };
          this.isVCD_Cloudify = function() {
-            if((this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0' || this.OrchType == 'Ovf') && (this.VIMType == 'vCloud Director')){
+            if((this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.2' || this.OrchType == 'Ovf') && (this.VIMType == 'vCloud Director')){
                return true;
             }
            else{
@@ -218,7 +218,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		
 	 } else{
 		 this.NIC_PLACEHOLDER = ['Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network'];
-          if((this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.0') && (this.VIMType == 'OpenStack')){
+          if((this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.2') && (this.VIMType == 'OpenStack')){
 	 	 this.SUBNET_PLACEHOLDER = ['Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet'];
 	  }
 	 }
@@ -316,21 +316,11 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		   for (i = 0; i < this.numberOfNICs; i++) { 
 		   
 			if (this.Interfaces[i]){
-					if((typeof this.Edge_Gateway[i] == 'undefined') || (this.Edge_Gateway[i] == "")) {
-						this.errorCnt++;	  		
-					}
-					
+										
 					if(((typeof this.DNS_Suffix[i] == 'undefined') || (this.DNS_Suffix[i] == ""))) {
 						this.errorCnt++;		   		
 					}
-					
-					if((typeof this.Static_Start[i] == 'undefined') || (this.Static_Start[i] == "")) {
-						this.errorCnt++;	  		
-					}
-					
-					if(((typeof this.Static_end[i] == 'undefined') || (this.Static_end[i] == ""))) {
-						this.errorCnt++;		   		
-					}
+						
 					
 					if((typeof this.DNS1[i] == 'undefined') || (this.DNS1[i] == "")) {
 						this.errorCnt++;	  		
@@ -347,14 +337,31 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 					if(((typeof this.DHCP_End[i] == 'undefined') || (this.DHCP_End[i] == ""))) {
 						this.errorCnt++;		   		
 					}
-					if((typeof this.Netmask[i] == 'undefined') || (this.Netmask[i] == "")) {
-						this.errorCnt++;	  		
-					}
+					
 					
 					if(((typeof this.Gateway_IP[i] == 'undefined') || (this.Gateway_IP[i] == ""))) {
 						this.errorCnt++;		   		
 					}
 					
+					//if(!$scope.ParentNetworkTypeSelected[i] =='Direct'){
+						
+												
+						if((typeof this.Edge_Gateway[i] == 'undefined') || (this.Edge_Gateway[i] == "")) {
+							this.errorCnt++;	  		
+						}
+						
+						if((typeof this.Static_Start[i] == 'undefined') || (this.Static_Start[i] == "")) {
+							this.errorCnt++;	  		
+						}
+						
+						if(((typeof this.Static_end[i] == 'undefined') || (this.Static_end[i] == ""))) {
+							this.errorCnt++;		   		
+						}
+						
+						if((typeof this.Netmask[i] == 'undefined') || (this.Netmask[i] == "")) {
+							this.errorCnt++;	  		
+						}
+					//}
 			
 			}
 			
@@ -362,23 +369,24 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		   }
 	   }
 	   
-	   if(this.isVCD_Ovf()){
+	   if(this.isVCD_Ovf() ){
+		   
 		   
 		   
 		   for (i = 0; i < this.numberOfNICs; i++) { 
-		   
-			    if((typeof this.Edge_Gateway[i] == 'undefined') || (this.Edge_Gateway[i] == "")) {
+				//alert($scope.ParentNetworkTypeSelected[i] =='Direct')
+			    if(($scope.ParentNetworkTypeSelected[i] !='Direct') && ((typeof this.Edge_Gateway[i] == 'undefined') || (this.Edge_Gateway[i] == ""))) {
 						this.errorCnt++;	  		
 				}
-				if((typeof this.Netmask[i] == 'undefined') || (this.Netmask[i] == "")) {
-						this.errorCnt++;	  		
-				}
-					
-				if((typeof this.Static_Start[i] == 'undefined') || (this.Static_Start[i] == "")) {
+				if(($scope.ParentNetworkTypeSelected[i] !='Direct') && ((typeof this.Netmask[i] == 'undefined') || (this.Netmask[i] == ""))) {
 						this.errorCnt++;	  		
 				}
 					
-				if(((typeof this.Static_end[i] == 'undefined') || (this.Static_end[i] == ""))) {
+				if(($scope.ParentNetworkTypeSelected[i] !='Direct') && ((typeof this.Static_Start[i] == 'undefined') || (this.Static_Start[i] == ""))) {
+						this.errorCnt++;	  		
+				}
+					
+				if(($scope.ParentNetworkTypeSelected[i] !='Direct') && ((typeof this.Static_end[i] == 'undefined') || (this.Static_end[i] == ""))) {
 						this.errorCnt++;		   		
 				}
 				
@@ -500,8 +508,8 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
                  DNS_Suffix : this.DNS_Suffix,
                  DHCP_Start : this.DHCP_Start,
                  DHCP_End : this.DHCP_End,
-		 OrgVdc_Network : this.OrgVdc_Network,
-		 OrgVdcNetwork : this.OrgVdcNetwork,
+				 OrgVdc_Network : this.OrgVdc_Network,
+				 OrgVdcNetwork : this.OrgVdcNetwork,
                  Parent_Network : this.Parent_Network,
                  ParentNetwork_Type : $scope.ParentNetworkTypeSelected
 

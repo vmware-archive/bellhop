@@ -32,8 +32,8 @@ vnfd:vnfd-catalog:
             name: {{ vnfd_name }}_vdu_name
             vm-flavor:
                 vcpu-count: {{ cpu }}
-                memory-mb: {{ ram }}
-                storage-gb: {{disk}}
+                memory-mb: {{ ram }}{% for vm in params %}{% for x in range( vm.numberOfDisks ) %}
+                storage-gb: {{ vm.disk[loop.index0] }}{% endfor %}{% endfor %}
             image: {{ image_id }}
             {% if scripts %}
             cloud-init-file: {{scripts.create}}

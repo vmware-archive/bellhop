@@ -31,7 +31,7 @@
     <section class="form-block">
       
 	   <div class="form-group long "
-			 ng-if="value && param != 'scripts' && param != 'git_upload' && param != 'Create Network1' && param != 'Create Network2' && param != 'Create Network3'  && param != 'Create Network4' && param != 'Create Network5' && param != 'Create Network6' && param != 'Create Network7' && param != 'Create Network8' && param != 'Create Network9' && param != 'Create Network10' && param != 'Create Network11' && param != 'Create Network12' && param != 'Create Network13' && param != 'Create Network14' && param != 'Create Network15' && param != 'Create Network16' && param != 'Create Network17' && param != 'Create Network18' && param != 'Create Network19' && param != 'Create Network20'"
+			 ng-if="value && param != 'scripts' && param != 'git_upload' && param != 'Create Network1' && param != 'Create Network2' && param != 'Create Network3'  && param != 'Create Network4' && param != 'Create Network5' && param != 'Create Network6' && param != 'Create Network7' && param != 'Create Network8' && param != 'Create Network9' && param != 'Create Network10' && param != 'Create Network11' && param != 'Create Network12' && param != 'Create Network13' && param != 'Create Network14' && param != 'Create Network15' && param != 'Create Network16' && param != 'Create Network17' && param != 'Create Network18' && param != 'Create Network19' && param != 'Create Network20' "
 			 ng-repeat="(param, value) in $ctrl.inputs.vim_params">
 
 		  <label for="{{ param }}">
@@ -49,7 +49,7 @@
 		
 		<div class="panel" name="expand" id="expand-{{$index}}">
 		  <div class="form-group long "
-			 ng-if="value && param != 'scripts' && param != 'git_upload'"
+			 ng-if="value && param != 'scripts' && param != 'git_upload' && param != 'numberOfDisks' && param != 'UnitNumer' && param != 'BusNumer' && param != 'BusType' && param != 'disk' && param != 'VMDK' && param != 'OsVersionVal' "
 			 ng-repeat="(param, value) in $ctrl.inputs.params[i]">
 
 		  <label for="{{ param }}">
@@ -60,7 +60,134 @@
 			<input type="text" disabled ng-model="$ctrl.inputs.params[i][param]"/>
 		  </div>
 		</div>
+		<div class="form-group"
+			 ng-if="$ctrl.inputs.params[i].numberOfDisks"
+			 >
 
+		  <label for="{{ script }}">
+			Number Of Disks
+		  </label>
+		  
+
+		  <div id="{{ script }}">
+			<input type="text" disabled ng-model="$ctrl.inputs.params[i]['numberOfDisks']"/>
+		  </div>
+		</div>
+		
+		<div  class="form-group" 
+			ng-repeat="Disk in $ctrl.inputs.params[i].disk track by $index " 
+			ng-if = "$index < $ctrl.inputs.params[i]['numberOfDisks']" >
+				<!--<div class="form-group"   >-->
+
+					<label for="{{ Disk }}">
+						Disk -{{$index}}
+					  </label>
+					  
+
+					  <div id="{{ Disk }}" >
+						<input type="text" disabled ng-model="Disk"/>
+				  </div>
+				<!--</div>-->
+		</div>
+		
+		<div  class="form-group" 
+			ng-repeat="VMDK in $ctrl.inputs.params[i].VMDK track by $index " 
+			ng-if = "$index < $ctrl.inputs.params[i]['numberOfDisks']" >
+				<!--<div class="form-group"   >-->
+
+					<label for="{{ Disk }}">
+						VMDK -{{$index}}
+					  </label>
+					  
+
+					  <div id="{{ Disk }}" >
+						<input type="text" disabled ng-model="VMDK"/>
+				  </div>
+				<!--</div>-->
+		</div>
+		<!--<span>{{$ctrl.inputs.params[i].BusType}}</span>-->
+		
+		<div  class="form-group" 
+			ng-repeat="BusType in $ctrl.inputs.params[i].BusType track by $index " 
+			ng-if = "BusType !== 'Select Bus Type'" >
+				<!--<div class="form-group"   >-->
+
+					<label for="{{ BustType }}">
+						BusType -{{$index}}
+					  </label>
+					  
+
+					  <div id="{{ script }}" >
+						<input type="text" disabled ng-model="BusType"/>
+				  </div>
+				<!--</div>-->
+		</div>
+		
+		<div  class="form-group" 
+			ng-repeat="BusNumer in $ctrl.inputs.params[i].BusNumer track by $index "
+			ng-if = "BusNumer !== 'Bus No.'" >
+				<!--<div class="form-group"   >-->
+
+					<label for="{{ BustType }}" >
+						BusNumer -{{$index}}
+					  </label>
+					  
+
+					  <div id="{{ script }}" >
+						<input type="text" disabled ng-model="BusNumer"/>
+				  </div>
+				<!--</div>-->
+		</div>
+		
+		<div  class="form-group" 
+			ng-repeat="UnitNumer in $ctrl.inputs.params[i].UnitNumer track by $index " 
+			ng-if = "UnitNumer !== 'Unit No.'" >
+				<!--<div class="form-group"   >-->
+
+					<label for="{{ BustType }}" >
+						UnitNumer -{{$index}}
+					  </label>
+					  
+
+					  <div id="{{ script }}" >
+						<input type="text" disabled ng-model="UnitNumer"/>
+				  </div>
+				<!--</div>-->
+		</div>
+		
+	         <!--div  class="form-group"
+                        ng-repeat="Osfamily in $ctrl.inputs.params[i].Osfamily track by $index "
+                        ng-if = "Osfamily !== 'Select OS family'" -->
+                                <!--<div class="form-group"   >-->
+
+                                        <!--label for="{{ Osfamily }}">
+                                                Osfamily -{{$index}}
+                                          </label>
+
+
+                                          <div id="{{ script }}" >
+                                                <input type="text" disabled ng-model="Osfamily"/>
+                                  </div-->
+                                <!--</div>-->
+                <!--/div-->
+
+                <!--div  class="form-group"
+                        ng-repeat="OsVersion in $ctrl.inputs.params[i].BusNumer track by $index "
+                        ng-if = "OsVersion !== 'OS Version'" -->
+                                <!--<div class="form-group"   >-->
+
+                                        <!--label for="{{ OsVersion }}" >
+                                                OsVersion -{{$index}}
+                                          </label>
+
+
+                                          <div id="{{ script }}" >
+                                                <input type="text" disabled ng-model="OsVersion"/>
+                                  </div-->
+                                <!--</div>-->
+                <!--/div-->
+	
+		
 		<div class="form-group"
 			 ng-if="$ctrl.inputs.params[i].scripts[script][i]"
 			 ng-repeat="script in ['create', 'config', 'delete']">

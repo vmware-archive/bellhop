@@ -75,6 +75,8 @@ module.exports = {
       'vnf_name': 'VNF Name',
       'vnfd_name': 'VNF Name',
       'image_id': 'Image',
+      'Osfamily': 'OS Family',
+      'OsVersion': 'OS Version',
       'vnf_description': 'VNF Description',
       'flavor': 'Flavor ID',
       'flavorname': 'Flavor Name',
@@ -133,6 +135,7 @@ module.exports = {
       'NetworkInterface6_name' : 'Enabled Network Interface 6',
       'NetworkInterface5_name' : 'Enabled Network Interface 5',
       'NetworkInterface6_name' : 'Enabled Network Interface 6',
+     
       'Create Network1': 'Create Network 1',
       'Create Network2': 'Create Network 2',
       'Create Network3': 'Create Network 3',
@@ -453,7 +456,7 @@ module.exports = {
       'ParentNetwork19_type' : 'ParentNetwork Type 19',
       'ParentNetwork20_type' : 'ParentNetwork Type 20',       
 
-       'Parent_Network1' : 'Parent Network  1',
+      'Parent_Network1' : 'Parent Network  1',
       'Parent_Network2' : 'Parent Network  2',
       'Parent_Network3' : 'Parent Network  3',
       'Parent_Network4' : 'Parent Network  4',
@@ -508,7 +511,7 @@ module.exports = {
       'Interfaces6_name' : 'Enabled Interface 6',
 	  
 	  
-	  'Connect_OrgVdcNetwork1': 'Connect OrgVdcNetwork 1',
+      'Connect_OrgVdcNetwork1': 'Connect OrgVdcNetwork 1',
       'Connect_OrgVdcNetwork2': 'Connect OrgVdcNetwork 2',
       'Connect_OrgVdcNetwork3': 'Connect OrgVdcNetwork 3',
       'Connect_OrgVdcNetwork4': 'Connect OrgVdcNetwork 4',
@@ -548,7 +551,30 @@ module.exports = {
       'Parent_OrgVdc_Network17': 'Parent OrgVdcNetwork 17',
       'Parent_OrgVdc_Network18': 'Parent OrgVdcNetwork 18',
       'Parent_OrgVdc_Network19': 'Parent OrgVdcNetwork 19',
-      'Parent_OrgVdc_Network20': 'Parent OrgVdcNetwork 20'
+      'Parent_OrgVdc_Network20': 'Parent OrgVdcNetwork 20',
+
+      'Create Network1': 'Create Network 1',
+      'Create Network2': 'Create Network 2',
+      'Create Network3': 'Create Network 3',
+      'Create Network4': 'Create Network 4',
+      'Create Network5': 'Create Network 5',
+      'Create Network6': 'Create Network 6',
+      'Create Network7': 'Create Network 7',
+      'Create Network8': 'Create Network 8',
+      'Create Network9': 'Create Network 9',
+      'Create Network10': 'Create Network 10',
+      'Create Network11': 'Create Network 11',
+      'Create Network12': 'Create Network 12',
+      'Create Network13': 'Create Network 13',
+      'Create Network14': 'Create Network 14',
+      'Create Network15': 'Create Network 15',
+      'Create Network16': 'Create Network 16',
+      'Create Network17': 'Create Network 17',
+      'Create Network18': 'Create Network 18',
+      'Create Network19': 'Create Network 19',
+      'Create Network20': 'Create Network 20',
+      
+      'create_mgmt_network': 'Create Mgmt Network'     
     };
       }
 };

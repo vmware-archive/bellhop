@@ -47,9 +47,22 @@ console.log(userCredentials);
             data: JSON.stringify(userCredentials)
         }).then(function successCallback(successResponse) {
             let serviceResult = successResponse.data;                       
+            //let serviceResult = successResponse;                       
+            console.log(successResponse)
+            console.log(successResponse.data)
+            //callback(serviceResult);
             callback(serviceResult);
         }, function errorCallback(errorResponse) {
-            callback(errorResponse.data);
+            console.log(errorResponse)
+            if (errorResponse.xhrStatus == "error"){
+                response = {"Status":"Error","Message":"Failed to Connect to VNF Onboarding Server. Server may be down"}
+                //errorResponse.data = JSON.stringify(response)
+                errorResponse.data = response
+                console.log(errorResponse)
+            }
+            let errorResult = errorResponse.data;
+            callback(errorResult);
+            //callback(errorResult);
         });
     };
 
@@ -63,7 +76,14 @@ this.generateNewPassword = function(useridentity,callback) {
             let serviceResult = successResponse.data;
             callback(serviceResult);
         }, function errorCallback(errorResponse) {
-            callback(errorResponse.data);
+           if (errorResponse.xhrStatus == "error"){
+             response = {"Status":"Error","Message":"Failed to Connect to VNF Onboarding Server. Server may be down"}
+             //errorResponse.data = JSON.stringify(response)
+             errorResponse.data = response
+             console.log(errorResponse)
+           }
+           let errorResult = errorResponse.data;
+           callback(errorResult);
         });
     };
 

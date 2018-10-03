@@ -47,7 +47,15 @@ console.log(this.loginObj);
             let serviceResult = successResponse.data;                       
             callback(serviceResult);
         }, function errorCallback(errorResponse) {
-            callback(errorResponse.data);
+           console.log(errorResponse)
+           if (errorResponse.xhrStatus == "error"){
+              response = {"Status":"Error","Message":"Failed to Connect to VNF Onboarding Server. Server may be down"}
+              //errorResponse.data = JSON.stringify(response)
+              errorResponse.data = response
+              console.log(errorResponse)
+           }
+           let errorResult = errorResponse.data;
+           callback(errorResult); 
         });
     };
 console.log(this.loginObj);

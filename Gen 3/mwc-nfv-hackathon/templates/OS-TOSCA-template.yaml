@@ -40,8 +40,8 @@ topology_template:
             capabilities:
                 nfv_compute:
                     properties:{% if vm.flavor == 'auto' %}
-                        mem_size: {{ vm.ram }}
-                        disk_size: {{ vm.disk }}
+                        mem_size: {{ vm.ram }}{% for x in range( vm.numberOfDisks ) %}
+                        disk_size: {{ vm.disk[loop.index0] }}{% endfor %}
                         num_cpus: {{ vm.cpu }}
                         flavor_name: {{vm.flavorname}}{% if vm.memory_reservation %}
                         mem_page_size:  PREFER_LARGE{% else %}

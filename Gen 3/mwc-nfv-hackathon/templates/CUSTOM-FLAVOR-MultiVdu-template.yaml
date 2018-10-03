@@ -26,8 +26,8 @@
 {% if vm.flavor == 'auto' %}
 flavor{{loop.index}}:
     name{{loop.index}}: {{vm.flavorname}}
-    ram{{loop.index}}: {{ vm.ram }} 
-    disk{{loop.index}}: {{ vm.disk }} 
+    ram{{loop.index}}: {{ vm.ram }}{% for x in range( vm.numberOfDisks ) %}
+    disk{{loop.index}}: {{ vm.disk[loop.index0] }}{% endfor %}
     vcpus{{loop.index}}: {{ vm.cpu }} 
     property:
         hardware:{% if vm.memory_reservation %}

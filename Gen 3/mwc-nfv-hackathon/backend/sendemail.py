@@ -48,7 +48,7 @@ def sendMail (to,subject,text):
     server = get_config_param('database.ini','Email','emailserver')
     print "sendMail:",server
     
-    _sendMail(to, fro, subject, text,server)
+    return _sendMail(to, fro, subject, text,server)
  
 
 def _sendMail(to, fro, subject, text, server="localhost"):
@@ -72,10 +72,23 @@ def _sendMail(to, fro, subject, text, server="localhost"):
     #    part.add_header('Content-Disposition', 'attachment; filename="%s"'
     #                   % os.path.basename(file))
     #    msg.attach(part)
+    status = None
+    username = get_config_param('database.ini','Email','username')
+    password = get_config_param('database.ini','Email','password')
 
-    smtp = smtplib.SMTP(server)
-    smtp.sendmail(fro, to, msg.as_string() )
-    smtp.close()
+    try:
+       smtp = smtplib.SMTP(server)
+       if username != False and password != False:
+          smtp.login(username,password)
+       smtp.sendmail(fro, to, msg.as_string() )
+       smtp.close()
+       print "send email succeeded"
+       status = True
+    except:
+        print "failed to send mail"
+        status = False
+    finally:
+       return status
 
 
 if __name__ == '__main__':
@@ -86,5 +99,6 @@ if __name__ == '__main__':
     #sendMail(['maSnun <nandkumarj@vmware.com>'],'mydevsystem',mail_text)
     #mailid = "nandkumarj@vmware.com"
     mailid = "nandakishor.joshi@capgemini.com"
-    sendMail([mailid],'mydevsystem',"debug")
+    #mailid = "abc@abcdy.com"
+    sendMail([mailid],'mydevsystem',"debugmail from vnf onboarding")
 

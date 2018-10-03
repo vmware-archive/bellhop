@@ -69,7 +69,7 @@ module.exports = {
 	this.AdvanceConfigSelected = Opt_config.AdvanceConfig;
 	console.log(this.AdvanceConfigSelected);
 	
-	this.OrchType = ['TOSCA 1.1', 'RIFT.ware 5.3', 'Cloudify 3.4','Cloudify 4.0', 'OSM 3.0'];
+	this.OrchType = ['TOSCA 1.1', 'RIFT.ware 5.3', 'Cloudify 3.4','Cloudify 4.2', 'OSM 3.0'];
     this.OrchTypeSelected = config.OrchType;
 	$scope.OrchTypeSelected = config.OrchType;
 
@@ -412,7 +412,7 @@ module.exports = {
 						$scope.upload_tosca_blueprint(JSONFile)
 					}
 					//else if($scope.VIMTypeSelected == 'vCloud Director' &&  $scope.OrchTypeSelected == 'Cloudify 3.4') {
-					else if($scope.OrchTypeSelected == 'Cloudify 3.4' || $scope.OrchTypeSelected == 'Cloudify 4.0') {	
+					else if($scope.OrchTypeSelected == 'Cloudify 3.4' || $scope.OrchTypeSelected == 'Cloudify 4.2') {	
 									
 						//var impt = myJSON1.imports[0];
 						$scope.upload_cloudify_blueprint(JSONFile)
@@ -471,7 +471,7 @@ module.exports = {
 			this.flavorname = "";
 		}
 		
-		if((this.FlavorSelected != 'auto' && ( this.VIMTypeSelected == 'OpenStack' &&  (this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.0' || this.OrchTypeSelected == 'RIFT.ware 5.3')))){
+		if((this.FlavorSelected != 'auto' && ( this.VIMTypeSelected == 'OpenStack' &&  (this.OrchTypeSelected == 'TOSCA 1.1' || this.OrchTypeSelected == 'Cloudify 3.4' || this.OrchTypeSelected == 'Cloudify 4.2' || this.OrchTypeSelected == 'RIFT.ware 5.3')))){
 			this.Disk = "";
 			this.RAMSelected = "";
 			this.vCPUSelected = "";

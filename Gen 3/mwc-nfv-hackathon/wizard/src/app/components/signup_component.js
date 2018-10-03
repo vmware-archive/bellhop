@@ -49,28 +49,30 @@ module.exports = {
 	   $scope.ConfirmPasswordEmptyError = false;
           this.setErrorVisibility(false, false);
  
-           signupService.signup($scope.username,$scope.emailid, $scope.password,$scope.confirmPassword, function (serviceResponse) {
-           
-           if (serviceResponse == "True") {
+           signupService.signup($scope.username,$scope.emailid, $scope.password,$scope.confirmPassword, function(serviceResponse){ 
+           if (serviceResponse["Status"] == "Success") {
+              
               console.log('user registered successfully');           
               console.log(serviceResponse);
               $scope.UserSignupSuccessful = true;
               $scope.LoginNewUser = true;
-              document.getElementById("signupSuccess").innerHTML = "User Registration Successful. Email containing credentials has been sent to the user. "
+              //document.getElementById("signupSuccess").innerHTML = "User Registration Successful. Email containing credentials has been sent to the user. "
+              document.getElementById("signupSuccess").innerHTML =  serviceResponse["Message"] 
               $scope.clearCredentials($scope);
            }
            else {            
 	      console.log("registration failed")
-              console.log(serviceResponse);
+              console.log(serviceResponse["Message"]);
               $scope.UserSignupError = true;
               if(($scope.username == "") ||($scope.emailid == "") ||($scope.password == "") ||($scope.confirmPassword == "") ){
                   document.getElementById("signuperror").innerHTML = "User Name is blank. Please enter valid user name.";
               }
               else{
-                  document.getElementById("signuperror").innerHTML = "User Registration Failed. Username or Emailid already exists.";
+                  document.getElementById("signuperror").innerHTML = serviceResponse["Message"];
               }
 	      $scope.clearCredentials();
           }
+         
         });
       } 
     };
