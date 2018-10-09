@@ -31,7 +31,6 @@ from email import Encoders
 from config import db_config, get_config_param
 import os
 
-
 def draft_mail_text(purpose,username,password):
     mail_text = ""
     if(purpose == "User Registration"):
@@ -43,9 +42,15 @@ def draft_mail_text(purpose,username,password):
     return mail_text
 
 def sendMail (to,subject,text):
-    fro = get_config_param('database.ini','Email','domainname')
+    fro = get_config_param('database.ini','Email','mailfrom')
+    if fro == False:
+       print "mailfrom param is not set"
+       return False
     print "sendMail",fro
     server = get_config_param('database.ini','Email','emailserver')
+    if server == False:
+       print "emailserver param is not set"
+       return False
     print "sendMail:",server
     
     return _sendMail(to, fro, subject, text,server)
@@ -53,8 +58,6 @@ def sendMail (to,subject,text):
 
 def _sendMail(to, fro, subject, text, server="localhost"):
     assert type(to)==list
-    #assert type(files)==list
-
 
     msg = MIMEMultipart()
     msg['From'] = fro
@@ -65,40 +68,75 @@ def _sendMail(to, fro, subject, text, server="localhost"):
     msg.attach( MIMEText(text) )
     print "_sendMail:msg", msg
 
-    #for file in files:
-    #    part = MIMEBase('application', "octet-stream")
-    #    part.set_payload( open(file,"rb").read() )
-    #    Encoders.encode_base64(part)
-    #    part.add_header('Content-Disposition', 'attachment; filename="%s"'
-    #                   % os.path.basename(file))
-    #    msg.attach(part)
-    status = None
+    status = False
     username = get_config_param('database.ini','Email','username')
     password = get_config_param('database.ini','Email','password')
+    port = int(get_config_param('database.ini','Email','port'))
+    if port == False:
+       print "parameter port is not set"
+       return False
 
+    smtp = None
     try:
-       smtp = smtplib.SMTP(server)
-       if username != False and password != False:
-          smtp.login(username,password)
-       smtp.sendmail(fro, to, msg.as_string() )
-       smtp.close()
-       print "send email succeeded"
-       status = True
-    except:
-        print "failed to send mail"
+      smtp = smtplib.SMTP(server,port)
+      status = True
+    except Exception as e:
+        print(e)
         status = False
     finally:
+      if status == False:
+         print "error in smtp connection"
+         return status  
+
+    try:
+       #smtp = smtplib.SMTP(server,port) 
+       #if not smtp:
+       #  print "smtp is not defined"
+       #  return 
+       print "set debug level for smtp"
+       smtp.set_debuglevel(True)
+
+       # identify yourself, and get supported features
+       smtp.ehlo()
+
+       # start tls for security 
+       if smtp.has_extn('STARTTLS'):
+          print "TLS Supported"
+          #starttls and check if it succeeded
+          if smtp.starttls()[0] == 220:
+             print "starttls succeeded"
+          #return in case starttls is supported and fails
+          else:
+            print "starttls failed"
+            status = False
+            return
+          smtp.ehlo() # re-identify ourselves over TLS connection
+       
+       if username != False and password != False:
+          smtp.login(username,password)
+       sendStatus = smtp.sendmail(fro, to, msg.as_string() )
+       print "sendStatus=",sendStatus
+       if sendStatus:
+          print "Receipient refused"
+          status = False
+          return
+       print "send email succeeded"
+       status = True
+    #except:
+    except Exception as e: 
+        print(e)
+        print "failed to send mail"
+        status = False
+        return
+    finally:
+       if smtp is not None:
+          smtp.quit()
        return status
 
 
 if __name__ == '__main__':
-    #db_check_credentials("admin","admin")
-    #db_user_signup('admin','admin', 'admin@vmware.com')
     #Example:
-    mail_text = draft_mail_text("Forget Password","kishor","kishor")
-    #sendMail(['maSnun <nandkumarj@vmware.com>'],'mydevsystem',mail_text)
-    #mailid = "nandkumarj@vmware.com"
-    mailid = "nandakishor.joshi@capgemini.com"
-    #mailid = "abc@abcdy.com"
-    sendMail([mailid],'mydevsystem',"debugmail from vnf onboarding")
+    mail_text = draft_mail_text("User Registration","dummy","dummy")
+    #mailid = "admin@xyz.com"
+    sendMail([mailid],'mydevsystem',mail_text)
 
