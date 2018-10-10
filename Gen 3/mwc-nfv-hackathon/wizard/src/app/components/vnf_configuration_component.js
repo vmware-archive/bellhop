@@ -54,6 +54,7 @@ module.exports = {
     this.FLAVOR_TOOLTIP = TOOLTIPS.FLAVOR_TOOLTIP;
     this.FLAVOR_NAME_TOOLTIP = TOOLTIPS.FLAVOR_NAME_TOOLTIP;
     this.VMDK_TOOLTIP = TOOLTIPS.VMDK_TOOLTIP;
+    this.NumDisks =[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]; 
 	
 	/*this.BusType = ['IDE','LSI Logic Parallel(SCSI)','LSI Logic SAS(SCSI)','BusLogic Parallel(SCSI)','Paravirtual','SATA'];
 	this.SCSI_BusNumber = [0,1,2,3];
@@ -167,7 +168,7 @@ module.exports = {
 	this.vCPUSelected = this.vCPU;
 	for (let c = 0; c <this.vCPU.length; c++){
 			     
-		this.vCPUSelected[c] = this.vCPU[c] || 1;	  
+		this.vCPUSelected[c] = this.vCPU[c] || '1';	  
 	}
     
     
@@ -292,6 +293,9 @@ module.exports = {
 */
 
 	this.NumDisk = config.numberOfDisks;
+         for (i = 0; i < this.numberOfVMs; i++) {
+                this.NumDisk[i] = '1';
+        }
 	
 		
 	this.BusTypeList = dataService.getBusTypeList();

@@ -2415,7 +2415,7 @@ module.exports = function ($http) {
                         OsVersion: _vnfConfiguration.OsVersion[v],
                         OsVersionVal: _vnfConfiguration.OsVersionVal[v],
 			BusType: _vnfConfiguration.BusType[v],
-			numberOfDisks: _vnfConfiguration.numberOfDisks[v],
+			numberOfDisks: parseInt( _vnfConfiguration.numberOfDisks[v]),
 			ram: _vnfConfiguration.RAM[v] * 1024,
 			numa_affinity : _epaDefinition.NumaAffinity[v],
 			memory_reservation: _epaDefinition.MemoryReservation[v],
