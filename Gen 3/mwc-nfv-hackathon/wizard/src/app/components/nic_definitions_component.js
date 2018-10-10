@@ -50,7 +50,8 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 this.VCD_OVF_INTERFACES = ['Select Type','Vmxnet3', 'E1000', 'VIRTIO','PCI-PASSTHROUGH','SR-IOV'];
 	 this.OPENSTACKINTERFACES = ['Select Type','VIRTIO','PCI-PASSTHROUGH','SR-IOV','E1000'];
          this.OPENSTACK_OSM_INTERFACES = ['Select Type','E1000','VMXNET3','PCI-PASSTHROUGH','SR-IOV','VIRTIO'];
-         this.VCD_OSM_INTERFACES = ['Select Type','E1000','VMXNET3','PCI-PASSTHROUGH','SR-IOV','VIRTIO'];
+         //this.VCD_OSM_INTERFACES = ['Select Type','E1000','E1000E','SR-IOV','VMXNET 2(Enhanced)','VMXNET3', 'unknown vNIC (VMXNET3VRDMA)'];
+         this.VCD_OSM_INTERFACES = ['Select Type','E1000','VIRTIO','SR-IOV','OM-MGMT'];
 	 this.VCD_CLOUDIFY_INTERFACES = ['Select Type','Default'];
 	 this.OPENSTACK_CLOUDIFY_INTERFACES = ['Select Type','normal','direct','macvtap'];
 	 this.OPENSTACK_HEAT_INTERFACES = ['Select Type','normal','direct','direct-physical', 'macvtap'];
@@ -183,7 +184,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		} else if (this.OrchType == 'Ovf') {
 			
 			this.possibleInterfaces = this.VCD_OVF_INTERFACES; 
-		}else if (this.OrchType == 'OSM 3.0') {
+		}else if (this.OrchType == 'OSM 3.0' || this.OrchType == 'OSM 4.0') {
 
                         this.possibleInterfaces = this.VCD_OSM_INTERFACES;
                 }else {
@@ -198,7 +199,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 			this.possibleInterfaces = this.OPENSTACK_CLOUDIFY_INTERFACES; 
 		} else if(this.OrchType == 'Heat') {
 			this.possibleInterfaces = this.OPENSTACK_HEAT_INTERFACES;
-                }else if(this.OrchType == 'OSM 3.0') {
+                }else if(this.OrchType == 'OSM 3.0' || this.OrchType == 'OSM 4.0') {
                         this.possibleInterfaces = this.OPENSTACK_OSM_INTERFACES;
 		
                 }else if(this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1') {
@@ -269,7 +270,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
        this.NICshow[this.indices[index]] = this.numberOfNICs  > index;
      }*/
 	
-	  if (this.OrchType == 'OSM 3.0' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){	
+	  if (this.OrchType == 'OSM 3.0' || this.OrchType == 'OSM 4.0' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){	
 		this.NIC_PLACEHOLDER = ['Enter Mgmt NIC','Enter NIC name','Enter NIC name','Enter NIC name','Enter NIC name','Enter NIC name'];
 		
 	 } else{

@@ -21,7 +21,6 @@
 # contact:  osslegalrouting@vmware.com
 
 ###########################################################################
-
 vnfd:vnfd-catalog:
     vnfd:
     -   id: {{ vim_params.vnfd_name }}_vnfd_id

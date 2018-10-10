@@ -520,7 +520,7 @@ module.exports = {
     };
    
     this.isOSM = function() {
-      return this.OrchTypeSelected === this.OSM_NAME;
+      return (this.OrchTypeSelected === this.OSM_NAME || this.OrchTypeSelected === 'OSM 4.0');
     };
 
    
@@ -712,7 +712,7 @@ module.exports = {
       if( isValid ) {
 		  
 		  
-		if(this.VIMTypeSelected == 'vCloud Director' || (this.VIMTypeSelected == 'OpenStack' &&  (this.OrchTypeSelected == 'OSM 3.0' || this.OrchTypeSelected == 'RIFT.ware 5.3' || this.OrchTypeSelected == 'RIFT.ware 6.1'))) {
+		if(this.VIMTypeSelected == 'vCloud Director' || (this.VIMTypeSelected == 'OpenStack' &&  (this.OrchTypeSelected == 'OSM 3.0' || this.OrchTypeSelected == 'OSM 4.0' || this.OrchTypeSelected == 'RIFT.ware 5.3' || this.OrchTypeSelected == 'RIFT.ware 6.1'))) {
 		        for (let cf = 0; cf <this.Flavor.length; cf++){
 			    if(this.Flavor[cf] == 'auto'){			
 				this.Flavor[cf] = this.Flavors[Object.keys(this.Flavors)[0]];	  

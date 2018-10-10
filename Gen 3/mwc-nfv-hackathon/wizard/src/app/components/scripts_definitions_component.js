@@ -87,7 +87,7 @@ module.exports = {
 	
 	for (i = 0; i <= this.scriptsInputsconfig.create.length -1; i++) {
 		//alert(1);
-		if (this.OrchType == 'OSM 3.0' || this.OrchType == 'Heat' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){	
+		if (this.OrchType == 'OSM 3.0' || this.OrchType == 'OSM 4.0' || this.OrchType == 'Heat' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){	
 		 
 		 console.log(this.scriptsInputsconfig['create']);
 		this.scriptsInputs[i] = {
@@ -133,7 +133,7 @@ module.exports = {
 	 
 	this.isOSM = function(){
 		
-		return this.OrchType == 'OSM 3.0'; 
+		return (this.OrchType == 'OSM 3.0' ||  this.OrchType == 'OSM 4.0'); 
 	}
 
     this.empty = function (x) {
@@ -159,7 +159,7 @@ module.exports = {
 		for (i = 0; i <= this.scriptsInputsconfig.create.length -1; i++) {
 		//alert(1);
 			
-			if (this.OrchType == 'OSM 3.0' || this.OrchType == 'Heat' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){
+			if (this.OrchType == 'OSM 3.0' || this.OrchType == 'OSM 4.0' || this.OrchType == 'Heat' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){
 				
 					create_arr.push(emptyToString(this.scriptsInputs[i]['create'].value))
 			}else{
@@ -170,7 +170,7 @@ module.exports = {
 				
 		}
 
-		if (this.OrchType == 'OSM 3.0' || this.OrchType == 'Heat'){
+		if (this.OrchType == 'OSM 3.0' || this.OrchType == 'OSM 4.0' || this.OrchType == 'Heat'){
 
 			config_final = {
 					create: create_arr			
