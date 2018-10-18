@@ -46,16 +46,16 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	  
 	 this.possibleNumbersOfNICs = [1,2,3,4,5,6,7,8,9,10];
          this.nicCnt = this.possibleNumbersOfNICs.length;
-	 this.VCDINTERFACES = ['Select Type','E1000'];
-	 this.VCD_OVF_INTERFACES = ['Select Type','Vmxnet3', 'E1000', 'VIRTIO','PCI-PASSTHROUGH','SR-IOV'];
-	 this.OPENSTACKINTERFACES = ['Select Type','VIRTIO','PCI-PASSTHROUGH','SR-IOV','E1000'];
-         this.OPENSTACK_OSM_INTERFACES = ['Select Type','E1000','OM-MGMT','PCI-PASSTHROUGH','SR-IOV','VIRTIO'];
+	 this.VCDINTERFACES = ['NIC Type','E1000'];
+	 this.VCD_OVF_INTERFACES = ['NIC Type','Vmxnet3', 'E1000', 'VIRTIO','PCI-PASSTHROUGH','SR-IOV'];
+	 this.OPENSTACKINTERFACES = ['NIC Type','VIRTIO','PCI-PASSTHROUGH','SR-IOV','E1000'];
+         this.OPENSTACK_OSM_INTERFACES = ['NIC Type','E1000','OM-MGMT','PCI-PASSTHROUGH','SR-IOV','VIRTIO'];
          //this.VCD_OSM_INTERFACES = ['Select Type','E1000','E1000E','SR-IOV','VMXNET 2(Enhanced)','VMXNET3', 'unknown vNIC (VMXNET3VRDMA)'];
-         this.VCD_OSM_INTERFACES = ['Select Type','E1000','VIRTIO','SR-IOV','OM-MGMT','PCI-PASSTHROUGH'];
-	 this.VCD_CLOUDIFY_INTERFACES = ['Select Type','Default'];
-	 this.OPENSTACK_CLOUDIFY_INTERFACES = ['Select Type','normal','direct','macvtap'];
-	 this.OPENSTACK_HEAT_INTERFACES = ['Select Type','normal','direct','direct-physical', 'macvtap'];
-         this.OPENSTACKRIFTINTERFACES = ['Select Type','VIRTIO','VMXNET3','PCI-PASSTHROUGH','SR-IOV','E1000','RTL8139','PCNET','OM-MGMT'];
+         this.VCD_OSM_INTERFACES = ['NIC Type','E1000','VIRTIO','SR-IOV','OM-MGMT','PCI-PASSTHROUGH'];
+	 this.VCD_CLOUDIFY_INTERFACES = ['NIC Type','Default'];
+	 this.OPENSTACK_CLOUDIFY_INTERFACES = ['NIC Type','normal','direct','macvtap'];
+	 this.OPENSTACK_HEAT_INTERFACES = ['NIC Type','normal','direct','direct-physical', 'macvtap'];
+         this.OPENSTACKRIFTINTERFACES = ['NIC Type','VIRTIO','VMXNET3','PCI-PASSTHROUGH','SR-IOV','E1000','RTL8139','PCNET','OM-MGMT'];
 	 
 	 
 	 const config_vnf = dataService.getVnfDefinition();
@@ -84,7 +84,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 this.Interfaces = config.Interfaces;
 	 this.NICshow = [[]];
 	 //this.NICshow[0][0] = true;
-	 this.Networks ={'Select Type':'Select Type'};
+	 this.Networks ={'Network':'Network'};
          if( this.mgmtNetwork){
 	 	this.Networks[this.mgmtNetwork] = this.mgmtNetwork;
 	 }
@@ -94,7 +94,17 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 			 this.Networks[this.netNetworks[n]]=this.netNetworks[n];
 		 }
 	 }
-	 
+
+	for (i = 0; i < this.numberOfVMs; i++) {
+		 for (let n = 0; n < this.NICs[i].length; n++){
+
+			if(!this.Networks.hasOwnProperty(this.NICs[i][n])){
+
+				this.NICs[i][n] = "";
+	    		 }
+		 }	
+
+	 }	 
 	 console.log('netNetworks');
 	 console.log(this.Networks);
 	 
@@ -277,7 +287,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 	 this.NIC_PLACEHOLDER = ['Enter NIC name','Enter NIC name','Enter NIC name','Enter NIC name','Enter NIC name','Enter NIC name'];
 	 }
      
-	 this.INTERFACE_PLACEHOLDER = "Select Type";
+	 this.INTERFACE_PLACEHOLDER = "NIC Type";
          if((this.OrchType == 'Heat' ) && (this.VIMType == 'OpenStack')){
 
               this.INTERFACE_TOOLTIP = TOOLTIPS.OS_NIC_INTERFACE_TOOLTIP;
@@ -340,10 +350,10 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	  
 		for (i = 0; i < this.numberOfVMs; i++) { 
 		    for (n = 0; n < this.numberOfNICs[i]; n++) {
-		        if(this.NICs[i][n] == 'Select Type'){
+		        if(this.NICs[i][n] == 'Network'){
 			     this.validCnt++;
 			     console.log("error nic" + i + n )
-                        }else if(this.Interfaces[i][n] == 'Select Type'){
+                        }else if(this.Interfaces[i][n] == 'NIC Type'){
 			         //console.log(InterfaceName +"|" + NetworkName)
 			         this.validCnt++;
 			         console.log("error Type" + i + n )
@@ -360,12 +370,43 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	
 //	isValid = false ;
       if( isValid ) {
-		  
+
+
+               for (i = 0; i < this.numberOfVMs; i++) {
+
+		       for (j = 0; j < this.NICs[i].length; j++) {
+
+                        	if(this.NICs[i][j] && this.numberOfNICs[i] > j){
+                                	this.NICs[i][j] = this.NICs[i][j];
+
+                        	}	
+                        	else{
+                                	this.NICs[i][j] = 'Network';
+                        	}
+
+                	}
+		}
+		 
+		for (i = 0; i < this.numberOfVMs; i++) {
+
+                       for (j = 0; j < this.Interfaces[i].length; j++) {
+
+                                if(this.Interfaces[i][j] && this.numberOfNICs[i] > j){
+                                        this.Interfaces[i][j] = this.Interfaces[i][j];
+
+                                }
+                                else{
+                                        this.Interfaces[i][j] = 'NIC Type';
+                                }
+
+                        }
+                }
+ 
 		  
 	      for (i = 0; i < this.numberOfVMs; i++) { 
 		      for (j = 0; j < this.Interfaces.length; j++) {
 			
-			      if( this.Interfaces[i][j] == 'Select Type'){
+			      if( this.Interfaces[i][j] == 'NIC Type'){
 				      this.Interfaces[i][j] = "";
 			      }
 		      }
@@ -373,7 +414,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		
 	      for (i = 0; i < this.numberOfVMs; i++) { 
 		      for (j = 0; j < this.NICs.length; j++) {
-			      if( this.NICs[i][j] == 'Select Type'){
+			      if( this.NICs[i][j] == 'Network'){
 				      this.NICs[i][j] = "";
 			      }
 		      }

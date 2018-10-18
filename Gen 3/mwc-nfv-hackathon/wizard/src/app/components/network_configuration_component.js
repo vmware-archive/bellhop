@@ -214,10 +214,10 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 }
 
          if (this.OrchType == 'OSM 3.0' || this.OrchType == 'OSM 4.0' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){ 	
-		 this.NIC_PLACEHOLDER = ['Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network', 'Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network'];
+		 this.NIC_PLACEHOLDER = ['Network Name','Network Name','Network Name','Network Name','Network Name','Network Name', 'Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name'];
 		
 	 } else{
-		 this.NIC_PLACEHOLDER = ['Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network','Enter Network'];
+		 this.NIC_PLACEHOLDER = ['Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name','Network Name'];
           if((this.OrchType == 'Cloudify 3.4' || this.OrchType == 'Cloudify 4.2') && (this.VIMType == 'OpenStack')){
 	 	 this.SUBNET_PLACEHOLDER = ['Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet','Enter Subnet'];
 	  }
@@ -225,7 +225,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
      
 	 this.INTERFACE_PLACEHOLDER = "Select Type";
 	 this.INTERFACE_TOOLTIP= TOOLTIPS.NIC_INTERFACE_TOOLTIP;
-         this.MGMT_PLACEHOLDER = "MGMT Network";
+         this.MGMT_PLACEHOLDER = "Network Name";
          this.MGMT_Subnet_PLACEHOLDER = "MGMT Subnet"
 
      angular.element(document).ready(() => {
@@ -406,7 +406,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		  
                 for (i = 0; i < this.indices.length; i++) {
 
-                        if(this.NICs[i] && this.numberOfNICs > 0){
+                        if(this.NICs[i] && this.numberOfNICs > i){
                                 this.Interfaces[i] = this.Interfaces[i];
                                 this.Subnet[i] = this.Subnet[i];
 
@@ -421,7 +421,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		 
 		for (i = 0; i < this.indices.length; i++) {
 		
-			if(this.NICs[i] && this.numberOfNICs > 0){
+			if(this.NICs[i] && this.numberOfNICs > i){
 				this.NICs[i] = this.NICs[i];
 
 			}
@@ -432,8 +432,22 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		}
 		
 		for (i = 0; i < this.indices.length; i++) {
+
+                        if((this.NICs[i] && this.numberOfNICs > i) && (this.isOSM ())){
+                                $scope.EthernetTypeSelected[i] = $scope.EthernetTypeSelected[i];
+				$scope.NetworksTypeSelected[i] = $scope.NetworksTypeSelected[i];
+                        }
+                        else{
+                                $scope.EthernetTypeSelected[i] = "ELAN";
+				$scope.NetworksTypeSelected[i] = "INTERNAL";
+                        }
+
+                }
+
 		
-			if(this.NICs[i] && this.numberOfNICs > 0){
+		for (i = 0; i < this.indices.length; i++) {
+		
+			if(this.NICs[i] && this.numberOfNICs > i){
 				
 				$scope.EthernetTypeSelected[i] = $scope.EthernetTypeSelected[i] ;
 			}
@@ -448,22 +462,90 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 			}
 			
 		}
-	
+		
+		for (i = 0; i < this.indices.length; i++) {
+
+                        if((this.NICs[i] && this.numberOfNICs > i) && (this.isVCD_Cloudify())){
+
+				$scope.ParentNetworkTypeSelected[i] = $scope.ParentNetworkTypeSelected[i] ;
+                                this.Parent_Network[i] = this.Parent_Network[i];
+                                this.Edge_Gateway[i] = this.Edge_Gateway[i];
+                                this.Netmask[i] = this.Netmask[i];
+                                this.Static_Start[i] = this.Static_Start[i];
+                                this.Static_end[i] = this.Static_end[i];
+				this.Static_Range[i] = this.Static_Range[i];
+				this.Gateway_IP[i] = this.Gateway_IP[i];
+				this.DNS1[i] = this.DNS1[i];
+				this.DNS2[i] = this.DNS2[i];
+				this.DNS_Suffix[i] = this.DNS_Suffix[i];
+				this.DHCP_Start[i] = this.DHCP_Start[i];
+				this.DHCP_End[i] = this.DHCP_End[i];
+
+                        }else {
+				$scope.ParentNetworkTypeSelected[i] = "";
+                                this.Parent_Network[i] = "" ;
+                                this.Edge_Gateway[i] = "";
+                                this.Netmask[i] = "" ;
+                                this.Static_Start[i] = "";
+                                this.Static_end[i] = "";
+				this.Static_Range[i] = "";
+				this.Gateway_IP[i] = "";
+                                this.DNS1[i] = "";
+                                this.DNS2[i] = "";
+                                this.DNS_Suffix[i] = "";
+                                this.DHCP_Start[i] = "";
+                                this.DHCP_End[i] = "";
+
+                        }
+                }
+
+
+
+
+/*	
                 for (i = 0; i < this.indices.length; i++) {
 
-                        if((this.NICs[i] && this.numberOfNICs > 0) && (this.OrchType == 'Ovf')){
+                        if((this.NICs[i] && this.numberOfNICs > i) && (this.OrchType == 'Ovf')){
 
                                 $scope.ParentNetworkTypeSelected[i] = $scope.ParentNetworkTypeSelected[i] ;
+				this.Parent_Network[i] = this.Parent_Network[i];
+				this.Edge_Gateway[i] = this.Edge_Gateway[i];
+				this.Netmask[i] = this.Netmask[i];
+				this.Static_Start[i] = this.Static_Start[i];
+				this.Static_end[i] = this.Static_end[i];
+				/* 
+					Edge_Gateway : this.Edge_Gateway,
+                 Network_Name : this.Network_Name,
+                 Static_end : this.Static_end,
+                 Static_Start : this.Static_Start,
+                 Static_Range : this.Static_Range,
+                 Netmask : this.Netmask,
+                 Gateway_IP : this.Gateway_IP,
+                 DNS1 : this.DNS1,
+                 DNS2 : this.DNS2,
+                 //DNS : this.DNS,
+                 DNS_Suffix : this.DNS_Suffix,
+                 DHCP_Start : this.DHCP_Start,
+                 DHCP_End : this.DHCP_End,
+
+ 
+
                         }
                         else
                         {
                                 $scope.ParentNetworkTypeSelected[i] = "";
+				this.Parent_Network[i] = "" ;
+                                this.Edge_Gateway[i] = "";
+                                this.Netmask[i] = "" ;
+                                this.Static_Start[i] = "";
+                                this.Static_end[i] = "";
+
 
                         }
-                }
+                } */
 	
 		for (i = 0; i < this.indices.length; i++) {
-	       		 if(this.NICs[i] && this.numberOfNICs > 0){
+	       		 if(this.NICs[i] && this.numberOfNICs > i){
 				
 				$scope.NetworksTypeSelected[i] = $scope.NetworksTypeSelected[i] ;
 			}
@@ -486,13 +568,13 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 		const config = {
                  numberOfNetworks: this.numberOfNICs,
                  Networks: this.NICs,
-				 NewNetwork: this.Interfaces,
+		 NewNetwork: this.Interfaces,
                  Subnet: this.Subnet,
                  NetworkIndices: $scope._localIndices,
                  mgmtNetwork : this.mgmtNetwork,
                  SubnetCidr : this.SubnetCidr,
                  EthernetType : $scope.EthernetTypeSelected,
-				 NetworksType : $scope.NetworksTypeSelected,
+		 NetworksType : $scope.NetworksTypeSelected,
                  mgmtNetworkEthernetType : $scope.mgmtNetworkEthernetTypeSelected,
                  create_mgmt_network : this.createMgmtNetwork,
                  Edge_Gateway : this.Edge_Gateway,
@@ -508,8 +590,8 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
                  DNS_Suffix : this.DNS_Suffix,
                  DHCP_Start : this.DHCP_Start,
                  DHCP_End : this.DHCP_End,
-				 OrgVdc_Network : this.OrgVdc_Network,
-				 OrgVdcNetwork : this.OrgVdcNetwork,
+		 OrgVdc_Network : this.OrgVdc_Network,
+		 OrgVdcNetwork : this.OrgVdcNetwork,
                  Parent_Network : this.Parent_Network,
                  ParentNetwork_Type : $scope.ParentNetworkTypeSelected
 
