@@ -76,7 +76,7 @@ module.exports = function (dataService, $state) {
 	      }
       }
 
-      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2'  ||  this.OrchType == 'TOSCA 1.1' || this.OrchType === 'Heat' || this.OrchType === 'Ovf')) {
+      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2'  ||  this.OrchType == 'TOSCA 1.1' || this.OrchType === 'Heat' || this.OrchType === 'Ovf' || this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
   
 	   /*	      if (this.currPath - 1 == 4){
 				
@@ -91,7 +91,7 @@ module.exports = function (dataService, $state) {
 				
 	      }*/
 
-	      if (this.OrchType === 'Ovf'){
+	      if (this.OrchType === 'Ovf' || ( this.VIMType === 'vCloud Director' && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0'))){
                         if (this.currPath - 1 == 5){
                                 this.currPath = this.currPath - 1 ;
                         }
@@ -135,7 +135,7 @@ module.exports = function (dataService, $state) {
 	      }
       }
 
-      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType == 'TOSCA 1.1' || this.OrchType === 'Cloudify 4.2'  || this.OrchType === 'Heat' || this.OrchType === 'Ovf')) {
+      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType == 'TOSCA 1.1' || this.OrchType === 'Cloudify 4.2'  || this.OrchType === 'Heat' || this.OrchType === 'Ovf' || this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
   
 	   /*   if (this.currPath + 1 == 4){
 //               alert("I am here");
@@ -146,7 +146,7 @@ module.exports = function (dataService, $state) {
 				}
 	      } */
 
-	      if (this.OrchType === 'Ovf'){  
+	      if (this.OrchType === 'Ovf' || ( this.VIMType === 'vCloud Director' && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0'))){  
 			if (this.currPath + 1 == 5){
                 this.currPath = this.currPath + 1 ;
             }
@@ -280,7 +280,7 @@ module.exports = function (dataService, $state) {
       this.VIMType = config_data.VIMType;
       this.OrchType = config_data.OrchType;
       
-      if (this.VIMType === 'vCloud Director'&& this.OrchType === 'Ovf') {
+      if (this.VIMType === 'vCloud Director'&& (this.OrchType === 'Ovf' || this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
 	      return true;
       }
       return false;

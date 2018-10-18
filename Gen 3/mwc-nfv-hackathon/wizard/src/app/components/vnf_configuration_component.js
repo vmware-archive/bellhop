@@ -294,7 +294,7 @@ module.exports = {
 
 	this.NumDisk = config.numberOfDisks;
          for (i = 0; i < this.numberOfVMs; i++) {
-                this.NumDisk[i] = '1';
+                this.NumDisk[i] =  this.NumDisk[i] || '1';
         }
 	
 		
@@ -620,7 +620,7 @@ module.exports = {
 
       var isValid = this.forms.vnfDefinitionForm.$valid;
 	  //alert(isValid)
-	 // isValid = true;
+	  isValid = true;
 	  
 	  this.validCnt = 0 ;
 	  for (i = 0; i < this.numberOfVMs; i++) {
@@ -642,41 +642,25 @@ module.exports = {
 		 if(this.OrchTypeSelected == 'Ovf'){
 			 
 			 for (let d = 0; d < this.NumDisk[i]; d++){
-					 
+
 				 
-					if ((typeof this.Disk[i][d] == 'undefined') || (this.Disk[i][d] =="") || (this.Disk[i][d] == 0)|| isNaN(this.Disk[i][d]))
-					{
-						this.validCnt++;
-					}else if ((typeof this.VMDK[i][d] == 'undefined') || (this.VMDK[i][d] =="") || (this.VMDK[i][d] == 0)){
+			     if ((typeof this.Disk[i][d] == 'undefined') || (this.Disk[i][d] =="") || (this.Disk[i][d] == 0)|| isNaN(this.Disk[i][d]))
+			     {
+				     this.validCnt++;
+			     }else if ((typeof this.VMDK[i][d] == 'undefined') || (this.VMDK[i][d] =="") || (this.VMDK[i][d] == 0)){
+				     this.validCnt++;
+			     }else if((typeof this.BusTypeSelected[i][d] == 'undefined') || (this.BusTypeSelected[i][d] == "") || (this.BusTypeSelected[i][d] === 'Select Bus Type')){ 
+				     this.validCnt++
 						
-						this.validCnt++;
-					}else if((typeof this.BusTypeSelected[i][d] == 'undefined') || (this.BusTypeSelected[i][d] == "") || (this.BusTypeSelected[i][d] === 'Select Bus Type')){ 
-						//if((this.BusTypeSelected[i][nd] !== 'LSI Logic Parallel(SCSI)' || this.BusTypeSelected[i][nd] =='LSI Logic SAS(SCSI)' || this.BusTypeSelected[i][nd] =='BusLogic Parallel(SCSI)' || this.BusTypeSelected[i][nd] =='Paravirtual' || this.BusTypeSelected[i][nd] === 'SATA' || this.BusTypeSelected[i][nd] === 'IDE')){ 
-						//if((typeof this.BusTypeSelected[i][d] == 'undefined') || (this.BusTypeSelected[i][nd] == "") || (this.BusTypeSelected[i][nd] === 'Select Bus Type')){
-						//alert(this.BusTypeSelected[i][d]);
-						//alert(this.BusNumerSelected[i][d]);
-						//alert(this.UnitNumerSelected[i][d]);
-						this.validCnt++
+			     }else if((typeof this.BusNumerSelected[i][d] == 'undefined') || (this.BusNumerSelected[i][d] =="") || this.BusNumerSelected[i][d] === 'Bus No.'){
 						
-					}else if((typeof this.BusNumerSelected[i][d] == 'undefined') || (this.BusNumerSelected[i][d] =="") || this.BusNumerSelected[i][d] === 'Bus No.'){
+				     this.validCnt++
 						
-						this.validCnt++
+			     }else if((typeof this.UnitNumerSelected[i][d] == 'undefined') || this.UnitNumerSelected[i][d] =="" || this.UnitNumerSelected[i][d] ==='Unit No.'){
 						
-					}else if((typeof this.UnitNumerSelected[i][d] == 'undefined') || this.UnitNumerSelected[i][d] =="" || this.UnitNumerSelected[i][d] ==='Unit No.'){
+				     this.validCnt++
 						
-						this.validCnt++
-						
-					}
-//else if((typeof this.OsfamilySelected[i][d] == 'undefined') || (this.OsfamilySelected[i][d] =="") || this.OsfamilySelected[i][d] === 'OS Family'){
-
-  //                                              this.validCnt++
-
-                                       /* }else if((typeof this.OsVersionSelected[i][d] == 'undefined') || (this.OsVersionSelected[i][d] =="") || (this.OsVersionSelected[i][d] ==='OS Version')){
-
-                                                this.validCnt++
-
-                                        }*/
-					
+			     }
 				
 			}
 			 
@@ -687,14 +671,13 @@ module.exports = {
 			 for (let d = 0; d < this.NumDisk[i]; d++){
 					 
 				 
-					if ((typeof this.Disk[i][d] == 'undefined') || (this.Disk[i][d] =="") || (this.Disk[i][d] == 0)|| isNaN(this.Disk[i][d]))
-					{
-						this.validCnt++;
-					}
+	           		 if ((typeof this.Disk[i][d] == 'undefined') || (this.Disk[i][d] =="") || (this.Disk[i][d] == 0)|| isNaN(this.Disk[i][d]))
+				 {
+					 this.validCnt++;
+				 }
 					
 				
 			}
-			 
 		 }		  
 				
 		
@@ -712,7 +695,7 @@ module.exports = {
 	  console.log(this.validCnt);
 	  
 	  console.log("M ahe");
-	  isValid = true;
+	 // isValid = true;
       if( isValid ) {
 		  
 		  
