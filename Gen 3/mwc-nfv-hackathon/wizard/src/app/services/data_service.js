@@ -77,7 +77,7 @@ module.exports = function ($http) {
 	  
    _vnfDefinition = {
       VIMType: 'vCloud Director',
-      OrchType: 'OSM 3.0',
+      OrchType: 'OSM 4.0',
       OType: 'T.1',
       VNFType: 'vRouter',
       VNFDescription: '',
@@ -111,7 +111,7 @@ module.exports = function ($http) {
                         211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,
                         241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,
                         271,272,273,274,275,276,277,278,279,280,281,282,283,284],
-	  numberOfDisks: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+	  numberOfDisks: ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
 				 a  :[ 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 					  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 					  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -1744,7 +1744,7 @@ module.exports = function ($http) {
     _nicDefinition = {
       numberOfNICs: ['', '', '', '', '','','', '', '', '', '','','', '', '', '', '','','',''],
       NICs: [['', '', '', '', '',''], ['', '', '', '', '',''], ['', '', '', '', '',''], ['', '', '', '', '',''], ['', '', '', '', '',''],['', '', '', '', '',''],['', '', '', '', '',''], ['', '', '', '', '',''], ['', '', '', '', '',''], ['', '', '', '', '',''], ['', '', '', '', '',''],['', '', '', '', '',''],['', '', '', '', '',''], ['', '', '', '', '',''], ['', '', '', '', '',''], ['', '', '', '', '',''], ['', '', '', '', '',''],['', '', '', '', '',''],['', '', '', '', '',''],['', '', '', '', '','']],
-	  Interfaces:[['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'], ['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'], ['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'], ['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'], ['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'],['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'],['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'], ['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'], ['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'], ['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'], ['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'],['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'],['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'], ['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'], ['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'], ['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'], ['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'],['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'],['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type'],['Select Type', 'Select Type', 'Select Type', 'Select Type', 'Select Type','Select Type']],
+	  Interfaces:[['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'], ['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'], ['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'], ['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'], ['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'],['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'],['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'], ['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'], ['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'], ['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'], ['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'],['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'],['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'], ['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'], ['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'], ['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'], ['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'],['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'],['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type'],['NIC Type', 'NIC Type', 'NIC Type', 'NIC Type', 'NIC Type','NIC Type']],
       NICsIndices: [0, 1, 2, 3, 4, 5,6,7,8,9]
     };
    

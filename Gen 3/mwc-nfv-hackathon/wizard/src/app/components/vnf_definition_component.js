@@ -35,7 +35,7 @@ module.exports = {
     this.OPENSTACK_NAME = 'OpenStack';
     this.CUSTOM_FLAVOR = "auto"; 
     this.TOSCA_NAME = "TOSCA 1.1"; 
-    this.OSM_NAME = 'OSM 3.0';
+    this.OSM_NAME = 'OSM 4.0';
     this.RIFT_NAME = 'RIFT.ware 5.3';
     this.OPERATION_TYPE = 'Upload Blueprint' 
     this.DISABLED_FORM_GROUP = 'form-group disabled';
@@ -56,13 +56,13 @@ module.exports = {
 
     this.VIMType = ['vCloud Director', 'OpenStack'];
     this.VIMTypeSelected = config.VIMType;
+    this.PreviousVim = config.VIMType; 	
 	
 	
-	
-    this.OrchType = ['OSM 3.0', 'OSM 4.0', 'Cloudify 3.4', 'Cloudify 4.2', 'TOSCA 1.1', 'Heat', 'RIFT.ware 5.3','RIFT.ware 6.1'];
+    this.OrchType = ['OSM 4.0', 'OSM 3.0', 'Cloudify 4.2', 'Cloudify 3.4', 'TOSCA 1.1', 'Heat', 'RIFT.ware 6.1','RIFT.ware 5.3'];
     //this.OrchType = ['OSM 3.0', 'Cloudify 3.4', 'Cloudify 4.2', 'TOSCA 1.1', 'Heat', 'RIFT.ware 5.3','RIFT.ware 6.1'];
     this.OrchTypeSelected = config.OrchType;
-    this.OrchTypeSelected = config.OrchType;
+    this.PreviousOrch = config.OrchType;
 
 	
     this.VNFDname = config.VNFDname; 
@@ -122,6 +122,15 @@ module.exports = {
         }
 	
 	if(isValid){	
+
+
+	if ( this.PreviousVim != this.VIMTypeSelected ||  this.PreviousOrch != this.OrchTypeSelected) {
+
+                dataService.populateData();
+
+        }
+	
+
 	var vnf_config = {
           VIMType: this.VIMTypeSelected,
           OrchType: this.OrchTypeSelected,
