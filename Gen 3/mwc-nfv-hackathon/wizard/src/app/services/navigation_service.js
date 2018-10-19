@@ -101,7 +101,12 @@ module.exports = function (dataService, $state) {
 			
 			  this.currPath = this.currPath ;
 			
-	    }else {
+	 }else if (this.currPath - 1 == 4 && (this.VIMType === 'OpenStack'  && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0'))){
+                        //alert("I")
+
+                          this.currPath = this.currPath ;
+
+             }else {
 
                         if (this.currPath - 1 == 4){
                                 this.currPath = this.currPath - 1 ;
@@ -156,7 +161,12 @@ module.exports = function (dataService, $state) {
 			
 			  this.currPath = this.currPath ;
 			
-	      }else {
+	      }else if (this.currPath + 1 == 4 && (this.VIMType === 'OpenStack'  && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0'))){
+                        //alert("I")
+
+                          this.currPath = this.currPath ;
+
+             }else {
 
 			if (this.currPath + 1 == 4){
 				this.currPath = this.currPath + 1 ;
