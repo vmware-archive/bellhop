@@ -63,7 +63,7 @@ then
    mkdir $blueprint_folder 
    mkdir $blueprint_folder/TOSCA
    cd $blueprint_folder/TOSCA 
-elif [ "$4" = "OSM 3.0" ]
+elif [ "$4" = "OSM 3.0" ] || [ "$4" = "OSM 4.0" ]
 then
    mkdir $blueprint_folder 
    mkdir $blueprint_folder/OSM
