@@ -53,7 +53,7 @@ vnfd:vnfd-catalog:
                 storage-gb: {{ vm.disk[loop.index0] }}{% endfor %}{% if vm.cloud_init_file %}
             cloud-init-file: {{ vm.cloud_init_file }} {% endif %}
             guest-epa: {% if vm.memory_reservation %}
-                mempage-size: PREFER_LARGE{% else %}
+                mempage-size: LARGE{% else %}
                 mempage-size: SMALL{% endif %} {% if vm.latency_sensitivity %}
                 cpu-pinning-policy: DEDICATED{% else %}
                 cpu-pinning-policy: ANY {% endif %}{% if vm.numa_affinity %}
@@ -129,7 +129,7 @@ vnfd:vnfd-catalog:
                 virtual-interface:
                     type: {{ vm.Interfaces10_name }}{% endif %}{% if vm.nic10_type == "EXTERNAL"  %}
                 external-connection-point-ref: {{ vm.nic10_cp }}_cp{% elif vm.nic10_type == "INTERNAL" %}
-                internal-connection-point-ref: {{ vm.nic10_cp }}_internal_cp {% endif %}{% if vim_params.Nics_Internal %}
+                internal-connection-point-ref: {{ vm.nic10_cp }}_internal_cp {% endif %}{% if vm.Internal_Connection_Points %}
             internal-connection-point:{% for ICP in vm.Internal_Connection_Points %}
             -   id: {{ ICP }}_internal_cp
                 name: {{ ICP }}_internal_cp

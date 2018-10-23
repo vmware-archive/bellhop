@@ -38,7 +38,7 @@ nsd:nsd-catalog:
             name: {{ ext_net }}_net {% endif %}{% if vim_params.NeworOldNetwork.get(ext_net) == false %}
             vim-network-name: {{ ext_net }}{% endif %}
             type: {{ vim_params.NetEtherNetType.get(ext_net) }}
-            vnfd-connection-point-ref:
+            vnfd-connection-point-ref:{% for cp in vim_params.Nics_External_cp.get(ext_net) %}
             -   member-vnf-index-ref: '1'
-                vnfd-id-ref: {{ vim_params.vnfd_name }}_vnfd_id {% for cp in vim_params.Nics_External_cp.get(ext_net) %}
+                vnfd-id-ref: {{ vim_params.vnfd_name }}_vnfd_id
                 vnfd-connection-point-ref: {{ cp }}_cp {% endfor %} {% endfor %}
