@@ -55,7 +55,7 @@ require('imports-loader?$=>jQuery!jquery-ui-sortable-npm');
 	 this.VCD_CLOUDIFY_INTERFACES = ['NIC Type','Default'];
 	 this.OPENSTACK_CLOUDIFY_INTERFACES = ['NIC Type','normal','direct','macvtap'];
 	 this.OPENSTACK_HEAT_INTERFACES = ['NIC Type','normal','direct','direct-physical', 'macvtap'];
-         this.OPENSTACKRIFTINTERFACES = ['NIC Type','VIRTIO','VMXNET3','PCI-PASSTHROUGH','SR-IOV','E1000','RTL8139','PCNET','OM-MGMT'];
+         this.OPENSTACKRIFTINTERFACES = ['NIC Type','VIRTIO','VMXNET3','SR-IOV','E1000'];
 	 
 	 
 	 const config_vnf = dataService.getVnfDefinition();
