@@ -26,23 +26,22 @@ module.exports = function (dataService, $state) {
     "ngInject";
 
     this.currPath = 0;
-	this.state_path;
-    //var config_data = dataService.getVnfDefinition();
+    this.state_path;
     this.VIMType = "";
     this.OrchType = "";
     this.changeRoute = function( pathId ) {
-      this.currPath = pathId;
-      this.updatePath()
+    this.currPath = pathId;
+    this.updatePath()
     };
 	    this.links = [
-     		 {name: 'VNF definitions', href: 'wizard.vnfdef', button:'Continue'},
-	 	 {name: 'Network Configurations', href: 'wizard.netconfig', button:'Continue'},
-	         {name: 'VNF Configurations', href: 'wizard.vnfconfig', button:'Continue'},
-	         {name: 'NIC Definitions', href: 'wizard.nic_definitions', button: 'Continue'},
-    	 	 {name: 'EPA Configurations', href: 'wizard.epa_configurations', button: 'Continue'},
-		 {name: 'Scripts', href: 'wizard.scripts', button: 'Continue'},
-		 {name: 'Summary', href: 'wizard.summary', button: 'Generate'},
-		 {name: 'Generate', href: 'wizard.generate', button: 'Create new'}
+            {name: 'VNF definitions', href: 'wizard.vnfdef', button:'Continue'},
+            {name: 'Network Configurations', href: 'wizard.netconfig', button:'Continue'},
+            {name: 'VNF Configurations', href: 'wizard.vnfconfig', button:'Continue'},
+            {name: 'NIC Definitions', href: 'wizard.nic_definitions', button: 'Continue'},
+            {name: 'EPA Configurations', href: 'wizard.epa_configurations', button: 'Continue'},
+		    {name: 'Scripts', href: 'wizard.scripts', button: 'Continue'},
+		    {name: 'Summary', href: 'wizard.summary', button: 'Generate'},
+		    {name: 'Generate', href: 'wizard.generate', button: 'Create new'}
 	    ];
 
 	this.epas = [
@@ -60,238 +59,188 @@ module.exports = function (dataService, $state) {
     ];
 	
     this.prevPath = function(){
-      dataService.update();
-//      alert(this.currPath);
-      var config_data = dataService.getVnfDefinition();
-      var vnf_config =  dataService.getVnfConfiguration();
-      this.flavor = vnf_config.Flavor ;
-      this.VIMType = config_data.VIMType;
-      this.OrchType = config_data.OrchType;
-      this.customFlavor = 0;
-      if (this.VIMType === 'OpenStack' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'Heat')) {
-	      for(f=0; f< this.flavor.length; f++){	
-		      if(this.flavor[f] == 'auto'){
-			      this.customFlavor ++ ;      
-		      }
-	      }
-      }
+        dataService.update();
+        var config_data = dataService.getVnfDefinition();
+        var vnf_config =  dataService.getVnfConfiguration();
+        this.flavor = vnf_config.Flavor ;
+        this.VIMType = config_data.VIMType;
+        this.OrchType = config_data.OrchType;
+        this.customFlavor = 0;
+        if (this.VIMType === 'OpenStack' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'Heat')) {
+            for(f=0; f< this.flavor.length; f++){	
+                if(this.flavor[f] == 'auto'){
+                    this.customFlavor ++ ;      
+                }
+            }
+        }
 
-      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2'  ||  this.OrchType == 'TOSCA 1.1' || this.OrchType === 'Heat' || this.OrchType === 'Ovf' || this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
+        if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2'  ||  this.OrchType == 'TOSCA 1.1' || this.OrchType === 'Heat' || this.OrchType === 'Ovf' || this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
   
-	   /*	      if (this.currPath - 1 == 4){
-				
-				this.currPath = this.currPath - 1 ;
-				
-	      }
-		  
-		  if (this.currPath - 2 == 4){
-				if (this.OrchType === 'Ovf'){
-					this.currPath = this.currPath - 2 ;
-				}
-				
-	      }*/
+            if (this.OrchType === 'Ovf' || ( this.VIMType === 'vCloud Director' && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0'))){
+                if (this.currPath - 1 == 5){
+                    this.currPath = this.currPath - 1 ;
+                }
 
-	      if (this.OrchType === 'Ovf' || ( this.VIMType === 'vCloud Director' && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0'))){
-                        if (this.currPath - 1 == 5){
-                                this.currPath = this.currPath - 1 ;
-                        }
-
-         }else if (this.VIMType === 'vCloud Director'  && this.OrchType == 'TOSCA 1.1' ){
-			//alert("I")
+            }else if (this.VIMType === 'vCloud Director'  && this.OrchType == 'TOSCA 1.1' ){
 			
-			  this.currPath = this.currPath ;
+                this.currPath = this.currPath ;
 			
-	 }else if (this.currPath - 1 == 4 && (this.VIMType === 'OpenStack'  && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0'))){
-                        //alert("I")
+            }else if (this.currPath - 1 == 4 && (this.VIMType === 'OpenStack'  && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0'))){
 
-                          this.currPath = this.currPath ;
+                this.currPath = this.currPath ;
 
-             }else {
+            }else {
 
-                        if (this.currPath - 1 == 4){
-                                this.currPath = this.currPath - 1 ;
-                        }
-               }
+                if (this.currPath - 1 == 4){
+                    this.currPath = this.currPath - 1 ;
+                }
+            }
 
-      }
+        }
 
-      
-      this.currPath = this.currPath - 1;
-      this.updatePath()
+        this.currPath = this.currPath - 1;
+        this.updatePath()
     };
 
     this.nextPath = function() {
- //     alert(this.currPath);
-      /*var config_data = dataService.getVnfDefinition();
-      this.VIMType = config_data.VIMType;
-       this.OrchType = config_data.OrchType;
-*/
-      var config_data = dataService.getVnfDefinition();
-      var vnf_config =  dataService.getVnfConfiguration();
-      this.flavor = vnf_config.Flavor ;
-      this.VIMType = config_data.VIMType;
-      this.OrchType = config_data.OrchType;
-      this.customFlavor = 0;
-      if (this.VIMType === 'OpenStack' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'Heat')) {
-	      for(f=0; f< this.flavor.length; f++){	
-		      if(this.flavor[f] == 'auto'){
-			      this.customFlavor ++ ;      
-		      }
-	      }
-      }
-
-      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType == 'TOSCA 1.1' || this.OrchType === 'Cloudify 4.2'  || this.OrchType === 'Heat' || this.OrchType === 'Ovf' || this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
-  
-	   /*   if (this.currPath + 1 == 4){
-//               alert("I am here");
-				if (this.OrchType === 'Ovf'){
-					this.currPath = this.currPath + 2 ;
-				}else{
-					this.currPath = this.currPath + 1 ;
-				}
-	      } */
-
-	      if (this.OrchType === 'Ovf' || ( this.VIMType === 'vCloud Director' && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0'))){  
-			if (this.currPath + 1 == 5){
-                this.currPath = this.currPath + 1 ;
+        var config_data = dataService.getVnfDefinition();
+        var vnf_config =  dataService.getVnfConfiguration();
+        this.flavor = vnf_config.Flavor ;
+        this.VIMType = config_data.VIMType;
+        this.OrchType = config_data.OrchType;
+        this.customFlavor = 0;
+        if (this.VIMType === 'OpenStack' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'Heat')) {
+            for(f=0; f< this.flavor.length; f++){	
+                if(this.flavor[f] == 'auto'){
+                    this.customFlavor ++ ;      
+                }
             }
-
-	      }else if (this.VIMType === 'vCloud Director'  && this.OrchType == 'TOSCA 1.1' ){
-			//alert("I")
-			
-			  this.currPath = this.currPath ;
-			
-	      }else if (this.currPath + 1 == 4 && (this.VIMType === 'OpenStack'  && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0'))){
-                        //alert("I")
-
-                          this.currPath = this.currPath ;
-
-             }else {
-
-			if (this.currPath + 1 == 4){
-				this.currPath = this.currPath + 1 ;
-			}
-	       }
-      }
-      if( dataService.update() ) {
-        if (this.currPath + 1 === this.links.length) {
-          this.currPath = 0;
-          dataService.populateData();
-        } else {
-          this.currPath = this.currPath + 1;
         }
 
-        this.updatePath()
-      }
+        if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType == 'TOSCA 1.1' || this.OrchType === 'Cloudify 4.2'  || this.OrchType === 'Heat' || this.OrchType === 'Ovf' || this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
+            if (this.OrchType === 'Ovf' || ( this.VIMType === 'vCloud Director' && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0'))){  
+                if (this.currPath + 1 == 5){
+                    this.currPath = this.currPath + 1 ;
+                }
+
+            }else if (this.VIMType === 'vCloud Director'  && this.OrchType == 'TOSCA 1.1' ){
+                //alert("I")
+
+                this.currPath = this.currPath ;
+
+            }else if (this.currPath + 1 == 4 && (this.VIMType === 'OpenStack'  && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0'))){
+                //alert("I")
+
+                this.currPath = this.currPath ;
+
+            }else {
+
+                if (this.currPath + 1 == 4){
+                    this.currPath = this.currPath + 1 ;
+                }
+            }
+        }
+        if( dataService.update() ) {
+            if (this.currPath + 1 === this.links.length) {
+                this.currPath = 0;
+                dataService.populateData();
+            } else {
+                this.currPath = this.currPath + 1;
+            }
+
+            this.updatePath()
+        }
     };
 
     this.updatePath = function()  {
+        if (this.currPath === 4){
+            this.state_path = this.selectepa();
+        }else { 
+            this.state_path = this.links[this.currPath].href;
+        }
 
-     // alert(this.links[this.currPath].href);
-      //alert(this.currPath);
-	  //var num = 3 
-	  //alert(num);
-	  if (this.currPath === 4){
-		  
-		  //alert("inside select epa");
-		  this.state_path = this.selectepa();
-	  }else { 
-	     //alert("inside normal");
-	      this.state_path = this.links[this.currPath].href;
-	  }
-	  
-	  //alert(this.state_path);
-      //$state.go(this.links[this.currPath].href);
-      $state.go(this.state_path);
+        $state.go(this.state_path);
     }
-	
-	this.selectepa = function() {
-		
-	   var config_data = dataService.getVnfDefinition();
-	   var path;
-       this.VIMType = config_data.VIMType;
-       this.OrchType = config_data.OrchType;	
-       //VIMType = ['vCloud Director', 'OpenStack'];
-       //OrchType = ['TOSCA 1.1', 'Cloudify 3.4', 'OSM 3.0'];	
-       //alert('I am in')	   ;
-	    //alert(this.VIMType);
-		//alert(this.OrchType);
-	   if (this.VIMType === 'vCloud Director' && this.OrchType === 'TOSCA 1.1') {
-		   
-		   path = this.epas[0].href;
-		   		   
-	   }else if (this.VIMType === 'vCloud Director' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2')) {
-		   
-		   path = this.epas[1].href;
-		   
-	   }else if (this.VIMType === 'vCloud Director' && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
-		   
-		   path = this.epas[2].href;
-		   
-	   }else if (this.VIMType === 'vCloud Director' && this.OrchType === 'RIFT.ware 5.3') {
-		  
-		   //alert();
-		   path = this.epas[3].href;
-		   
-	   }else if (this.VIMType === 'vCloud Director' && this.OrchType === 'Ovf') {
 
-                   //alert();
-                   path = this.epas[4].href;
+    this.selectepa = function() {
 
-           }else if (this.VIMType === 'OpenStack' && this.OrchType === 'TOSCA 1.1') {
-		   
-		   path = this.epas[5].href;
-		   
-	   }else if (this.VIMType === 'OpenStack' && (this.OrchType === 'Cloudify 3.4' ||this.OrchType === 'Cloudify 4.2')) {
-		   
-		   path = this.epas[6].href;
-		   
-	   }else if (this.VIMType === 'OpenStack' && (this.OrchType === 'Heat')) {
-		   
-		   path = this.epas[7].href;
-		   
-	   }else if (this.VIMType === 'OpenStack' && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
-		   
-		   path = this.epas[8].href;
-		   
+        var config_data = dataService.getVnfDefinition();
+        var path;
+        this.VIMType = config_data.VIMType;
+        this.OrchType = config_data.OrchType;	
+        if (this.VIMType === 'vCloud Director' && this.OrchType === 'TOSCA 1.1') {
+
+            path = this.epas[0].href;
+
+        }else if (this.VIMType === 'vCloud Director' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2')) {
+
+            path = this.epas[1].href;
+
+        }else if (this.VIMType === 'vCloud Director' && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
+
+            path = this.epas[2].href;
+
+        }else if (this.VIMType === 'vCloud Director' && this.OrchType === 'RIFT.ware 5.3') {
+
+            path = this.epas[3].href;
+
+        }else if (this.VIMType === 'vCloud Director' && this.OrchType === 'Ovf') {
+
+            path = this.epas[4].href;
+
+        }else if (this.VIMType === 'OpenStack' && this.OrchType === 'TOSCA 1.1') {
+
+            path = this.epas[5].href;
+
+        }else if (this.VIMType === 'OpenStack' && (this.OrchType === 'Cloudify 3.4' ||this.OrchType === 'Cloudify 4.2')) {
+
+            path = this.epas[6].href;
+
+        }else if (this.VIMType === 'OpenStack' && (this.OrchType === 'Heat')) {
+
+            path = this.epas[7].href;
+
+        }else if (this.VIMType === 'OpenStack' && (this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
+
+            path = this.epas[8].href;
+
 	   }else if (this.VIMType === 'OpenStack' && (this.OrchType === 'RIFT.ware 5.3' || this.OrchType === 'RIFT.ware 6.1')) {
-		   //alert();
+
 		   path = this.epas[9].href;
 		   
 	   }
 	   
-	   //alert(path);
-	   return path ;
+        return path ;
 				
 	}
 
    this.IsEpaDisable = function(){
-      var config_data = dataService.getVnfDefinition();
-      var vnf_config =  dataService.getVnfConfiguration();
-      this.flavor = vnf_config.Flavor ;
-      this.VIMType = config_data.VIMType;
-      this.OrchType = config_data.OrchType;
-      this.customFlavour = 0;
-      if (this.VIMType === 'OpenStack' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'Heat')) {
-	      for(f=0; f< this.flavor.length; f++){	
-		      if(this.flavor[f] == 'auto'){
-			      this.customFlavor ++ ;      
-		      }
-	      }
-      }
-      if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'Heat' || this.OrchType === 'Ovf1')) {
-	      return true;
-      }
-      return false;
+       var config_data = dataService.getVnfDefinition();
+       var vnf_config =  dataService.getVnfConfiguration();
+       this.flavor = vnf_config.Flavor ;
+       this.VIMType = config_data.VIMType;
+       this.OrchType = config_data.OrchType;
+       this.customFlavour = 0;
+       if (this.VIMType === 'OpenStack' && ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'Heat')) {
+           for(f=0; f< this.flavor.length; f++){	
+               if(this.flavor[f] == 'auto'){
+                   this.customFlavor ++ ;      
+               }
+           }
+       }
+       if ((this.VIMType === 'vCloud Director' || !this.customFlavor )&& ( this.OrchType === 'Cloudify 3.4' || this.OrchType === 'Cloudify 4.2' || this.OrchType == 'TOSCA 1.1' ||  this.OrchType === 'Heat' || this.OrchType === 'Ovf1')) {
+           return true;
+       }
+       return false;
    }
-   
+
    this.IsScriptDisable = function(){
-      var config_data = dataService.getVnfDefinition();
-      this.VIMType = config_data.VIMType;
-      this.OrchType = config_data.OrchType;
-      
-      if (this.VIMType === 'vCloud Director'&& (this.OrchType === 'Ovf' || this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
-	      return true;
+       var config_data = dataService.getVnfDefinition();
+       this.VIMType = config_data.VIMType;
+       this.OrchType = config_data.OrchType;
+
+       if (this.VIMType === 'vCloud Director'&& (this.OrchType === 'Ovf' || this.OrchType === 'OSM 3.0' || this.OrchType === 'OSM 4.0')) {
+           return true;
       }
       return false;
    }

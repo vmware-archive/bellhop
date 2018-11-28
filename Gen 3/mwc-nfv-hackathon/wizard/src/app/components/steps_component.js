@@ -25,14 +25,13 @@
 module.exports = {
   template: require('../templates/wizard.html'),
   controller: function (navigationService,authService,dataService) {
-    "ngInject";
+      "ngInject";
 
-    this.navigationService = navigationService;
-    this.authService = authService;
-    const vm_config = dataService.getVnfDefinition();
-    this.VIMType = vm_config.VIMType
-    this.OrchType = vm_config.OrchType
-
+      this.navigationService = navigationService;
+      this.authService = authService;
+      const vm_config = dataService.getVnfDefinition();
+      this.VIMType = vm_config.VIMType
+      this.OrchType = vm_config.OrchType
   }
 };
 

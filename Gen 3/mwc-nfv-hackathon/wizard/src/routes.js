@@ -25,7 +25,6 @@
 module.exports = function routesConfig($stateProvider, $urlRouterProvider, $locationProvider) {
   "ngInject";
 
-  //$locationProvider.html5Mode(true).hashPrefix('!');
   $urlRouterProvider.otherwise('/');
 
   $stateProvider
@@ -352,7 +351,5 @@ module.exports = function routesConfig($stateProvider, $urlRouterProvider, $loca
       }
     });
 
-
-  //$urlRouterProvider.otherwise('/w/vnf');
   $urlRouterProvider.otherwise('/login');
 };

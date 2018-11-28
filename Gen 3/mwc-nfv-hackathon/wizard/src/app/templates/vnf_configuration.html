@@ -46,18 +46,7 @@
 		
 		<div class="panel" name="expand" id="expand-{{$index}}">
 							
-<!--		<div class="form-group" ng-show="$ctrl.isOS_Heat()">
-		     <label for="Image">Availability Zone</label>
-		     <input type="text" ng-model="$ctrl.Availability_zone[$index]" data-index="{{ $ctrl.indices[ $index ] }}" id="availability_zone" placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="20" />
-		     <div class="col-xs-2">
-		     <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-bottom-left">
-		     	<clr-icon shape="info-circle" size="24"></clr-icon>
-		     	<span class="tooltip-content">{{$ctrl.IMAGE_TOOLTIP}}</span>
-	     	     </span>
-		     </div>
-		</div>
-
--->		<div class="form-group" ng-show="!$ctrl.isOVF()">
+		<div class="form-group" ng-show="!$ctrl.isOVF()">
 		     <label class="required" for="Image">Image</label>
 		     <input type="text" ng-model="$ctrl.Image[$index]" data-index="{{ $ctrl.indices[ $index ] }}" id="Image" placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="20"  required/>
 		     <div class="col-xs-2">
@@ -125,11 +114,6 @@
 	              </div>
 		</div>
 							
-<!--		<div ng-class="$ctrl.isOSM_or_VCD_Class($index)" ng-show="$ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index)">
-                     <label for="CPU">CPU</label>
-                     <input type="number" ng-model="$ctrl.vCPUSelected[$index]" data-index="{{ $ctrl.indices[ $index ] }}" id="Image" placeholder="Select CPU" size="20" min="1" max="128" step="1"  value="1" />
-        </div>
--->
 		<div ng-class="$ctrl.isOSM_or_VCD_Class($index)" ng-show="$ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index)">
                      <label for="CPU">CPU</label>
                      <div class="select select_length">
@@ -138,8 +122,6 @@
                           </select>
                      </div>
         </div>
-
-
 
 		<div ng-class="$ctrl.isOSM_or_VCD_Class($index)" ng-show="$ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index)">
 		     <label for="RAM">RAM</label>
@@ -151,29 +133,8 @@
 	             </div>
 		</div>
 							  
-		<!--<div ng-class="$ctrl.isOSM_or_VCD_and_NONE_Class($index)" ng-show="(!$ctrl.isOVF()) && ($ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index))">
-			<label class="required" for="Disk">Disk</label>
-			<input type="text"  ng-model="$ctrl.Disk[i][$index]" id="Disk" 
-				placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="20" required/>
-				<span>GB</span>
-		</div>
-             
-                <div ng-class="$ctrl.isOSM_or_VCD_and_NONE_Class($index)" ng-show="$ctrl.isOVF()">
-                        <label class="required" for="VMDK">VMDK File Name</label>
-                        <input type="text"  ng-model="$ctrl.VMDK[$index]" id="VMDK"
-                                placeholder="{{$ctrl.INPUT_PLACEHOLDER}}" size="20" />
-                    <div class="col-xs-2">
-                           <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
-                                 <clr-icon shape="info-circle" size="24"></clr-icon>
-                                 <span class="tooltip-content">{{ $ctrl.VMDK_TOOLTIP }}</span>
-                           </span>
-                    </div>
-                </div>
-		-->
-
 		<div ng-class="$ctrl.isOSM_or_VCD_and_NONE_Class($index)" ng-show=" $ctrl.isOVF() && ($ctrl.isDISK_RAM_CPU() || $ctrl.isCUSTOM_FLAVOR($index))">
 		     <label for="DISK">Number of Disk(s)</label>
-		     <!--<input type="number" ng-model="$ctrl.NumDisk[$index]" data-index="{{ $ctrl.indices[ $index ] }}" id="NumDisk" placeholder="" size="20" min="1" max="285" step="1"  value="1" />-->
 		      <div class="select select_length">
                           <select ng-required="true" id="NumDisk" ng-model="$ctrl.NumDisk[$index]"
                                  >
@@ -216,13 +177,6 @@
 				</div>
 				
         </div>
-				
-					
-					  
-		
-
-
-	       
 	</div>
 	</div>
 		

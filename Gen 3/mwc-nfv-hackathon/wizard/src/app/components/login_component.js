@@ -29,7 +29,7 @@ module.exports = {
 
     $scope.username = "";
     $scope.password = "";
-    $scope.session_key = ""; 
+    $scope.session_key = "";
     $scope.errorVisible = false;
     $scope.emptyCredentialsErrorVisible = false;
     $scope.currentUser = '';
@@ -38,17 +38,16 @@ module.exports = {
     this.submit = function () {
       if ($scope.username != '' && $scope.password != '') {
         
-        authService.login($scope.username, $scope.password, function (serviceResponse) {          
+        authService.login($scope.username, $scope.password, function (serviceResponse) {
           if (serviceResponse["Status"] == "Success") {
-            authService.loginObj.isAuthenticated = true;           
+            authService.loginObj.isAuthenticated = true;
             authService.loginObj.username = $scope.username; 
             dataService.setusername($scope.username);
-            dataService.setsessionkey(authService.loginObj.session_key);           
-            //$state.go('wizard.vnf');
+            dataService.setsessionkey(authService.loginObj.session_key);
             $state.go('wizard.vnfdef');
           }
-          else {            
-            $scope.clearCredentials();                       
+          else {
+            $scope.clearCredentials();
             $scope.errorVisible = true;
             $scope.emptyCredentialsErrorVisible = false;
             document.getElementById("loginerror").innerHTML = serviceResponse["Message"];
@@ -72,12 +71,11 @@ module.exports = {
     };
 
     $scope.uploadFile = function () {
-      console.log('In upload file');      
+      console.log('In upload file');
       console.log($scope.files);
 
       var fd = new FormData();
       fd.append('file',$scope.files);
-     
      
       session_key = authService.loginObj.session_key; 
       console.log(fd);

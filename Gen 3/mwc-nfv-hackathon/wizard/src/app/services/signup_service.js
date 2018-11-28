@@ -36,38 +36,33 @@ module.exports = function (authService,$http,$state) {
 
         var userCredentials = {
             'username': username,
-	    'emailaddress' : emailadd,
+            'emailaddress' : emailadd,
             'password': password,
             'confirmpassword' : confirmPassword	
         };
-console.log(userCredentials);
+        console.log(userCredentials);
         $http({
             method: 'POST',
             url: 'http://' + location.hostname + ':5000' + '/backend' + '/signup',
             data: JSON.stringify(userCredentials)
         }).then(function successCallback(successResponse) {
             let serviceResult = successResponse.data;                       
-            //let serviceResult = successResponse;                       
             console.log(successResponse)
             console.log(successResponse.data)
-            //callback(serviceResult);
             callback(serviceResult);
         }, function errorCallback(errorResponse) {
             console.log(errorResponse)
             if (errorResponse.xhrStatus == "error"){
                 response = {"Status":"Error","Message":"Failed to Connect to VNF Onboarding Server. Server may be down"}
-                //errorResponse.data = JSON.stringify(response)
                 errorResponse.data = response
                 console.log(errorResponse)
             }
             let errorResult = errorResponse.data;
             callback(errorResult);
-            //callback(errorResult);
         });
     };
 
 this.generateNewPassword = function(useridentity,callback) {
-    
        $http({
             method: 'POST',
             url: 'http://' + location.hostname + ':5000' + '/backend' + '/forgetpassword',
@@ -78,7 +73,6 @@ this.generateNewPassword = function(useridentity,callback) {
         }, function errorCallback(errorResponse) {
            if (errorResponse.xhrStatus == "error"){
              response = {"Status":"Error","Message":"Failed to Connect to VNF Onboarding Server. Server may be down"}
-             //errorResponse.data = JSON.stringify(response)
              errorResponse.data = response
              console.log(errorResponse)
            }
@@ -86,20 +80,6 @@ this.generateNewPassword = function(useridentity,callback) {
            callback(errorResult);
         });
     };
-
-
-
-/*    this.logOut = function () {
-        this.loginObj.isAuthenticated = false;
-        $state.go('login');
-    };
-*/
-/*
-    this.changeAuth = function () {
-        this.loginObj.isAuthenticated = false;
-    };
-*/
-
 };
 
 

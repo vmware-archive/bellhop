@@ -24,102 +24,97 @@
 module.exports = {
     template: require('../templates/signup.html'),
     controller: function (signupService,$scope, $http, $state) {
-      "ngInject";
+        "ngInject";
 
-      $scope.username = "";
-      $scope.emailid = "";
-      $scope.password = "";
-      $scope.confirmPassword = "";
-      $scope.EmptyFieldErrorVisible = false;
-      $scope.PasswordErrorVisible = false;
-      $scope.PasswordEmptyError = false;
-      $scope.UserNameEmptyError = false;
-      $scope.EmailEmptyError = false;
-      $scope.ConfirmPasswordEmptyError = false;
-      $scope.UserSignupSuccessful = false;
-      $scope.LoginNewUser = false;
-      $scope.UserSignupError = false;
+        $scope.username = "";
+        $scope.emailid = "";
+        $scope.password = "";
+        $scope.confirmPassword = "";
+        $scope.EmptyFieldErrorVisible = false;
+        $scope.PasswordErrorVisible = false;
+        $scope.PasswordEmptyError = false;
+        $scope.UserNameEmptyError = false;
+        $scope.EmailEmptyError = false;
+        $scope.ConfirmPasswordEmptyError = false;
+        $scope.UserSignupSuccessful = false;
+        $scope.LoginNewUser = false;
+        $scope.UserSignupError = false;
 
+        this.submit = function () {
+            if (this.IsValid()) {
+                $scope.PasswordEmptyError = false;
+                $scope.UserNameEmptyError = false;
+                $scope.EmailEmptyError = false;
+                $scope.ConfirmPasswordEmptyError = false;
+                this.setErrorVisibility(false, false);
 
-      this.submit = function () {
-        if (this.IsValid()) {
-	   $scope.PasswordEmptyError = false;
-           $scope.UserNameEmptyError = false;
-	   $scope.EmailEmptyError = false;
-	   $scope.ConfirmPasswordEmptyError = false;
-          this.setErrorVisibility(false, false);
- 
-           signupService.signup($scope.username,$scope.emailid, $scope.password,$scope.confirmPassword, function(serviceResponse){ 
-           if (serviceResponse["Status"] == "Success") {
-              
-              console.log('user registered successfully');           
-              console.log(serviceResponse);
-              $scope.UserSignupSuccessful = true;
-              $scope.LoginNewUser = true;
-              //document.getElementById("signupSuccess").innerHTML = "User Registration Successful. Email containing credentials has been sent to the user. "
-              document.getElementById("signupSuccess").innerHTML =  serviceResponse["Message"] 
-              $scope.clearCredentials($scope);
-           }
-           else {            
-	      console.log("registration failed")
-              console.log(serviceResponse["Message"]);
-              $scope.UserSignupError = true;
-              if(($scope.username == "") ||($scope.emailid == "") ||($scope.password == "") ||($scope.confirmPassword == "") ){
-                  document.getElementById("signuperror").innerHTML = "User Name is blank. Please enter valid user name.";
-              }
-              else{
-                  document.getElementById("signuperror").innerHTML = serviceResponse["Message"];
-              }
-	      $scope.clearCredentials();
-          }
+                signupService.signup($scope.username,$scope.emailid, $scope.password,$scope.confirmPassword, function(serviceResponse){ 
+                        if (serviceResponse["Status"] == "Success") {
+                            console.log('user registered successfully');           
+                            console.log(serviceResponse);
+                            $scope.UserSignupSuccessful = true;
+                            $scope.LoginNewUser = true;
+                            document.getElementById("signupSuccess").innerHTML =  serviceResponse["Message"] 
+                            $scope.clearCredentials($scope);
+                        }else {            
+                            console.log("registration failed")
+                            console.log(serviceResponse["Message"]);
+                            $scope.UserSignupError = true;
+                            if(($scope.username == "") ||($scope.emailid == "") ||($scope.password == "") ||($scope.confirmPassword == "") ){
+                                document.getElementById("signuperror").innerHTML = "User Name is blank. Please enter valid user name.";
+                            }
+                            else{
+                                document.getElementById("signuperror").innerHTML = serviceResponse["Message"];
+                            }
+                            $scope.clearCredentials();
+                        }
          
         });
       } 
     };
 
+        this.Cancel = function() {
+            $state.go('login');
+        };
 
-      this.Cancel = function() {
-        $state.go('login');
-      };
- 
-      this.Login = function() {
-	$state.go('login');
-      };
+        this.Login = function() {
+            $state.go('login');
+        };
 
-      this.IsValid = function () {
-           $scope.PasswordEmptyError = false;
-           $scope.UserNameEmptyError = false;
-           $scope.EmailEmptyError = false;
-           $scope.ConfirmPasswordEmptyError = false;
+        this.IsValid = function () {
+            $scope.PasswordEmptyError = false;
+            $scope.UserNameEmptyError = false;
+            $scope.EmailEmptyError = false;
+            $scope.ConfirmPasswordEmptyError = false;
 
-        if ($scope.username == ""){
-            $scope.UserNameEmptyError = true;
-          return false;
-        } else if($scope.emailid == ""){
-            $scope.EmailEmptyError = true;
-            return false;
-        } else if ($scope.password == ""){
-            $scope.PasswordEmptyError = true;
-            return false;
-        }else if ($scope.confirmPassword == ""){
-           $scope.ConfirmPasswordEmptyError = true;
-           return false;
-        }else if ($scope.password !== $scope.confirmPassword) {
-          this.setErrorVisibility(false,true);
-          return false;
-        }
-        return true;
-      };
+            if ($scope.username == ""){
+                $scope.UserNameEmptyError = true;
+                return false;
+            } else if($scope.emailid == ""){
+                $scope.EmailEmptyError = true;
+                return false;
+            } else if ($scope.password == ""){
+                $scope.PasswordEmptyError = true;
+                return false;
+            }else if ($scope.confirmPassword == ""){
+                $scope.ConfirmPasswordEmptyError = true;
+                return false;
+            }else if ($scope.password !== $scope.confirmPassword) {
+                this.setErrorVisibility(false,true);
+                return false;
+            }
+            return true;
+        };
 
-      this.setErrorVisibility = function(emptyFieldError,passwordFieldError){
-        $scope.EmptyFieldErrorVisible = emptyFieldError;
-        $scope.PasswordErrorVisible = passwordFieldError;
-      };
+        this.setErrorVisibility = function(emptyFieldError,passwordFieldError){
+            $scope.EmptyFieldErrorVisible = emptyFieldError;
+            $scope.PasswordErrorVisible = passwordFieldError;
+        };
 
-      $scope.clearCredentials = function() {
-        $scope.username = "";
-        $scope.password = "";
-        $scope.emailid = "";
+        $scope.clearCredentials = function() {
+            $scope.username = "";
+            $scope.password = "";
+            $scope.emailid = "";
         $scope.confirmPassword = "";
       };
     }

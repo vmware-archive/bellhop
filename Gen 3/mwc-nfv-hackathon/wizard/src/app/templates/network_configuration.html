@@ -35,51 +35,49 @@
     <div class="form-group long" ng-show="$ctrl.isMgmtNwt()">
     	<label class="required" for="mgmtNetwork">Management Network </label> 
     	<div >
-   	 	<input type="text" id="mgmtNetwork" name="mgmtNetwork" ng-model="$ctrl.mgmtNetwork" 
-		placeholder="{{ $ctrl.MGMT_PLACEHOLDER }}" size="14"  ng-show="!$ctrl.isOS_Subnet() " >
-	</div> 
-	<div class=" col-xs-4" ng-show="$ctrl.NewNetwk && !$ctrl.isOS_Subnet() ">
-		<input ng-disabled=false type="checkbox"  ng-model="$ctrl.createMgmtNetwork" size="12">
-		<label for="mem_res">Create New </label>
-	</div>	
+     	 	<input type="text" id="mgmtNetwork" name="mgmtNetwork" ng-model="$ctrl.mgmtNetwork" 
+    		placeholder="{{ $ctrl.MGMT_PLACEHOLDER }}" size="14"  ng-show="!$ctrl.isOS_Subnet() " >
+	    </div> 
+	    <div class=" col-xs-4" ng-show="$ctrl.NewNetwk && !$ctrl.isOS_Subnet() ">
+		    <input ng-disabled=false type="checkbox"  ng-model="$ctrl.createMgmtNetwork" size="12">
+		    <label for="mem_res">Create New </label>
+	    </div>	
                
-	<div class="col-xs-2"  ng-show="!$ctrl.isOS_Subnet() ">
-		<span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
-			<clr-icon shape="info-circle" size="24"></clr-icon>
-			<span class="tooltip-content">{{ $ctrl.MGMT_NETWORK_TOOLTIP }}</span>
-		</span>
-	</div>
+	    <div class="col-xs-2"  ng-show="!$ctrl.isOS_Subnet() ">
+		    <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
+			    <clr-icon shape="info-circle" size="24"></clr-icon>
+			    <span class="tooltip-content">{{ $ctrl.MGMT_NETWORK_TOOLTIP }}</span>
+		    </span>
+	    </div>
     </div> 
 	
     <div class="form-group " ng-show="$ctrl.createMgmtNetwork && ($ctrl.OrchType == 'TOSCA 1.1')" >
-	<label class="required" for="mgmtNetwork">Management Subnet Cidr</label>
+	    <label class="required" for="mgmtNetwork">Management Subnet Cidr</label>
     	<div>
-		<input type="text" name="{{MgmtSubnet}}" 
+		    <input type="text" name="{{MgmtSubnet}}" 
 		       ng-model="$ctrl.SubnetCidr" 
-                       placeholder="Subnet cidr" size="14"  required />
-	</div>	
+               placeholder="Subnet cidr" size="14"  required />
+	    </div>	
     </div>
       
     <div class="form-group" ng-show="$ctrl.NewNetwk && $ctrl.isOSM()">
     	<label class="required" for="mgmtNetwork">Management Network Type</label>
     	<div class="select select_length" ng-show="$ctrl.NewNetwk && $ctrl.isOSM()">
-  	     <select  ng-model="mgmtNetworkEthernetTypeSelected" 
-		      ng-options="mgmtNetworkenetwork for mgmtNetworkenetwork in ETHERNETTYPE">
-	     </select>
+  	         <select  ng-model="mgmtNetworkEthernetTypeSelected" 
+		          ng-options="mgmtNetworkenetwork for mgmtNetworkenetwork in ETHERNETTYPE">
+	        </select>
       	</div>
 		<div class="col-xs-2">
 			 <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
 				   <clr-icon shape="info-circle" size="24"></clr-icon>
-			   <span class="tooltip-content">{{ $ctrl.MGMT_TYPE_NETWORK_TOOLTIP }}</span>
-				 </span>
+		    	   <span class="tooltip-content">{{ $ctrl.MGMT_TYPE_NETWORK_TOOLTIP }}</span>
+			 </span>
 		</div>
-
     </div>
 
-      <div class="form-group">
+    <div class="form-group">
         <label class="required" for="numberOfNICs ">Additional Networks</label>
 		<input type="text" id="numberOfNICs" name="numberOfNICs" ng-model="$ctrl.numberOfNICs" placeholder="MGMT Subnet" size="14"  ng-pattern="/^[0-9]/" >
-
 
         <div class="col-xs-2">
           <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
@@ -87,114 +85,68 @@
             <span class="tooltip-content">{{ $ctrl.AD_NETWORK_TOOLTIP }}</span>
           </span>
         </div>
-      </div>
+    </div>
 	  
-      <div class="form-group" ng-show="maxNicsError || $ctrl.forms.nicDefinitionForm.numberOfNICs.$error.pattern">
+    <div class="form-group" ng-show="maxNicsError || $ctrl.forms.nicDefinitionForm.numberOfNICs.$error.pattern">
   	  <label></label>  <span style="color:red">Value must be numeric and between 0 and 20.</span>
-      </div>      
-<!---  --->
+    </div>      
 	
 	<div class="form-group long" ng-show="$ctrl.isVCD_Ovf()"> 
            <label class="required" for="NICs" ng-show="$ctrl.numberOfNICs > 0">Network</label>
-      </div>
-      <div class="col-xs-8" ng-show="$ctrl.isVCD_Ovf()">
-           <div class="row">
-                <div ng-repeat="NIC in $ctrl.indices track by $index" ng-show="$ctrl.NICshow[ $ctrl.indices[ $index ]]"> 
-                     <div class="form-group long col-xs-6" >
-		          <div>
-			     <label>{{$index + 1}} </label> </div><span></span>
-			     <input type="text" name="{{NIC}}" ng-model="$ctrl.NICs[ $ctrl.indices[ $index ]]" 
-				    data-index="{{ $ctrl.indices[ $index ] }}" 
-				    placeholder="{{ $ctrl.NIC_PLACEHOLDER[$index] }}" size="14"  required />
-			     <!--<div class=" col-xs-4" ng-show="$ctrl.NewNetwk">
-			          <input type="checkbox"  
-					 ng-model="$ctrl.Interfaces[$ctrl.indices[ $index ]]" size="14">
-				  <label for="mem_res">Create New </label>
-			     </div>	
-			     <div class="col-xs-2" >
-			          <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
-			          	<clr-icon shape="info-circle" size="24"></clr-icon>
-			          	<span class="tooltip-content">{{ $ctrl.NETWORK_INTERFACE }}</span>
-			    	  </span>
-			     </div> -->
-			   </div>
+    </div>
+    <div class="col-xs-8" ng-show="$ctrl.isVCD_Ovf()">
+        <div class="row">
+            <div ng-repeat="NIC in $ctrl.indices track by $index" ng-show="$ctrl.NICshow[ $ctrl.indices[ $index ]]"> 
+                <div class="form-group long col-xs-6" >
+		            <div>
+			            <label>{{$index + 1}} </label> </div><span></span>
+			            <input type="text" name="{{NIC}}" ng-model="$ctrl.NICs[ $ctrl.indices[ $index ]]" 
+				            data-index="{{ $ctrl.indices[ $index ] }}" 
+				            placeholder="{{ $ctrl.NIC_PLACEHOLDER[$index] }}" size="14"  required />
+			        </div>
 			   
 			   <div class="form-group long col-xs-12"  >
 				  <div class="col-xs-4 select" style="margin: 5px;">
 				      <select ng-model="ParentNetworkTypeSelected[$ctrl.indices[ $index ]]"
-				      ng-options="type for type in PARENTNETWORKTYPE">
+				          ng-options="type for type in PARENTNETWORKTYPE">
 				      </select>
-                                </div>
-
-				 <div class="col-xs-12" style="margin: 5px;" ng-show="ParentNetworkTypeSelected[$ctrl.indices[ $index ]]=='Routed'">
-                                      <input type="text" name="{{parent_nework}}"
-
-                                        ng-model="$ctrl.Parent_Network[ $ctrl.indices[ $index ]]"
-                                        data-index="{{ $ctrl.indices[ $index ] }}"
-                                        placeholder="Parent Network" size="14" required />
-                                      <span> </span>
-                                </div>
+                  </div>
+				  <div class="col-xs-12" style="margin: 5px;" ng-show="ParentNetworkTypeSelected[$ctrl.indices[ $index ]]=='Routed'">
+                       <input type="text" name="{{parent_nework}}"
+                              ng-model="$ctrl.Parent_Network[ $ctrl.indices[ $index ]]"
+                              data-index="{{ $ctrl.indices[ $index ] }}"
+                              placeholder="Parent Network" size="14" required />
+                              <span> </span>
+                  </div>
 
 				<div class="col-xs-12" style="margin: 5px;" ng-show="ParentNetworkTypeSelected[$ctrl.indices[ $index ]]!='Direct'">
 			 	      <input type="text" name="{{Subnet}}" 
-					
-	           		        ng-model="$ctrl.Edge_Gateway[ $ctrl.indices[ $index ]]" 
-				        data-index="{{ $ctrl.indices[ $index ] }}" 
-                                        placeholder="Edge Gateway" size="14" required />
-                                      <span> </span>
+	           	            ng-model="$ctrl.Edge_Gateway[ $ctrl.indices[ $index ]]" 
+				            data-index="{{ $ctrl.indices[ $index ] }}" 
+                            placeholder="Edge Gateway" size="14" required />
+                            <span> </span>
 			 	      <input type="text" name="{{Subnet}}"
-                                        
-                                        ng-model="$ctrl.Netmask[ $ctrl.indices[ $index ]]"
-                                        data-index="{{ $ctrl.indices[ $index ] }}"
-                                        placeholder="Netmask" size="14"  required />
-                                      <!--<div class="col-xs-2" >
-                                  	<span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
-                                        	<clr-icon shape="info-circle" size="24"></clr-icon>
-	                                        <span class="tooltip-content">{{ $ctrl.NETWORK_INTERFACE }}</span>
-        	                        </span>
-                	              </div>-->
+                            ng-model="$ctrl.Netmask[ $ctrl.indices[ $index ]]"
+                            data-index="{{ $ctrl.indices[ $index ] }}"
+                            placeholder="Netmask" size="14"  required />
 				</div>	
 				<div class="col-xs-10" style="margin: 5px;" ng-show="ParentNetworkTypeSelected[$ctrl.indices[ $index ]]!='Direct'">
-                                      <input type="text" name="{{Subnet}}"
-                                        
-                                        ng-model="$ctrl.Static_Start[ $ctrl.indices[ $index ]]"
-                                        data-index="{{ $ctrl.indices[ $index ] }}"
-                                        placeholder="Start Static IP" size="14"  required />
-                                      <span> </span>
-                                      <input type="text" name="{{Subnet}}"
-                                        
+                            <input type="text" name="{{Subnet}}"
+                                   ng-model="$ctrl.Static_Start[ $ctrl.indices[ $index ]]"
+                                   data-index="{{ $ctrl.indices[ $index ] }}"
+                                   placeholder="Start Static IP" size="14"  required />
+                                   <span> </span>
+                                   <input type="text" name="{{Subnet}}"
                                         ng-model="$ctrl.Static_end[ $ctrl.indices[ $index ]]"
                                         data-index="{{ $ctrl.indices[ $index ] }}"
                                         placeholder="End Static IP" size="14"  required />
-                                </div>
-                                
-
-				
-				<!--<div class="col-xs-10" style="margin: 5px;">
-                                       <input type="text" name="{{Subnet}}"
-                                        ng-show="$ctrl.OrgVdcNetwork[$ctrl.indices[ $index ]]"
-                                        ng-model="$ctrl.OrgVdc_Network[ $ctrl.indices[ $index ]]"
-                                        data-index="{{ $ctrl.indices[ $index ] }}"
-                                        placeholder="OrgVdc Network" size="14"  required />
-				        <span> </span>
-				       <input ng-disabled=flase type="checkbox"  
-							ng-model="$ctrl.OrgVdcNetwork[$ctrl.indices[ $index ]]" size="14">
-					  <label for="mem_res">Connect OrgVdcNetwork</label>
-                </div>-->
-								
-								
-					
-				
-				
-                            </div>
-							
-			     
-				  </div>
-				  </div>
-					</div>
+                  </div>
+                </div>
+		      </div>
+		  </div>
+		</div>
 
 
-<!--- -->      
       <div class="form-group long" ng-show="!$ctrl.isVCD_Ovf()"> 
            <label class="required" for="NICs" ng-show="$ctrl.numberOfNICs > 0">Network Interface</label>
       </div>
@@ -240,44 +192,9 @@
                                         ng-model="$ctrl.Gateway_IP[ $ctrl.indices[ $index ]]"
                                         data-index="{{ $ctrl.indices[ $index ] }}"
                                         placeholder="Gateway IP" size="14"  required />
-                                      <!--<div class="col-xs-2" >
-                                  	<span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
-                                        	<clr-icon shape="info-circle" size="24"></clr-icon>
-	                                        <span class="tooltip-content">{{ $ctrl.NETWORK_INTERFACE }}</span>
-        	                        </span>
-                	              </div>-->
 				</div>
 				
-<!--				<div class="col-xs-10" style="margin: 5px;">
-                                      <input type="text" name="{{Subnet}}"
-                                        ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isVCD_Cloudify()"
-                                        ng-model="$ctrl.Static_Range[ $ctrl.indices[ $index ]]"
-                                        data-index="{{ $ctrl.indices[ $index ] }}"
-                                        placeholder="Static Range" size="14"  required />
-                                      <span> </span>
-                                      <input type="text" name="{{Subnet}}"
-                                        ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isVCD_Cloudify()"
-                                        ng-model="$ctrl.Netmask[ $ctrl.indices[ $index ]]"
-                                        data-index="{{ $ctrl.indices[ $index ] }}"
-                                        placeholder="Netmask" size="14"  required />
-                                </div>
-
-                                <div class="col-xs-10" style="margin: 5px;">
-                                       <input type="text" name="{{Subnet}}"
-                                        ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isVCD_Cloudify()"
-                                        ng-model="$ctrl.DNS[ $ctrl.indices[ $index ]]"
-                                        data-index="{{ $ctrl.indices[ $index ] }}"
-                                        placeholder="DNS" size="14"  required />
-                                        <span> </span>
-                                       <input type="text" name="{{Subnet}}"
-                                        ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isVCD_Cloudify()"
-                                        ng-model="$ctrl.DNS_Suffix[ $ctrl.indices[ $index ]]"
-                                        data-index="{{ $ctrl.indices[ $index ] }}"
-                                        placeholder="DNS Suffix" size="14"  required />
-
-                                </div> -->
-	
-			<!--  cloudify_changes -->	<div class="col-xs-10" style="margin: 5px;">
+				<div class="col-xs-10" style="margin: 5px;">
                                       <input type="text" name="{{Subnet}}"
                                         ng-show="$ctrl.Interfaces[$ctrl.indices[ $index ]] && $ctrl.isVCD_Cloudify()"
                                         ng-model="$ctrl.Static_Start[ $ctrl.indices[ $index ]]"
