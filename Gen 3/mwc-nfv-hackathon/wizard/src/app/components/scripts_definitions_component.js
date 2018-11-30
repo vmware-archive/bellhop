@@ -35,6 +35,8 @@ module.exports = {
       this.FORM_SUBMIT_CLASS = '';
       this.SCRIPT_INFO_TOOLTIP = TOOLTIPS.SCRIPT_INFO_TOOLTIP;
       $scope.files = [];
+      $scope.filename = [20];
+      $scope.uploadwarning = false;
       this.upload_response = false;
       $("#Upload_Files").prop("disabled",true);
 
@@ -45,7 +47,7 @@ module.exports = {
       this.OrchType = config_vnf.OrchType;
       this.numberOfVMs = config_vnf.numberOfVMs;
       this.VMsIndices = config_vnf.VMsIndices;
-      this.scriptsInputs = [];
+      $scope.scriptsInputs = [];
 
       console.log(config_vnf);
 
@@ -74,29 +76,26 @@ module.exports = {
           }
       };
 
-      console.log(this.scriptsInputsconfig);
-
       for (i = 0; i <= this.scriptsInputsconfig.create.length -1; i++) {
+          
           if (this.OrchType == 'OSM 3.0' || this.OrchType == 'OSM 4.0' || this.OrchType == 'Heat' || this.OrchType == 'RIFT.ware 5.3' || this.OrchType == 'RIFT.ware 6.1'){	
               console.log(this.scriptsInputsconfig['create']);
-              this.scriptsInputs[i] = {
+              $scope.scriptsInputs[i] = {
                 create: this.scriptsInputsconfig['create'][i]
               };
               this.scriptsInputsconfig['create'][i].text = "Cloud Init Script ";
               this.scriptsInputsconfig['create'][i].tooltip = TOOLTIPS.INIT;;
-
           } else{
-              this.scriptsInputs[i] = {
+              $scope.scriptsInputs[i] = {
                     create: emptyToString(this.scriptsInputsconfig['create'][i]),
                     configure: emptyToString(this.scriptsInputsconfig['configure'][i]),
                     delete: emptyToString(this.scriptsInputsconfig['delete'][i])
               };
+	      
           }
+          $scope.filename[i] = ['','',''];
       }
 	
-      console.log(this.scriptsInputs);
-      console.log(this.OrchType );
-
       this.isOSM = function(){
 
           return (this.OrchType == 'OSM 3.0' ||  this.OrchType == 'OSM 4.0'); 
@@ -124,11 +123,11 @@ module.exports = {
                     for (i = 0; i <= this.scriptsInputsconfig.create.length -1; i++) {
                          if (this.OrchType == 'OSM 3.0' || this.OrchType == 'OSM 4.0' || this.OrchType == 'Heat' || this.OrchType == 'RIFT.ware 5.3' || 
                                  this.OrchType == 'RIFT.ware 6.1'){
-                                create_arr.push(emptyToString(this.scriptsInputs[i]['create'].value))
+                                create_arr.push(emptyToString($scope.scriptsInputs[i]['create'].value))
                          }else{
-                                create_arr.push(emptyToString(this.scriptsInputs[i]['create'].value)),
-                                config_arr.push(emptyToString(this.scriptsInputs[i]['configure'].value)),
-                                delete_arr.push(emptyToString(this.scriptsInputs[i]['delete'].value))
+                                create_arr.push(emptyToString($scope.scriptsInputs[i]['create'].value)),
+                                config_arr.push(emptyToString($scope.scriptsInputs[i]['configure'].value)),
+                                delete_arr.push(emptyToString($scope.scriptsInputs[i]['delete'].value))
                          }
                     }
 
@@ -154,9 +153,31 @@ module.exports = {
               return isValid;
       });
 
-      $scope.setFiles = function (element) {
+      $scope.setFiles = function (indx,element) {
           $("#Upload_Files").prop("disabled",false);
           $scope.files.push(element.files[0]);
+          var res = indx.split("-");
+          $scope.filename[Number(res[0])][Number(res[1])] = element.files[0].name;
+	  console.log($scope.filename);
+          $scope.uploadwarning = true;
+          
+          $scope.$apply( () => {
+
+         for (i = 0; i <= 20; i++) {
+
+                if (this.OrchType == 'OSM 3.0' || this.OrchType == 'Heat'){
+
+                      $scope.scriptsInputs[i]['create'].value = $scope.filename[i][0];
+                }else{
+                      $scope.scriptsInputs[i]['create'].value = $scope.filename[i][0];
+                      $scope.scriptsInputs[i]['configure'].value = $scope.filename[i][1];
+                      $scope.scriptsInputs[i]['delete'].value = $scope.filename[i][2];
+                }
+
+        }
+
+        console.log(this.scriptsInputs);
+     });
 
           console.log($scope.files);
       };
@@ -182,6 +203,7 @@ module.exports = {
                       if (this.readyState == 4 && this.status == 200) {
                           document.getElementById("uploadresponse").innerHTML =
                               this.responseText;
+                          $scope.uploadwarning = false;
                       }
                   };
 
