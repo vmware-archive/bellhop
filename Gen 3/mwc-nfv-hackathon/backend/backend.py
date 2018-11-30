@@ -41,12 +41,12 @@ import database
 import pprint
 from flask import jsonify
 
-app = Flask(__name__)
-app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix='/backend')
-app.config['UPLOAD_FOLDER'] = '/tmp/uploads/'
-CORS(app, supports_credentials=True)
+vnf_onboarding_backend_app = Flask(__name__)
+vnf_onboarding_backend_app.wsgi_app = PrefixMiddleware(vnf_onboarding_backend_app.wsgi_app, prefix='/backend')
+vnf_onboarding_backend_app.config['UPLOAD_FOLDER'] = '/tmp/uploads/'
+CORS(vnf_onboarding_backend_app, supports_credentials=True)
 
-@app.route('/login',methods=['GET','POST'])
+@vnf_onboarding_backend_app.route('/login',methods=['GET','POST'])
 
 @cross_origin(origin='*')
 
@@ -64,7 +64,7 @@ def login_page():
         return jsonify({"Status":"Error","Message":"Login failed.Failure to connect to database" })
   return jsonify({"Status":"Success","Message":"user is authenticated"})
 
-@app.route('/signup', methods=['GET', 'POST'])
+@vnf_onboarding_backend_app.route('/signup', methods=['GET', 'POST'])
 
 def signup():
   pprint.pprint("received signup request")
@@ -87,7 +87,7 @@ def signup():
   else:
       return jsonify({"Status":"Error","Message":"User Registration Failed. Username or Email-id already exists"})
 
-@app.route('/generate', methods=['GET', 'POST'])
+@vnf_onboarding_backend_app.route('/generate', methods=['GET', 'POST'])
 
 
 def generate():
@@ -107,7 +107,7 @@ def generate():
     cleanup(os.path.dirname(workdir))
     return resp
 
-@app.route('/upload', methods=['GET', 'POST'])
+@vnf_onboarding_backend_app.route('/upload', methods=['GET', 'POST'])
 
 def upload():
    print("Received upload request")
@@ -127,10 +127,9 @@ def upload():
       if file:
 	 # Make the filename safe, remove unsupported chars
           filename = secure_filename(file.filename)
-          if not os.path.isdir(app.config['UPLOAD_FOLDER']):
+          if not os.path.isdir(vnf_onboarding_backend_app.config['UPLOAD_FOLDER']):
              os.mkdir(upload_dir)
-
-          user_dir = os.path.join(app.config['UPLOAD_FOLDER'],username)
+          user_dir = os.path.join(vnf_onboarding_backend_app.config['UPLOAD_FOLDER'],username)
           session_dir = os.path.join(user_dir,session_key)
           print(user_dir)
           print(session_dir)
@@ -144,7 +143,7 @@ def upload():
    return 'file uploaded successfully'
 
 
-@app.route('/forgetpassword', methods=['GET', 'POST'])
+@vnf_onboarding_backend_app.route('/forgetpassword', methods=['GET', 'POST'])
 
 def forgetpassword():
    print "Received forgetpassword request",request.data
@@ -177,7 +176,7 @@ def forgetpassword():
 
 
    
-@app.route('/multivdu_blueprint', methods=['POST'])
+@vnf_onboarding_backend_app.route('/multivdu_blueprint', methods=['POST'])
 
 def multivdu_blueprint():
   if request.method == 'POST':
@@ -206,7 +205,7 @@ if __name__ == "__main__":
     handler = RotatingFileHandler('vnf_backend.log', maxBytes=1000000000000, backupCount=1)
     handler.setLevel(logging.INFO)
     handler.setFormatter(formatter)
-    app.logger.addHandler(handler) 
-    app.logger.setLevel(logging.INFO)
-    app.run(host='0.0.0.0', port=5000)
+    vnf_onboarding_backend_app.logger.addHandler(handler) 
+    vnf_onboarding_backend_app.logger.setLevel(logging.INFO)
+    vnf_onboarding_backend_app.run(host='0.0.0.0', port=5000)
 #    app.run(host='0.0.0.0', port=5000, debug=True)
