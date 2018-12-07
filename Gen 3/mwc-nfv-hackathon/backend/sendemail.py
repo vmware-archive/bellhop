@@ -89,10 +89,6 @@ def _sendMail(to, fro, subject, text, server="localhost"):
          return status  
 
     try:
-       #smtp = smtplib.SMTP(server,port) 
-       #if not smtp:
-       #  print "smtp is not defined"
-       #  return 
        print "set debug level for smtp"
        smtp.set_debuglevel(True)
 
@@ -122,7 +118,6 @@ def _sendMail(to, fro, subject, text, server="localhost"):
           return
        print "send email succeeded"
        status = True
-    #except:
     except Exception as e: 
         print(e)
         print "failed to send mail"
@@ -137,6 +132,5 @@ def _sendMail(to, fro, subject, text, server="localhost"):
 if __name__ == '__main__':
     #Example:
     mail_text = draft_mail_text("User Registration","dummy","dummy")
-    #mailid = "admin@xyz.com"
     sendMail([mailid],'mydevsystem',mail_text)
 

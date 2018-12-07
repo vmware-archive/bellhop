@@ -28,13 +28,25 @@
 
 <form name="$ctrl.forms.scriptsForm" ng-class="$ctrl.FORM_SUBMIT_CLASS" id="scripts-form">
   <section class="form-block">
+	 
+	 <div class="alert alert-warning" ng-show="uploadwarning">
+           <div class="alert-items">
+                <div class="alert-item static">
+                        <div class="alert-icon-wrapper">
+                                <clr-icon class="alert-icon" shape="exclamation-circle"></clr-icon>
+                        </div>
+                        <span class="alert-text">Make sure to upload any script(s) before moving away from this page to prevent file being lost.</span>
+                </div>
+        </div>
+        </div>
+
 		
          <div  ng-repeat="i in $ctrl.VMsIndices | limitTo : $ctrl.numberOfVMs"> 
 		<button class="accordion" ng-click="doCollapse(i);"> <span id="arrow-{{$index}}"><clr-icon  shape="caret" style="transform: rotate(270deg);"></clr-icon></span>VM {{i+1}}</button>
 		
 		<div class="panel" name="expand" id="expand-{{$index}}">
 			
-			<div class="form-group" ng-repeat="input in $ctrl.scriptsInputs[$index] track by $index">
+			<div class="form-group" ng-repeat="input in scriptsInputs[$index] track by $index">
 			  <label for="{{input.id}}">
 				{{input.text}}
 			  </label>
@@ -49,7 +61,7 @@
 				  <clr-icon shape="info-circle" size="24"></clr-icon>
 				  <span class="tooltip-content">{{input.tooltip}}</span>
 				</span>
-				<input type="file" ng-model-instant multiple onchange="angular.element(this).scope().setFiles(this)" />                
+				 <input type="file" id={{i}}-{{$index}}  ng-model-instant multiple onchange="angular.element(this).scope().setFiles(this.id ,this)" />
 			  </div>
 			</div>
 						

@@ -21,9 +21,11 @@
 # contact:  osslegalrouting@vmware.com
 
 ###########################################################################
+import multiprocessing
 
-openstack_config: {
- "auth_url": "",
- "username": "",
- "password": "",
- "tenant_name": ""}
+# Configuration for gunicorn server
+
+bind = "0.0.0.0:5000"
+#cpucount = multiprocessing.cpu_count()
+#print "cpu_count=",cpucount
+workers = multiprocessing.cpu_count() * 2 + 1

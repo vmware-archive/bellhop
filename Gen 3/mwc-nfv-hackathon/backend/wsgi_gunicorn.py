@@ -1,3 +1,10 @@
+#########################################################################
+# Copyright 2017-2018 VMware Inc.
+# This file is part of VNF-ONboarding
+# All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
@@ -12,20 +19,13 @@
 #
 # For those usages not covered by the Apache License, Version 2.0 please
 # contact:  osslegalrouting@vmware.com
-##
 
 ###########################################################################
 
-flavor:
-    name: {{flavorname}}
-    ram: {{ ram }} 
-    disk: {{ disk }} 
-    vcpus: {{ cpu }} 
-    property:
-        hardware:{% if memory_reservation %}
-            mem_page-size: PREFER_LARGE{% else %}
-            mem_page-size: SMALL{% endif %}{% if latency_sensitivity %}
-            cpu-policy: DEDICATED{% else %}
-            cpu-policy: ANY{% endif %}{% if numa_affinity %}
-            numa_nodes:  {{ number_numa_node }}{% endif %}
+#This script is the WSGI entry point for Gunicorn server
 
+from backend import vnf_onboarding_backend_app
+
+if __name__ == "__main__":
+    #app.run(host='0.0.0.0', port=5000)
+    vnf_onboarding_backend_app.run()

@@ -26,7 +26,6 @@ const angular = require('angular');
 require('angular-ui-router');
 
 yaml = require('js-yaml');
-//fs   = require('fs');
 
 /* Clarity */
 require('mutationobserver-shim');
@@ -44,7 +43,6 @@ const vnfDefComponent = require('./app/components/vnf_definition_component');
 const vnfConfigComponent = require('./app/components/vnf_configuration_component');
 const networkconfigComponent = require('./app/components/network_configuration_component');
 const nicComponent = require('./app/components/nic_definitions_component');
-//const epaComponent = require('./app/components/epa_configurations_component');
 const scriptsComponent = require('./app/components/scripts_definitions_component');
 const summaryComponent = require('./app/components/summary_component');
 const rangeComponent = require('./app/components/range_component');
@@ -66,7 +64,6 @@ const signupComponent = require('./app/components/signup_component');
 /* Services */
 const dataService = require('./app/services/data_service');
 const navigationService = require('./app/services/navigation_service');
-// const dbService = require('./app/services/db_service');
 const authService = require('./app/services/auth_service');
 const signupService = require('./app/services/signup_service');
 const forgotpasswordComponent = require('./app/components/forgotpassword_component');
@@ -81,7 +78,6 @@ module.exports = angular
   .config(routesConfig)
   .service('dataService', dataService)
   .service('navigationService', navigationService)
-  // .service('dbService',dbService)
   .service('authService',authService)
   .service('signupService',signupService)
   .component('wizard', wizardComponent)
@@ -90,7 +86,6 @@ module.exports = angular
   .component('selectvnf',selectvnfComponent)
   .component('nic', nicComponent)
   .component('netconfig', networkconfigComponent)
- // .component('epa', epaComponent)
   .component('epavct', epavctComponent)
   .component('epavcs', epavcsComponent)
   .component('epavcrift',epavcriftComponent)

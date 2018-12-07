@@ -31,7 +31,6 @@ module.exports = {
       $scope.passwordChangeSuccess = false;
       $scope.passwordChangeError = false;
 
-
       this.submit = function () {
           if (this.IsValid()) {
              if($scope.emailid == ""  && $scope.username != "") {
@@ -64,7 +63,6 @@ module.exports = {
          }
          this.clearCredentials();       
       } else {
-        //$scope.emptyCredentialsErrorVisible = true;
         $scope.passwordChangeError = true;
         document.getElementById("passwordChangeErrorMessage").innerHTML = "Incorrect Inputs. Please enter either UserId or Password"
         this.clearCredentials();
@@ -83,18 +81,12 @@ module.exports = {
 
       this.IsValid = function () {
         if (($scope.username == "" &&  $scope.emailid !== "" ) || ($scope.username !== "" && $scope.emailid == "")) {
-          //this.setErrorVisibility(true,false);
           return true;
         }
         else {
           return false;
         }
       };
-
-      /*this.setErrorVisibility = function(emptyFieldError,passwordFieldError){
-        $scope.EmptyFieldErrorVisible = emptyFieldError;
-        $scope.PasswordErrorVisible = passwordFieldError;
-      }; */
 
       this.clearCredentials = function() {
         $scope.username = "";

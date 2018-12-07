@@ -2308,13 +2308,6 @@ module.exports = function ($http) {
 		  }
 		}
 
-
-/*	for (let i = 0; i <_networkConfiguration.DNS.length; i++){
-		  if (_networkConfiguration.DNS[i]){
-			  inputs.vim_params['DNS_Network' + ( i + 1 ) ] = _networkConfiguration.DNS[i];
-		  }
-		}
-*/
 	for (let i = 0; i <_networkConfiguration.DNS1.length; i++){
 		  if (_networkConfiguration.DNS1[i]){
 			  inputs.vim_params['DNS1_Network' + ( i + 1 ) ] = _networkConfiguration.DNS1[i];
@@ -2405,10 +2398,8 @@ module.exports = function ($http) {
 			image_id: _vnfConfiguration.Image[v],
 			flavor: _vnfConfiguration.Flavor[v],
 			flavorname: _vnfConfiguration.flavorname[v],
-			//cpu: _vCPUs[_vnfConfiguration.vCPU[v]],
 			cpu: _vnfConfiguration.vCPU[v],
 			disk: _vnfConfiguration.Disk[v],
-			//VMDK: _vnfConfiguration.VMDK[v],
 			UnitNumer: _vnfConfiguration.UnitNumer[v],
 			BusNumer: _vnfConfiguration.BusNumer[v],
                         Osfamily: _vnfConfiguration.Osfamily[v],

@@ -27,127 +27,106 @@ const TOOLTIPS = require('../config/tooltips.json');
 module.exports = {
   template: require('../templates/vnf_definition.html'),
   controller: function ( dataService,authService, $scope) {
-    "ngInject";
+      "ngInject";
 
-    this.FORM_SUBMIT_CLASS = 'submit';
-    this.NO_CLASS = '';
-    this.VCD_NAME = 'vCloud Director';
-    this.OPENSTACK_NAME = 'OpenStack';
-    this.CUSTOM_FLAVOR = "auto"; 
-    this.TOSCA_NAME = "TOSCA 1.1"; 
-    this.OSM_NAME = 'OSM 4.0';
-    this.RIFT_NAME = 'RIFT.ware 5.3';
-    this.OPERATION_TYPE = 'Upload Blueprint' 
-    this.DISABLED_FORM_GROUP = 'form-group disabled';
-    this.FORM_GROUP = 'form-group';
-    this.INPUT_PLACEHOLDER = "Type here";
-    this.VIM_TOOLTIP = TOOLTIPS.VIM_TOOLTIP
-    this.ORCH_TOOLTIP = TOOLTIPS.ORCH_TOOLTIP
-    this.VNF_TOOLTIP = TOOLTIPS.VNF_TOOLTIP;
-    this.VNF_DESCRIPTION_TOOLTIP = TOOLTIPS.VNF_DESCRIPTION_TOOLTIP;
-    this.VNFD_NAME_TOOLTIP = TOOLTIPS.VNFD_NAME_TOOLTIP;
-    this.IMAGE_TOOLTIP = TOOLTIPS.IMAGE;
-    this.DISK_TOOLTIP = TOOLTIPS.DISK;
-    this.FLAVOR_TOOLTIP = TOOLTIPS.FLAVOR_TOOLTIP;
-    this.FLAVOR_NAME_TOOLTIP = TOOLTIPS.FLAVOR_NAME_TOOLTIP;
-    this.VM_TOOLTIP =  TOOLTIPS.VM_TOOLTIP    
-	
-    var config = dataService.getVnfDefinition();
+      this.FORM_SUBMIT_CLASS = 'submit';
+      this.NO_CLASS = '';
+      this.VCD_NAME = 'vCloud Director';
+      this.OPENSTACK_NAME = 'OpenStack';
+      this.CUSTOM_FLAVOR = "auto"; 
+      this.TOSCA_NAME = "TOSCA 1.1"; 
+      this.OSM_NAME = 'OSM 4.0';
+      this.RIFT_NAME = 'RIFT.ware 5.3';
+      this.OPERATION_TYPE = 'Upload Blueprint' 
+      this.DISABLED_FORM_GROUP = 'form-group disabled';
+      this.FORM_GROUP = 'form-group';
+      this.INPUT_PLACEHOLDER = "Type here";
+      this.VIM_TOOLTIP = TOOLTIPS.VIM_TOOLTIP
+      this.ORCH_TOOLTIP = TOOLTIPS.ORCH_TOOLTIP
+      this.VNF_TOOLTIP = TOOLTIPS.VNF_TOOLTIP;
+      this.VNF_DESCRIPTION_TOOLTIP = TOOLTIPS.VNF_DESCRIPTION_TOOLTIP;
+      this.VNFD_NAME_TOOLTIP = TOOLTIPS.VNFD_NAME_TOOLTIP;
+      this.IMAGE_TOOLTIP = TOOLTIPS.IMAGE;
+      this.DISK_TOOLTIP = TOOLTIPS.DISK;
+      this.FLAVOR_TOOLTIP = TOOLTIPS.FLAVOR_TOOLTIP;
+      this.FLAVOR_NAME_TOOLTIP = TOOLTIPS.FLAVOR_NAME_TOOLTIP;
+      this.VM_TOOLTIP =  TOOLTIPS.VM_TOOLTIP    
+      var config = dataService.getVnfDefinition();
+      this.VIMType = ['vCloud Director', 'OpenStack'];
+      this.VIMTypeSelected = config.VIMType;
+      this.PreviousVim = config.VIMType; 	
 
-    this.VIMType = ['vCloud Director', 'OpenStack'];
-    this.VIMTypeSelected = config.VIMType;
-    this.PreviousVim = config.VIMType; 	
-	
-	
-    this.OrchType = ['OSM 4.0', 'OSM 3.0', 'Cloudify 4.2', 'Cloudify 3.4', 'TOSCA 1.1', 'Heat', 'RIFT.ware 6.1','RIFT.ware 5.3'];
-    //this.OrchType = ['OSM 3.0', 'Cloudify 3.4', 'Cloudify 4.2', 'TOSCA 1.1', 'Heat', 'RIFT.ware 5.3','RIFT.ware 6.1'];
-    this.OrchTypeSelected = config.OrchType;
-    this.PreviousOrch = config.OrchType;
+      this.OrchType = ['OSM 4.0', 'OSM 3.0', 'Cloudify 4.2', 'Cloudify 3.4', 'TOSCA 1.1', 'Heat', 'RIFT.ware 6.1','RIFT.ware 5.3'];
+      this.OrchTypeSelected = config.OrchType;
+      this.PreviousOrch = config.OrchType;
 
-	
-    this.VNFDname = config.VNFDname; 
-    
-    this.vnfDescription = config.VNFDescription || this.VNFTypeSelected;
-    this.VNFType = dataService.getVNFTypes();
-    this.VNFTypeSelected = config.VNFType;
-	
-	this.numberOfVMs = config.numberOfVMs;
-	this.VMsIndices = config.VMsIndices;
-	
-	this.possibleNumbersOfVMs = config.possibleNumbersOfVMs;
-	console.log(config.possibleNumbersOfVMs);
-	
-	
-	
-	$scope.OperationTypeSelected = config.VMsIndices;
-	
-	
-	console.log(" AT top ---- VIM : " + this.VIMTypeSelected + " Orch : " + this.OrchTypeSelected);
-   
-	//$scope.vnfDescription = this.VNFDescription;
-  
-    
+      this.VNFDname = config.VNFDname; 
 
-    this.NumaAffinity = [true,false] ;
-	this.NumaAffinity2 = false ;
-	
-	// Number of VM 
-	
-		
-    this.forms = {};
-    this.formSubmit = false;
-    this.maxvalue = 20;
-    this.minvalue = 1;
-    $scope.$watch(() => {
-       $scope.maxNicsError = false;
-       //alert(this.numberOfVMs);
-       if(isNaN(this.numberOfVMs) || this.numberOfVMs > this.maxvalue || this.numberOfVMs < this.minvalue){
-                $scope.maxNicsError = true;
-        }
-        if(this.VIMTypeSelected == 'vCloud Director'){
-		this.OrchType[5] = "Ovf";
-	}else{
-		this.OrchType[5] = "Heat";
-	}
+      this.vnfDescription = config.VNFDescription || this.VNFTypeSelected;
+      this.VNFType = dataService.getVNFTypes();
+      this.VNFTypeSelected = config.VNFType;
 
-     });
-    
-	
-    dataService.setSubmitCallback( function () {
-      this.formSubmit = true;
-	
-      var isValid = this.forms.vnfDefinitionForm.$valid;
-      if(isNaN(this.numberOfVMs) || this.numberOfVMs > this.maxvalue || this.numberOfVMs < this.minvalue){
-                isValid = false;
-        }
-	
-	if(isValid){	
+      this.numberOfVMs = config.numberOfVMs;
+      this.VMsIndices = config.VMsIndices;
+
+      this.possibleNumbersOfVMs = config.possibleNumbersOfVMs;
+      console.log(config.possibleNumbersOfVMs);
+
+      $scope.OperationTypeSelected = config.VMsIndices;
+
+      console.log(" AT top ---- VIM : " + this.VIMTypeSelected + " Orch : " + this.OrchTypeSelected);
+
+      this.NumaAffinity = [true,false] ;
+      this.NumaAffinity2 = false ;
+
+      // Number of VM 
 
 
-	if ( this.PreviousVim != this.VIMTypeSelected ||  this.PreviousOrch != this.OrchTypeSelected) {
+      this.forms = {};
+      this.formSubmit = false;
+      this.maxvalue = 20;
+      this.minvalue = 1;
+      $scope.$watch(() => {
+              $scope.maxNicsError = false;
+              if(isNaN(this.numberOfVMs) || this.numberOfVMs > this.maxvalue || this.numberOfVMs < this.minvalue){
+                    $scope.maxNicsError = true;
+              }
+              if(this.VIMTypeSelected == 'vCloud Director'){
+                    this.OrchType[5] = "Ovf";
+              }else{
+                    this.OrchType[5] = "Heat";
+              }
 
-                dataService.populateData();
+      });
 
-        }
-	
+      dataService.setSubmitCallback( function () {
+              this.formSubmit = true;
 
-	var vnf_config = {
-          VIMType: this.VIMTypeSelected,
-          OrchType: this.OrchTypeSelected,
-          VNFType: this.VNFTypeSelected,
-          VNFDescription: this.vnfDescription,
-          VNFDname: this.VNFDname,        
-          numberOfVMs : this.numberOfVMs,
-	  VMsIndices : this.VMsIndices,
-	  possibleNumbersOfVMs : this.possibleNumbersOfVMs
-	  }
-	  //console.log(vnf_config);
-	  dataService.setVNFD( vnf_config);
-	  console.log("getVnfDefinition");
-	  console.log(dataService.getVnfDefinition());
-	}	
-      return isValid;
-	  //return false;
-    }.bind(this));
+              var isValid = this.forms.vnfDefinitionForm.$valid;
+              if(isNaN(this.numberOfVMs) || this.numberOfVMs > this.maxvalue || this.numberOfVMs < this.minvalue){
+                    isValid = false;
+              }
+
+              if(isValid){	
+                    if ( this.PreviousVim != this.VIMTypeSelected ||  this.PreviousOrch != this.OrchTypeSelected) {
+                            dataService.populateData();
+              }
+
+              var vnf_config = {
+                    VIMType: this.VIMTypeSelected,
+                    OrchType: this.OrchTypeSelected,
+                    VNFType: this.VNFTypeSelected,
+                    VNFDescription: this.vnfDescription,
+                    VNFDname: this.VNFDname,        
+                    numberOfVMs : this.numberOfVMs,
+	                VMsIndices : this.VMsIndices,
+	                possibleNumbersOfVMs : this.possibleNumbersOfVMs
+              }
+                    dataService.setVNFD( vnf_config);
+                    console.log("getVnfDefinition");
+                    console.log(dataService.getVnfDefinition());
+              }	
+              return isValid;
+      }.bind(this));
   }
 };

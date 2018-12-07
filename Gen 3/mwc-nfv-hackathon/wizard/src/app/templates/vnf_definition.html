@@ -56,10 +56,6 @@
       <div class="form-group long">
         <label  class="required" for="OrchType">Orchestrator Type </label>
 			<div class="select select_length">
-			  <!--<select ng-required="true" id="OrchType" ng-model="$ctrl.OrchTypeSelected"
-					  ng-change="DropDownChanged($ctrl.OrchTypeSelected)">
-				<option ng-repeat="Orch in $ctrl.OrchType" value="{{Orch}}">{{Orch}}</option>
-			  </select>-->
 			  <select ng-required="true" id="OrchType" ng-model="$ctrl.OrchTypeSelected"
 					  ng-change="DropDownChanged($ctrl.OrchTypeSelected)" 
 					   ng-options="Orch disable when ((Orch === 'RIFT.ware 5.3' || Orch === 'RIFT.ware 6.1') && $ctrl.VIMTypeSelected =='vCloud Director') for  Orch in $ctrl.OrchType" >
@@ -120,11 +116,6 @@
         <label  class="required" for="OrchType">Number of VMs </label>
 		 <input type="text" ng-model="$ctrl.numberOfVMs" id="numberOfVMs" name="numberOfVMs"
                placeholder="{{ $ctrl.INPUT_PLACEHOLDER }}" size="20" ng-pattern="/^[1-9]/" required/>
-			<!--<div class="select select_length">
-			    <select ng-model="$ctrl.numberOfVMs"
-					  ng-options="number for number in $ctrl.possibleNumbersOfVMs">
-			    </select>
-			</div>-->
 			 <div class="col-xs-2">
 				  <span role="tooltip" aria-haspopup="true" class="tooltip tooltip-top-left">
 					<clr-icon shape="info-circle" size="24"></clr-icon>

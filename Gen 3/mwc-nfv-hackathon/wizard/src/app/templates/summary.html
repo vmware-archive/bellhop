@@ -77,7 +77,6 @@
 		<div  class="form-group" 
 			ng-repeat="Disk in $ctrl.inputs.params[i].disk track by $index " 
 			ng-if = "$index < $ctrl.inputs.params[i]['numberOfDisks']" >
-				<!--<div class="form-group"   >-->
 
 					<label for="{{ Disk }}">
 						Disk -{{$index}}
@@ -87,13 +86,11 @@
 					  <div id="{{ Disk }}" >
 						<input type="text" disabled ng-model="Disk"/>
 				  </div>
-				<!--</div>-->
 		</div>
 		
 		<div  class="form-group" 
 			ng-repeat="VMDK in $ctrl.inputs.params[i].VMDK track by $index " 
 			ng-if = "$index < $ctrl.inputs.params[i]['numberOfDisks']" >
-				<!--<div class="form-group"   >-->
 
 					<label for="{{ Disk }}">
 						VMDK -{{$index}}
@@ -103,14 +100,11 @@
 					  <div id="{{ Disk }}" >
 						<input type="text" disabled ng-model="VMDK"/>
 				  </div>
-				<!--</div>-->
 		</div>
-		<!--<span>{{$ctrl.inputs.params[i].BusType}}</span>-->
 		
 		<div  class="form-group" 
 			ng-repeat="BusType in $ctrl.inputs.params[i].BusType track by $index " 
 			ng-if = "BusType !== 'Select Bus Type'" >
-				<!--<div class="form-group"   >-->
 
 					<label for="{{ BustType }}">
 						BusType -{{$index}}
@@ -120,13 +114,11 @@
 					  <div id="{{ script }}" >
 						<input type="text" disabled ng-model="BusType"/>
 				  </div>
-				<!--</div>-->
 		</div>
 		
 		<div  class="form-group" 
 			ng-repeat="BusNumer in $ctrl.inputs.params[i].BusNumer track by $index "
 			ng-if = "BusNumer !== 'Bus No.'" >
-				<!--<div class="form-group"   >-->
 
 					<label for="{{ BustType }}" >
 						BusNumer -{{$index}}
@@ -136,13 +128,11 @@
 					  <div id="{{ script }}" >
 						<input type="text" disabled ng-model="BusNumer"/>
 				  </div>
-				<!--</div>-->
 		</div>
 		
 		<div  class="form-group" 
 			ng-repeat="UnitNumer in $ctrl.inputs.params[i].UnitNumer track by $index " 
 			ng-if = "UnitNumer !== 'Unit No.'" >
-				<!--<div class="form-group"   >-->
 
 					<label for="{{ BustType }}" >
 						UnitNumer -{{$index}}
@@ -152,41 +142,7 @@
 					  <div id="{{ script }}" >
 						<input type="text" disabled ng-model="UnitNumer"/>
 				  </div>
-				<!--</div>-->
 		</div>
-		
-	         <!--div  class="form-group"
-                        ng-repeat="Osfamily in $ctrl.inputs.params[i].Osfamily track by $index "
-                        ng-if = "Osfamily !== 'Select OS family'" -->
-                                <!--<div class="form-group"   >-->
-
-                                        <!--label for="{{ Osfamily }}">
-                                                Osfamily -{{$index}}
-                                          </label>
-
-
-                                          <div id="{{ script }}" >
-                                                <input type="text" disabled ng-model="Osfamily"/>
-                                  </div-->
-                                <!--</div>-->
-                <!--/div-->
-
-                <!--div  class="form-group"
-                        ng-repeat="OsVersion in $ctrl.inputs.params[i].BusNumer track by $index "
-                        ng-if = "OsVersion !== 'OS Version'" -->
-                                <!--<div class="form-group"   >-->
-
-                                        <!--label for="{{ OsVersion }}" >
-                                                OsVersion -{{$index}}
-                                          </label>
-
-
-                                          <div id="{{ script }}" >
-                                                <input type="text" disabled ng-model="OsVersion"/>
-                                  </div-->
-                                <!--</div>-->
-                <!--/div-->
-	
 		
 		<div class="form-group"
 			 ng-if="$ctrl.inputs.params[i].scripts[script][i]"
@@ -195,7 +151,6 @@
 		  <label for="{{ script }}">
 			{{$ctrl.inputsNames[script]}}
 		  </label>
-		  
 
 		  <div id="{{ script }}">
 			<input type="text" disabled ng-model="$ctrl.inputs.params[i].scripts[script][i]"/>

@@ -27,7 +27,6 @@ resources:{% for vm in params %} {% set vmindex = loop.index %}
     vdu_{{ vmindex }}:
        type: OS::Nova::Server
        properties: 
-        #availability_zone: {{ vm.az }}
           image: {{ vm.image_id }} {% if vm.flavorname %}
           flavor: {get_resource: {{ vm.flavorname }}_type}{% else %}
           flavor: {{ vm.flavor }} {% endif %}{% if vm.cloud_init_file %}
